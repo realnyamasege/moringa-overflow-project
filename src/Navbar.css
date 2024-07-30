@@ -1,0 +1,51 @@
+/* src/components/Navbar.css */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #9fcdfa;
+  }
+  
+  .navbar-logo img {
+    height: 40px;
+  }
+  
+  .navbar-links {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .navbar-links a {
+    text-decoration: none;
+    color: #000000;
+  }
+  
+  .navbar-search {
+    display: flex;
+    gap: 5px;
+  }
+  
+  .navbar-search input {
+    padding: 5px;
+  }
+  
+  .navbar-auth {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .navbar-auth a {
+    background-color: #fdfdfd;
+    color: #a344da;
+    padding: 5px 10px;
+    border-radius: 4px;
+  }
+  
+  .navbar-auth .signup-button {
+    background-color: #a344da;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 4px;
+  }
+  

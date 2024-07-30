@@ -1,27 +1,16 @@
-import React, { useState, useEffect } from 'react';
+// src/components/UserProfile.jsx
+import React, { useEffect, useState } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 
 function UserProfile() {
-  const [user, setUser] = useState(null);
+  const { user, logout } = useAuth();
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Mock fetch user profile
-    const fetchUser = async () => {
-      try {
-        const userData = {
-          name: 'John Doe',
-          email: 'john.doe@example.com',
-          reputation: 1234,
-          badges: ['Gold', 'Silver', 'Bronze'],
-        };
-        setUser(userData);
-      } catch (err) {
-        setError(err.message);
-      }
-    };
-
-    fetchUser();
-  }, []);
+    if (!user) {
+      setError('No user logged in');
+    }
+  }, [user]);
 
   if (error) return <div>Error: {error}</div>;
   if (!user) return <div>Loading...</div>;
@@ -33,7 +22,6 @@ function UserProfile() {
       <div>Email: {user.email}</div>
       <div>Reputation: {user.reputation}</div>
       <div>Badges: {user.badges.join(', ')}</div>
-      {/* Add more user profile details */}
       <button onClick={logout}>Logout</button>
     </div>
   );
