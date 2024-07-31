@@ -1,18 +1,20 @@
+// src/pages/LoginPage.jsx
 import React, { useState } from 'react';
+import { useAuth } from '../contexts/AuthContext';
+import '../Auth.css';
 
 function LoginPage() {
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add your login logic here
     try {
-      // Mock login API call
-      console.log('Login:', { email, password });
+      await login(email, password);
     } catch (err) {
-      setError(err.message);
+      setError('Failed to login');
     }
   };
 

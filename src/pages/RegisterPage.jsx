@@ -1,6 +1,7 @@
-import React, { useState, useContext } from 'react';
-import { AuthContext } from '../contexts/AuthContext';
+// src/pages/RegisterPage.jsx
+import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import '../Auth.css';
 
 function RegisterPage() {
   const { register } = useAuth();

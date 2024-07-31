@@ -1,0 +1,42 @@
+/* src/styles/Home.css */
+/*This might help with the floating questions*/
+/*remove if unnecessary*/
+.home-container {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px;
+  }
+
+  .main-content {
+    flex: 2;
+  }
+  
+  .main-content .welcome-banner {
+    text-align: center;
+  }
+  
+  .main-content .welcome-banner img {
+    max-width: 100%;
+  }
+  
+  .recent-posts {
+    flex: 1;
+    margin-left: 20px;
+  }
+  
+  .recent-posts h3 {
+    margin-bottom: 20px;
+  }
+  
+  .recent-post {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .recent-post img {
+    width: 60px;
+    height: 60px;
+    margin-right: 10px;
+  }
+
