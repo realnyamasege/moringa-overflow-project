@@ -1,0 +1,82 @@
+{
+  "posts": [
+    {
+      "id": "1",
+      "title": "Introduction to Blogging",
+      "author": "Tonui",
+      "content": "This is an introductory post about blogging.",
+      "comments": [
+        {
+          "id": 1,
+          "author": "Alice",
+          "text": "Great post, looking forward to more!"
+        },
+        {
+          "id": 2,
+          "author": "Bob",
+          "text": "Interesting read, thanks for sharing."
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "title": "Top 10 Tips for Successful Blogging",
+      "author": "Jane Smith",
+      "content": "Here are some tips to help you succeed in blogging.",
+      "comments": [
+        {
+          "id": 3,
+          "author": "Charlie",
+          "text": "Very helpful advice, thanks!"
+        },
+        {
+          "id": 4,
+          "author": "Diana",
+          "text": "I'll definitely apply these tips to my blog."
+        }
+      ]
+    },
+    {
+      "id": "6371",
+      "title": "End of Phase 2 ",
+      "content": "- Blog Project ends today",
+      "author": "Kelvin",
+      "comments": []
+    },
+    {
+      "id": "d73f",
+      "title": "sbg fsd b",
+      "content": "fdbg fdsb ",
+      "author": "dfbg fd b",
+      "comments": []
+    },
+    {
+      "id": "b7f5",
+      "title": "esrfvdsrv",
+      "content": "erfvsr",
+      "author": "serfvsdrvs",
+      "comments": []
+    },
+    {
+      "id": "32f3",
+      "title": "rfsdg xd bg",
+      "content": "fdg bxfd b",
+      "author": "fdg bxdf b",
+      "comments": []
+    },
+    {
+      "id": "c466",
+      "title": "rfsdg xd bg",
+      "content": "fdg bxfd b",
+      "author": "fdg bxdf b",
+      "comments": []
+    },
+    {
+      "id": "cf05",
+      "title": "samb",
+      "content": "trying ",
+      "author": "Another",
+      "comments": []
+    }
+  ]
+}
