@@ -5,6 +5,7 @@ from models import db, User, Question, Vote
 
 user_bp = Blueprint('user_bp', __name__)
 
+# Get all users
 @user_bp.route('/users', methods=['GET'])
 def get_users():
     try:
@@ -14,6 +15,7 @@ def get_users():
         print(e)
         return jsonify({"message": "An error occurred while retrieving users."}), 500
 
+# Get a single user
 @user_bp.route('/users/<int:user_id>', methods=['GET'])
 def get_user(user_id):
     try:

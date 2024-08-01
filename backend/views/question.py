@@ -4,6 +4,7 @@ from models import db, Question, Tag, User
 
 question_bp = Blueprint('question_bp', __name__)
 
+# Create a new question
 @question_bp.route('/questions', methods=['POST'])
 @jwt_required()
 def ask_question():
@@ -53,7 +54,7 @@ def ask_question():
         print(f"Error in ask_question: {e}")
         return make_response(jsonify({"message": "An error occurred", "error": str(e)}), 500)
 
-
+# Get all questions
 @question_bp.route('/questions', methods=['GET'])
 def get_questions():
     try:
@@ -64,6 +65,7 @@ def get_questions():
         print(f"Error while retrieving questions: {e}")
         return make_response(jsonify({"message": "An error occurred while retrieving questions."}), 500)
 
+# Get a single question
 @question_bp.route('/questions/<int:id>', methods=['GET'])
 def get_question(id):
     try:
@@ -73,6 +75,7 @@ def get_question(id):
         print(f"Error while retrieving question {id}: {e}")
         return make_response(jsonify({"message": "An error occurred while retrieving the question."}), 500)
 
+# Update a question
 @question_bp.route('/questions/<int:id>', methods=['PUT'])
 @jwt_required()
 def update_question(id):
@@ -103,6 +106,7 @@ def update_question(id):
         print(f"Error while updating question {id}: {e}")
         return make_response(jsonify({"message": "An error occurred while updating the question."}), 500)
 
+# Delete a question
 @question_bp.route('/questions/<int:id>', methods=['DELETE'])
 @jwt_required()
 def delete_question(id):

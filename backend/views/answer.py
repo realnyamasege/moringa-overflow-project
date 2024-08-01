@@ -18,8 +18,6 @@ def create_answer():
 
     return jsonify({'message': 'Answer created successfully'})
 
-
-
 # Get all answers for a specific question
 @answer_bp.route('/answers/<int:question_id>', methods=['GET'])
 def get_answers_for_question(question_id):
@@ -31,7 +29,6 @@ def get_answers_for_question(question_id):
     answer_list = [{'id': answer.id, 'body': answer.body, 'user_id': answer.user_id} for answer in answers]
 
     return jsonify({'answers': answer_list})
-
 
 # Update an answer
 @answer_bp.route('/answers/<int:answer_id>', methods=['PUT'])
@@ -54,10 +51,6 @@ def update_answer(answer_id):
     # Commit changes to the database
     db.session.commit()
     return jsonify({'message': 'Answer updated successfully'}), 200
-
-
-
-    
 
 # Delete an answer
 @answer_bp.route('/answers/<int:answer_id>', methods=['DELETE'])
