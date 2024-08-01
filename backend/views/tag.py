@@ -3,6 +3,7 @@ from models import db, Tag
 
 tag_bp = Blueprint('tag_bp', __name__)
 
+# Get all tags
 @tag_bp.route('/tags', methods=['GET'])
 def get_tags():
     try:
@@ -11,6 +12,8 @@ def get_tags():
     except Exception as e:
         return make_response(jsonify({"message": "An error occurred while retrieving tags.", "error": str(e)}), 500)
 
+
+# Get a single tag
 @tag_bp.route('/tags/<int:tag_id>', methods=['GET'])
 def get_tag(tag_id):
     try:
@@ -19,6 +22,7 @@ def get_tag(tag_id):
     except Exception as e:
         return make_response(jsonify({"message": "An error occurred while retrieving the tag.", "error": str(e)}), 500)
 
+# Create a new tag
 @tag_bp.route('/tags', methods=['POST'])
 def create_tag():
     data = request.json
@@ -34,6 +38,7 @@ def create_tag():
         db.session.rollback()  # Rollback on error
         return make_response(jsonify({"message": "An error occurred while creating the tag.", "error": str(e)}), 500)
 
+# Update an existing tag
 @tag_bp.route('/tags/<int:tag_id>', methods=['PUT'])
 def update_tag(tag_id):
     data = request.json
@@ -46,6 +51,7 @@ def update_tag(tag_id):
         db.session.rollback()  # Rollback on error
         return make_response(jsonify({"message": "An error occurred while updating the tag.", "error": str(e)}), 500)
 
+# Delete an existing tag
 @tag_bp.route('/tags/<int:tag_id>', methods=['DELETE'])
 def delete_tag(tag_id):
     try:

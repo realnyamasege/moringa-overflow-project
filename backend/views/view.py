@@ -4,6 +4,7 @@ from datetime import datetime
 
 view_bp = Blueprint('view_bp', __name__)
 
+# Get all views
 @view_bp.route('/views', methods=['GET'])
 def get_views():
     try:
@@ -12,6 +13,7 @@ def get_views():
     except Exception as e:
         return make_response(jsonify({"message": "An error occurred while retrieving views.", "error": str(e)}), 500)
 
+# Get a single view
 @view_bp.route('/views/<int:view_id>', methods=['GET'])
 def get_view(view_id):
     try:
@@ -20,6 +22,7 @@ def get_view(view_id):
     except Exception as e:
         return make_response(jsonify({"message": "An error occurred while retrieving the view.", "error": str(e)}), 500)
 
+# Create a new view
 @view_bp.route('/views', methods=['POST'])
 def create_view():
     data = request.json
@@ -44,7 +47,8 @@ def create_view():
         return jsonify({ "message": "View created successfully"}), 201
     except Exception as e:
         return make_response(jsonify({"message": "An error occurred while creating the view.", "error": str(e)}), 500)
-    
+
+# Update an existing view    
 @view_bp.route('/views/<int:view_id>', methods=['PUT'])
 def update_view(view_id):
     data = request.json
@@ -70,7 +74,8 @@ def update_view(view_id):
     except Exception as e:
         db.session.rollback()
         return make_response(jsonify({"message": "An error occurred while updating the view.", "error": str(e)}), 500)
-    
+
+# Delete an existing view    
 @view_bp.route('/views/<int:view_id>', methods=['DELETE'])
 def delete_view(view_id):
     try:

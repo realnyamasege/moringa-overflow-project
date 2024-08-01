@@ -3,6 +3,7 @@ from models import db, Vote
 
 vote_bp = Blueprint('vote_bp', __name__)
 
+# Get all votes
 @vote_bp.route('/votes', methods=['GET'])
 def get_votes():
     try:
@@ -11,6 +12,7 @@ def get_votes():
     except Exception as e:
         return make_response(jsonify({"message": "An error occurred while retrieving votes.", "error": str(e)}), 500)
 
+# Get a single vote
 @vote_bp.route('/votes/<int:vote_id>', methods=['GET'])
 def get_vote(vote_id):
     try:
@@ -19,6 +21,7 @@ def get_vote(vote_id):
     except Exception as e:
         return make_response(jsonify({"message": "An error occurred while retrieving the vote.", "error": str(e)}), 500)
 
+# Create a new vote
 @vote_bp.route('/votes', methods=['POST'])
 def create_vote():
     data = request.json
@@ -44,6 +47,7 @@ def create_vote():
     except Exception as e:
         return make_response(jsonify({"message": "An error occurred while creating the vote.", "error": str(e)}), 500)
 
+# Update an existing vote
 @vote_bp.route('/votes/<int:vote_id>', methods=['PUT'])
 def update_vote(vote_id):
     data = request.json
@@ -56,6 +60,7 @@ def update_vote(vote_id):
     except Exception as e:
         return make_response(jsonify({"message": "An error occurred while updating the vote.", "error": str(e)}), 500)
 
+# Delete an existing vote
 @vote_bp.route('/votes/<int:vote_id>', methods=['DELETE'])
 def delete_vote(vote_id):
     try:
