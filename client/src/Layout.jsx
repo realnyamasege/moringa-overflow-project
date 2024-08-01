@@ -2,7 +2,10 @@ import React from 'react'
 import { Link, Outlet } from 'react-router-dom'
 import AskQuestion from './pages/AskQuestion'
 import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css'
+import SignUp from './pages/Signup'
+import { UserContext } from './context/UserContext'
+import LoginPage from './pages/LoginPage';
 
 export default function Layout() {
   return (
@@ -36,15 +39,30 @@ export default function Layout() {
         </li>
         
         <li>
-        <button data-modal-target="default-modal" data-modal-toggle="default-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-  Log in
-</button>
-        </li>
-        <li>
-        <button data-modal-target="default-modal" data-modal-toggle="default-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-  Sign up
-</button>
-        </li>
+    <Link to="/LoginPage">
+        <button 
+            data-modal-target="default-modal" 
+            data-modal-toggle="default-modal" 
+            class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" 
+            type="button">
+            Log in
+        </button>
+    </Link>
+</li>
+
+<li>
+    <Link to="Signup">
+        <button 
+            data-modal-target="default-modal" 
+            data-modal-toggle="default-modal" 
+            className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" 
+            type="button">
+            Sign up
+        </button>
+    </Link>
+</li>
+
+         
 
         <li>
           <input class="search" type="text" id="search" onkeyup="search()" placeholder="Search"/>

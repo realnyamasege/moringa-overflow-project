@@ -1,6 +1,11 @@
 import React, { useContext, useState } from 'react'
 import { UserContext } from '../context/UserContext'
-import { toast } from 'react-toastify'
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom'
+import { v4 as uuidv4 } from 'uuid';
+
+
+
 
 function Register() 
 {
@@ -12,9 +17,9 @@ function Register()
   const [name, setName] = useState()
   const [profile_image, setProfileImage] = useState()
   const [phone_number, setPhone_number] = useState()
-  const [is_carowner, setIsCarOwner] = useState("false")
+  
 
-  console.log(email, password,profile_image, repeatPassword, name, phone_number, is_carowner);
+  console.log(email, password,profile_image, repeatPassword, name, phone_number,);
   function handleSubmit(e){
     e.preventDefault()
 
@@ -23,7 +28,7 @@ function Register()
       return
     }
 
-    register_user(name,email,profile_image, phone_number,is_carowner, password)
+    register_user(name,email,profile_image, phone_number, password)
     setEmail("")
     setPassword("")
     setRepeatPassword("")
@@ -74,7 +79,7 @@ function Register()
             <select onChange={ e => setIsCarOwner(e.target.value)} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
               {/* <option selected>Choose a country</option> */}
               <option selected value="false">User</option>
-              <option value="true">Car Owner</option>
+            
             </select>
             </div>
 

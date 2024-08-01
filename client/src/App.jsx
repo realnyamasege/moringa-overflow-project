@@ -11,6 +11,10 @@ import AdminLogin from './pages/AdminLogin';
 import NoPage from './pages/NoPage';
 import Question from './pages/Question';
 import UpdateQuestion from './pages/UpdateQuestion';
+import Signup from './pages/Signup';
+import LoginPage from './pages/LoginPage';
+import { UserProvider } from './context/UserContext';
+
 
 function App() {
 
@@ -21,9 +25,10 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='/about' element={<About />} />
         <Route path='/AskQuestion' element={<AskQuestion />} />
+        <Route path='/Signup' element={<Signup />} />
+        <Route path='/LoginPage' element={<LoginPage />} />
         <Route path='/Question/:id' element={<Question />} />
         <Route path='/update/:post_id' element={<UpdateQuestion />} />
-
         <Route path="*" element={<NoPage />} />
       </Route>
       <Route path='/admin/' element={<LayoutAdmin/>}>
