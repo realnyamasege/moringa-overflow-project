@@ -46,6 +46,24 @@
       "id": "7cb1",
       "email": "max1@gmail.com",
       "password": "123"
+    },
+    {
+      "id": "2a68",
+      "name": "Ice Rube",
+      "email": "ice@gmail.com",
+      "password": "12",
+      "profile_image": "http://qqwertyui.com",
+      "phone_number": "1234567"
+    },
+    {
+      "id": "e278",
+      "email": "ice@gmail.com",
+      "password": "1211234567890qwertyuiopwertyuioertyuiop"
+    },
+    {
+      "id": "7697",
+      "email": "qwertyuio@gmail.co",
+      "password": "sdfghjhguhgtyujhfdsxcvgfdxcgh"
     }
   ],
   "questions": [
@@ -53,7 +71,14 @@
       "id": "1",
       "title": "What is React?",
       "content": "React is a JavaScript library for building user interfaces.",
-      "author": "Alice ",
+      "author": "Alice",
+      "upvotes": 25,
+      "downvotes": 11,
+      "tags": [
+        "JavaScript",
+        "React"
+      ],
+      "awards": 1,
       "comments": []
     },
     {
@@ -61,6 +86,13 @@
       "title": "How to use useState in React?",
       "content": "The useState hook allows you to add state to functional components.",
       "author": "Bob",
+      "upvotes": 42,
+      "downvotes": 6,
+      "tags": [
+        "React",
+        "useState"
+      ],
+      "awards": 2,
       "comments": []
     },
     {
@@ -68,6 +100,13 @@
       "title": "What is the use of useEffect in React?",
       "content": "The useEffect hook allows you to perform side effects in functional components.",
       "author": "Charlie",
+      "upvotes": 12,
+      "downvotes": 0,
+      "tags": [
+        "React",
+        "useEffect"
+      ],
+      "awards": 3,
       "comments": []
     },
     {
@@ -75,6 +114,13 @@
       "title": "What is Frontend coding?",
       "content": "Frontend coding involves creating the user interface and user experience of a website.",
       "author": "Charlie",
+      "upvotes": 8,
+      "downvotes": 3,
+      "tags": [
+        "Frontend",
+        "Web Development"
+      ],
+      "awards": 1,
       "comments": []
     },
     {
@@ -82,6 +128,12 @@
       "title": "dvawdfasdf",
       "content": "asrvqe",
       "author": "wrvqer",
+      "upvotes": 5,
+      "downvotes": 1,
+      "tags": [
+        "Misc"
+      ],
+      "awards": 0,
       "comments": []
     },
     {
@@ -89,6 +141,13 @@
       "title": "touch on the profile",
       "content": "add a profile image and any other tweaks you think are needed",
       "author": "Reuben",
+      "upvotes": 7,
+      "downvotes": 2,
+      "tags": [
+        "Profile",
+        "Tweaks"
+      ],
+      "awards": 1,
       "comments": []
     },
     {
@@ -96,6 +155,13 @@
       "title": "javascript",
       "content": "what is an arrow function",
       "author": "Ezekiel",
+      "upvotes": 18,
+      "downvotes": 2,
+      "tags": [
+        "JavaScript",
+        "Functions"
+      ],
+      "awards": 2,
       "comments": []
     },
     {
@@ -103,6 +169,12 @@
       "title": "wdvef",
       "content": "efverfbw",
       "author": "ebwefb",
+      "upvotes": 4,
+      "downvotes": 4,
+      "tags": [
+        "Misc"
+      ],
+      "awards": 0,
       "comments": []
     },
     {
@@ -110,6 +182,12 @@
       "title": "qwertyuio",
       "content": "qwertyuiop",
       "author": "qwertyuiop",
+      "upvotes": 6,
+      "downvotes": 0,
+      "tags": [
+        "Misc"
+      ],
+      "awards": 0,
       "comments": []
     },
     {
@@ -117,6 +195,13 @@
       "title": " cloud",
       "content": "what is the function of the cloud in storage",
       "author": "Sam",
+      "upvotes": 9,
+      "downvotes": 1,
+      "tags": [
+        "Cloud",
+        "Storage"
+      ],
+      "awards": 3,
       "comments": []
     },
     {
@@ -124,6 +209,12 @@
       "title": "How",
       "content": "How is How used?",
       "author": "Reuben",
+      "upvotes": 5,
+      "downvotes": 2,
+      "tags": [
+        "Misc"
+      ],
+      "awards": 1,
       "comments": []
     }
   ]
