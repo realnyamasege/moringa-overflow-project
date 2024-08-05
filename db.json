@@ -1,0 +1,130 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "John",
+      "email": "john@example.com",
+      "password": "123",
+      "profile_image": "http://example.com/profile/johndoe.jpg",
+      "phone_number": "07123456789"
+    },
+    {
+      "id": "2",
+      "name": "Jane Smith",
+      "email": "jane.smith@example.com",
+      "password": "password456",
+      "profile_image": "http://example.com/profile/janesmith.jpg",
+      "phone_number": "07198765432"
+    },
+    {
+      "id": "9e4e",
+      "email": "Kinuthia@gmail.com",
+      "password": "1234"
+    },
+    {
+      "id": "b089",
+      "name": "max",
+      "email": "max@gmail.com",
+      "password": "12",
+      "profile_image": "https://www.google.com/imgres?q=kfc%20wallpaper%204k&imgurl=https%3A%2F%2Fc4.wallpaperflare.com%2Fwallpaper%2F124%2F52%2F871%2Fkfc-wallpaper-preview.jpg&imgrefurl=https%3A%2F%2Fwww.wallpaperflare.com%2Fsearch%3Fwallpaper%3DKFC&docid=5D75_sNTxOUbdM&tbnid=TzZt6PoH0ksLkM&vet=12ahUKEwjpoqiSgtmHAxU5lP0HHUWFG38QM3oECGMQAA..i&w=728&h=455&hcb=2&ved=2ahUKEwjpoqiSgtmHAxU5lP0HHUWFG38QM3oECGMQAA",
+      "phone_number": "0712345678"
+    },
+    {
+      "id": "6858",
+      "email": "g@gmail.com",
+      "password": "tyfgyhycyucyucyucuy"
+    },
+    {
+      "id": "1659",
+      "name": "max",
+      "email": "max1@gmail.com",
+      "password": "123",
+      "profile_image": "https://www.google.com/imgres?q=kfc%20wallpaper%204k&imgurl=https%3A%2F%2Fc4.wallpaperflare.com%2Fwallpaper%2F124%2F52%2F871%2Fkfc-wallpaper-preview.jpg&imgrefurl=https%3A%2F%2Fwww.wallpaperflare.com%2Fsearch%3Fwallpaper%3DKFC&docid=5D75_sNTxOUbdM&tbnid=TzZt6PoH0ksLkM&vet=12ahUKEwjpoqiSgtmHAxU5lP0HHUWFG38QM3oECGMQAA..i&w=728&h=455&hcb=2&ved=2ahUKEwjpoqiSgtmHAxU5lP0HHUWFG38QM3oECGMQAA",
+      "phone_number": "0712345678"
+    },
+    {
+      "id": "7cb1",
+      "email": "max1@gmail.com",
+      "password": "123"
+    }
+  ],
+  "questions": [
+    {
+      "id": "1",
+      "title": "What is React?",
+      "content": "React is a JavaScript library for building user interfaces.",
+      "author": "Alice ",
+      "comments": []
+    },
+    {
+      "id": "2",
+      "title": "How to use useState in React?",
+      "content": "The useState hook allows you to add state to functional components.",
+      "author": "Bob",
+      "comments": []
+    },
+    {
+      "id": "3",
+      "title": "What is the use of useEffect in React?",
+      "content": "The useEffect hook allows you to perform side effects in functional components.",
+      "author": "Charlie",
+      "comments": []
+    },
+    {
+      "id": "4",
+      "title": "What is Frontend coding?",
+      "content": "Frontend coding involves creating the user interface and user experience of a website.",
+      "author": "Charlie",
+      "comments": []
+    },
+    {
+      "id": "f47a",
+      "title": "dvawdfasdf",
+      "content": "asrvqe",
+      "author": "wrvqer",
+      "comments": []
+    },
+    {
+      "id": "53c5",
+      "title": "touch on the profile",
+      "content": "add a profile image and any other tweaks you think are needed",
+      "author": "Reuben",
+      "comments": []
+    },
+    {
+      "id": "deec",
+      "title": "javascript",
+      "content": "what is an arrow function",
+      "author": "Ezekiel",
+      "comments": []
+    },
+    {
+      "id": "b803",
+      "title": "wdvef",
+      "content": "efverfbw",
+      "author": "ebwefb",
+      "comments": []
+    },
+    {
+      "id": "7796",
+      "title": "qwertyuio",
+      "content": "qwertyuiop",
+      "author": "qwertyuiop",
+      "comments": []
+    },
+    {
+      "id": "d6b2",
+      "title": " cloud",
+      "content": "what is the function of the cloud in storage",
+      "author": "Sam",
+      "comments": []
+    },
+    {
+      "id": "1ff3",
+      "title": "How",
+      "content": "How is How used?",
+      "author": "Reuben",
+      "comments": []
+    }
+  ]
+}
