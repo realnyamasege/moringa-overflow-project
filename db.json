@@ -17,204 +17,502 @@
       "phone_number": "07198765432"
     },
     {
-      "id": "9e4e",
-      "email": "Kinuthia@gmail.com",
-      "password": "1234"
-    },
-    {
-      "id": "b089",
       "name": "max",
-      "email": "max@gmail.com",
-      "password": "12",
+      "password": "1234",
       "profile_image": "https://www.google.com/imgres?q=kfc%20wallpaper%204k&imgurl=https%3A%2F%2Fc4.wallpaperflare.com%2Fwallpaper%2F124%2F52%2F871%2Fkfc-wallpaper-preview.jpg&imgrefurl=https%3A%2F%2Fwww.wallpaperflare.com%2Fsearch%3Fwallpaper%3DKFC&docid=5D75_sNTxOUbdM&tbnid=TzZt6PoH0ksLkM&vet=12ahUKEwjpoqiSgtmHAxU5lP0HHUWFG38QM3oECGMQAA..i&w=728&h=455&hcb=2&ved=2ahUKEwjpoqiSgtmHAxU5lP0HHUWFG38QM3oECGMQAA",
-      "phone_number": "0712345678"
+      "phone_number": "0712345678",
+      "id": "b089"
     },
     {
-      "id": "6858",
-      "email": "g@gmail.com",
-      "password": "tyfgyhycyucyucyucuy"
-    },
-    {
-      "id": "1659",
-      "name": "max",
-      "email": "max1@gmail.com",
-      "password": "123",
-      "profile_image": "https://www.google.com/imgres?q=kfc%20wallpaper%204k&imgurl=https%3A%2F%2Fc4.wallpaperflare.com%2Fwallpaper%2F124%2F52%2F871%2Fkfc-wallpaper-preview.jpg&imgrefurl=https%3A%2F%2Fwww.wallpaperflare.com%2Fsearch%3Fwallpaper%3DKFC&docid=5D75_sNTxOUbdM&tbnid=TzZt6PoH0ksLkM&vet=12ahUKEwjpoqiSgtmHAxU5lP0HHUWFG38QM3oECGMQAA..i&w=728&h=455&hcb=2&ved=2ahUKEwjpoqiSgtmHAxU5lP0HHUWFG38QM3oECGMQAA",
-      "phone_number": "0712345678"
-    },
-    {
-      "id": "7cb1",
-      "email": "max1@gmail.com",
-      "password": "123"
-    },
-    {
-      "id": "2a68",
       "name": "Ice Rube",
-      "email": "ice@gmail.com",
-      "password": "12",
+      "password": "1223",
       "profile_image": "http://qqwertyui.com",
+      "phone_number": "1234567",
+      "id": "2a68"
+    },
+    {
+      "name": "kfc",
+      "password": "12qw1",
+      "profile_image": "http://qwertyuio.com",
+      "phone_number": "1234567",
+      "id": "5956"
+    },
+    {
+      "name": "bb",
+      "password": "qwerty22",
+      "profile_image": "http://qwertyuiokj.com",
+      "phone_number": "123456",
+      "id": "b04b"
+    },
+    {
+      "id": "e4d6",
+      "name": "rr",
+      "email": "rr@gmail.com",
+      "password": "qwer",
+      "profile_image": "http://qwertyuiop.com",
+      "phone_number": "123456"
+    },
+    {
+      "id": "3018",
+      "name": "ee",
+      "email": "ee@gmail.com",
+      "password": "1234",
+      "profile_image": "https://c4.wallpaperflare.com/wallpaper/827/65/320/firewatch-4k-best-wallpaper-preview.jpg",
       "phone_number": "1234567"
-    },
-    {
-      "id": "e278",
-      "email": "ice@gmail.com",
-      "password": "1211234567890qwertyuiopwertyuioertyuiop"
-    },
-    {
-      "id": "7697",
-      "email": "qwertyuio@gmail.co",
-      "password": "sdfghjhguhgtyujhfdsxcvgfdxcgh"
     }
   ],
   "questions": [
     {
-      "id": "1",
-      "title": "What is React?",
-      "content": "React is a JavaScript library for building user interfaces.",
-      "author": "Alice",
-      "upvotes": 25,
+      "id": "8b7d",
+      "title": "What is the SOLID principle?",
+      "content": "The SOLID principles are a set of design principles in object-oriented programming aimed at making software designs more understandable, flexible, and maintainable.",
+      "author": "Derek",
+      "upvotes": 20,
       "downvotes": 11,
       "tags": [
-        "JavaScript",
-        "React"
+        "Software Engineering",
+        "Design Principles"
+      ],
+      "awards": 2,
+      "comments": [
+        {
+          "comment": "dfgh",
+          "author": "bee",
+          "id": "1722927345537"
+        },
+        {
+          "comment": "tyu",
+          "author": "ert",
+          "id": "1722927463234"
+        },
+        {
+          "comment": "rtyu",
+          "author": "rty",
+          "id": "1722927480025"
+        },
+        {
+          "comment": "qwert",
+          "author": "hhh",
+          "id": "1722927711566"
+        },
+        {
+          "comment": "yes that's true",
+          "author": "ben",
+          "id": "1722927767257"
+        },
+        {
+          "comment": "wertyuio",
+          "author": "ertyu",
+          "id": "1722928440019"
+        }
+      ]
+    },
+    {
+      "id": "7f8a",
+      "title": "How does version control work?",
+      "content": "Version control systems help manage changes to source code over time, allowing multiple developers to work on a project simultaneously.",
+      "author": "Eve",
+      "upvotes": 20,
+      "downvotes": 2,
+      "tags": [
+        "Version Control",
+        "Git"
       ],
       "awards": 1,
       "comments": []
     },
     {
-      "id": "2",
-      "title": "How to use useState in React?",
-      "content": "The useState hook allows you to add state to functional components.",
-      "author": "Bob",
-      "upvotes": 42,
-      "downvotes": 6,
+      "id": "2b1e",
+      "title": "What is continuous integration?",
+      "content": "Continuous integration (CI) is a practice in software development where code changes are automatically tested and integrated into the main codebase frequently.",
+      "author": "Frank",
+      "upvotes": 30,
+      "downvotes": 2,
       "tags": [
-        "React",
-        "useState"
-      ],
-      "awards": 2,
-      "comments": []
-    },
-    {
-      "id": "3",
-      "title": "What is the use of useEffect in React?",
-      "content": "The useEffect hook allows you to perform side effects in functional components.",
-      "author": "Charlie",
-      "upvotes": 12,
-      "downvotes": 0,
-      "tags": [
-        "React",
-        "useEffect"
+        "CI/CD",
+        "DevOps"
       ],
       "awards": 3,
       "comments": []
     },
     {
-      "id": "4",
-      "title": "What is Frontend coding?",
-      "content": "Frontend coding involves creating the user interface and user experience of a website.",
-      "author": "Charlie",
-      "upvotes": 8,
-      "downvotes": 3,
-      "tags": [
-        "Frontend",
-        "Web Development"
-      ],
-      "awards": 1,
-      "comments": []
-    },
-    {
-      "id": "f47a",
-      "title": "dvawdfasdf",
-      "content": "asrvqe",
-      "author": "wrvqer",
-      "upvotes": 5,
-      "downvotes": 1,
-      "tags": [
-        "Misc"
-      ],
-      "awards": 0,
-      "comments": []
-    },
-    {
-      "id": "53c5",
-      "title": "touch on the profile",
-      "content": "add a profile image and any other tweaks you think are needed",
-      "author": "Reuben",
-      "upvotes": 7,
-      "downvotes": 2,
-      "tags": [
-        "Profile",
-        "Tweaks"
-      ],
-      "awards": 1,
-      "comments": []
-    },
-    {
-      "id": "deec",
-      "title": "javascript",
-      "content": "what is an arrow function",
-      "author": "Ezekiel",
-      "upvotes": 18,
-      "downvotes": 2,
-      "tags": [
-        "JavaScript",
-        "Functions"
-      ],
-      "awards": 2,
-      "comments": []
-    },
-    {
-      "id": "b803",
-      "title": "wdvef",
-      "content": "efverfbw",
-      "author": "ebwefb",
-      "upvotes": 4,
+      "id": "f392",
+      "title": "What is microservices architecture?",
+      "content": "Microservices architecture is an approach to software development where an application is composed of small, independent services that communicate over a network.",
+      "author": "Grace",
+      "upvotes": 22,
       "downvotes": 4,
       "tags": [
-        "Misc"
+        "Microservices",
+        "Architecture"
       ],
-      "awards": 0,
+      "awards": 2,
       "comments": []
     },
     {
-      "id": "7796",
-      "title": "qwertyuio",
-      "content": "qwertyuiop",
-      "author": "qwertyuiop",
-      "upvotes": 6,
+      "id": "c94d",
+      "title": "What are design patterns?",
+      "content": "Design patterns are general, reusable solutions to common problems in software design.",
+      "author": "Hannah",
+      "upvotes": 18,
       "downvotes": 0,
       "tags": [
-        "Misc"
+        "Design Patterns",
+        "Software Engineering"
       ],
-      "awards": 0,
+      "awards": 2,
       "comments": []
     },
     {
-      "id": "d6b2",
-      "title": " cloud",
-      "content": "what is the function of the cloud in storage",
-      "author": "Sam",
-      "upvotes": 9,
+      "id": "4a7c",
+      "title": "What is the purpose of unit testing?",
+      "content": "Unit testing involves testing individual units or components of a software to ensure they work as expected.",
+      "author": "Ian",
+      "upvotes": 28,
       "downvotes": 1,
       "tags": [
-        "Cloud",
-        "Storage"
+        "Testing",
+        "Unit Testing"
+      ],
+      "awards": 2,
+      "comments": []
+    },
+    {
+      "id": "6f2d",
+      "title": "What is a RESTful API?",
+      "content": "A RESTful API is an API that adheres to the principles of Representational State Transfer (REST), allowing for interaction with web services using standard HTTP methods.",
+      "author": "Jack",
+      "upvotes": 25,
+      "downvotes": 3,
+      "tags": [
+        "API",
+        "REST"
+      ],
+      "awards": 2,
+      "comments": []
+    },
+    {
+      "id": "2e6a",
+      "title": "What is Agile methodology?",
+      "content": "Agile methodology is an iterative approach to software development that emphasizes flexibility, collaboration, and customer feedback.",
+      "author": "Karen",
+      "upvotes": 33,
+      "downvotes": 0,
+      "tags": [
+        "Agile",
+        "Methodology"
       ],
       "awards": 3,
       "comments": []
     },
     {
-      "id": "1ff3",
-      "title": "How",
-      "content": "How is How used?",
-      "author": "Reuben",
-      "upvotes": 5,
+      "id": "9b4f",
+      "title": "How does a compiler differ from an interpreter?",
+      "content": "A compiler translates source code into machine code before execution, while an interpreter translates code line-by-line during execution.",
+      "author": "Leo",
+      "upvotes": 19,
       "downvotes": 2,
       "tags": [
-        "Misc"
+        "Compiler",
+        "Interpreter"
       ],
       "awards": 1,
+      "comments": []
+    },
+    {
+      "id": "e8f3",
+      "title": "What is dependency injection?",
+      "content": "Dependency injection is a design pattern in which an object's dependencies are provided to it, rather than the object creating them itself.",
+      "author": "Mia",
+      "upvotes": 21,
+      "downvotes": 1,
+      "tags": [
+        "Design Patterns",
+        "Dependency Injection"
+      ],
+      "awards": 2,
+      "comments": []
+    },
+    {
+      "id": "0cfa",
+      "title": "What are some common database normalization forms?",
+      "content": "Database normalization involves organizing tables to reduce redundancy and improve data integrity. Common forms include 1NF, 2NF, 3NF, and BCNF.",
+      "author": "Noah",
+      "upvotes": 27,
+      "downvotes": 2,
+      "tags": [
+        "Database",
+        "Normalization"
+      ],
+      "awards": 3,
+      "comments": []
+    },
+    {
+      "id": "f5b9",
+      "title": "What is the difference between a thread and a process?",
+      "content": "A thread is the smallest unit of a process that can be scheduled, while a process is an independent executing instance of a program.",
+      "author": "Olivia",
+      "upvotes": 16,
+      "downvotes": 0,
+      "tags": [
+        "Concurrency",
+        "Threads"
+      ],
+      "awards": 2,
+      "comments": []
+    },
+    {
+      "id": "a7db",
+      "title": "What is the purpose of garbage collection in programming?",
+      "content": "Garbage collection is a form of automatic memory management that reclaims memory occupied by objects no longer in use.",
+      "author": "Paul",
+      "upvotes": 14,
+      "downvotes": 1,
+      "tags": [
+        "Memory Management",
+        "Garbage Collection"
+      ],
+      "awards": 1,
+      "comments": []
+    },
+    {
+      "id": "d5b8",
+      "title": "What is a race condition?",
+      "content": "A race condition occurs when the behavior of a software system depends on the timing or order of uncontrollable events, leading to unpredictable outcomes.",
+      "author": "Quincy",
+      "upvotes": 20,
+      "downvotes": 2,
+      "tags": [
+        "Concurrency",
+        "Race Condition"
+      ],
+      "awards": 2,
+      "comments": []
+    },
+    {
+      "id": "f4c6",
+      "title": "What is the Model-View-Controller (MVC) pattern?",
+      "content": "MVC is a design pattern that separates an application into three interconnected components: Model, View, and Controller.",
+      "author": "Rachel",
+      "upvotes": 23,
+      "downvotes": 3,
+      "tags": [
+        "Design Patterns",
+        "MVC"
+      ],
+      "awards": 2,
+      "comments": []
+    },
+    {
+      "id": "c92e",
+      "title": "How does HTTP work?",
+      "content": "HTTP is a protocol used for transmitting data over the web, operating as a request-response protocol between a client and server.",
+      "author": "Steve",
+      "upvotes": 29,
+      "downvotes": 1,
+      "tags": [
+        "HTTP",
+        "Web Development"
+      ],
+      "awards": 3,
+      "comments": []
+    },
+    {
+      "id": "b6f1",
+      "title": "What is the purpose of a load balancer?",
+      "content": "A load balancer distributes network or application traffic across multiple servers to ensure reliability and performance.",
+      "author": "Tina",
+      "upvotes": 17,
+      "downvotes": 1,
+      "tags": [
+        "Load Balancing",
+        "Infrastructure"
+      ],
+      "awards": 2,
+      "comments": []
+    },
+    {
+      "id": "f9b7",
+      "title": "What is a deadlock in computing?",
+      "content": "A deadlock is a situation in a concurrent system where two or more processes are unable to proceed because each is waiting for the other to release a resource.",
+      "author": "Ulysses",
+      "upvotes": 19,
+      "downvotes": 0,
+      "tags": [
+        "Concurrency",
+        "Deadlock"
+      ],
+      "awards": 2,
+      "comments": []
+    },
+    {
+      "id": "d9c3",
+      "title": "What is a software framework?",
+      "content": "A software framework is a platform for developing software applications, providing a foundation with predefined classes and functions.",
+      "author": "Victoria",
+      "upvotes": 24,
+      "downvotes": 1,
+      "tags": [
+        "Software Framework",
+        "Development"
+      ],
+      "awards": 2,
+      "comments": []
+    },
+    {
+      "id": "e5a6",
+      "title": "What is the difference between an abstract class and an interface?",
+      "content": "An abstract class can have method implementations and can be inherited from, while an interface only defines a contract and cannot have implementations.",
+      "author": "Walter",
+      "upvotes": 22,
+      "downvotes": 3,
+      "tags": [
+        "OOP",
+        "Abstract Class",
+        "Interface"
+      ],
+      "awards": 2,
+      "comments": []
+    },
+    {
+      "id": "b4a1",
+      "title": "What is the purpose of an API gateway?",
+      "content": "An API gateway acts as an entry point for API requests, handling routing, authentication, and other functions.",
+      "author": "Xena",
+      "upvotes": 18,
+      "downvotes": 0,
+      "tags": [
+        "API Gateway",
+        "Microservices"
+      ],
+      "awards": 2,
+      "comments": []
+    },
+    {
+      "id": "c7b2",
+      "title": "What are the different types of testing in software development?",
+      "content": "Types of testing include unit testing, integration testing, system testing, acceptance testing, performance testing, and more.",
+      "author": "Yvonne",
+      "upvotes": 26,
+      "downvotes": 2,
+      "tags": [
+        "Testing",
+        "Software Development"
+      ],
+      "awards": 2,
+      "comments": []
+    },
+    {
+      "id": "f8e3",
+      "title": "What is the purpose of a database index?",
+      "content": "A database index improves the speed of data retrieval operations on a database table by providing quick access to rows.",
+      "author": "Zach",
+      "upvotes": 20,
+      "downvotes": 1,
+      "tags": [
+        "Database",
+        "Indexing"
+      ],
+      "awards": 2,
+      "comments": []
+    },
+    {
+      "id": "e6b4",
+      "title": "What is object-oriented programming (OOP)?",
+      "content": "OOP is a programming paradigm based on the concept of objects, which contain data and methods.",
+      "author": "Aaron",
+      "upvotes": 28,
+      "downvotes": 0,
+      "tags": [
+        "OOP",
+        "Programming"
+      ],
+      "awards": 2,
+      "comments": []
+    },
+    {
+      "id": "c8d5",
+      "title": "What is a singleton pattern?",
+      "content": "The singleton pattern ensures that a class has only one instance and provides a global point of access to it.",
+      "author": "Bella",
+      "upvotes": 16,
+      "downvotes": 1,
+      "tags": [
+        "Design Patterns",
+        "Singleton"
+      ],
+      "awards": 2,
+      "comments": []
+    },
+    {
+      "id": "a4e6",
+      "title": "What is a callback function?",
+      "content": "A callback function is a function passed into another function as an argument, which is then invoked inside the outer function.",
+      "author": "Caleb",
+      "upvotes": 17,
+      "downvotes": 1,
+      "tags": [
+        "JavaScript",
+        "Callback"
+      ],
+      "awards": 1,
+      "comments": []
+    },
+    {
+      "id": "f7e9",
+      "title": "What is the difference between synchronous and asynchronous programming?",
+      "content": "Synchronous programming executes tasks sequentially, while asynchronous programming allows tasks to be executed without waiting for other tasks to complete.",
+      "author": "Diana",
+      "upvotes": 24,
+      "downvotes": 2,
+      "tags": [
+        "Programming",
+        "Asynchronous"
+      ],
+      "awards": 2,
+      "comments": []
+    },
+    {
+      "id": "b9a2",
+      "title": "What is the purpose of a cache?",
+      "content": "A cache stores frequently accessed data to reduce the time needed to retrieve it from a slower data source.",
+      "author": "Edward",
+      "upvotes": 21,
+      "downvotes": 1,
+      "tags": [
+        "Cache",
+        "Performance"
+      ],
+      "awards": 2,
+      "comments": []
+    },
+    {
+      "id": "d3b5",
+      "title": "What is the difference between SQL and NoSQL databases?",
+      "content": "SQL databases use structured query language and are relational, while NoSQL databases are non-relational and can store unstructured data.",
+      "author": "Fiona",
+      "upvotes": 29,
+      "downvotes": 0,
+      "tags": [
+        "Database",
+        "SQL",
+        "NoSQL"
+      ],
+      "awards": 3,
+      "comments": []
+    },
+    {
+      "id": "e2c4",
+      "title": "What is DevOps?",
+      "content": "DevOps is a set of practices that combines software development (Dev) and IT operations (Ops) to shorten the development lifecycle.",
+      "author": "George",
+      "upvotes": 30,
+      "downvotes": 1,
+      "tags": [
+        "DevOps",
+        "Software Development"
+      ],
+      "awards": 3,
       "comments": []
     }
   ]

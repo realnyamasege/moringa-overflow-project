@@ -10,32 +10,27 @@ const LoginPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch("http://localhost:3000/users", {
-      // Adding method type
-      method: "POST",
-
-      // Adding body or contents to send
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
-
-      // Adding headers to the request
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    })
-      // Converting to JSON
+    fetch("http://localhost:3000/users")
       .then((response) => response.json())
+      .then((users) => {
+        // Find the user with the matching email and password
+        const user = users.find(
+          (user) => user.email === email && user.password === password
+        );
 
-      // Displaying results to console
-      .then((data) => {
-        localStorage.setItem("access_token", data.access_token);
-        navigate("/Profile");
+        if (user) {
+          // Assuming the user is found and authentication is successful
+          localStorage.setItem("access_token", user.id); // Example token; in real apps, use proper tokens
+          navigate("/Profile");
+        } else {
+          // If user not found or credentials are incorrect
+          toast.error("Invalid email or password.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching users:", error);
+        toast.error("An error occurred. Please try again.");
       });
-
-    // Assuming the login is successful, navigate to the home page
-    // You might want to add actual authentication logic here
   };
 
   return (

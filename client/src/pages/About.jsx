@@ -15,15 +15,6 @@ export default function About() {
 
         {/* Text Section */}
         <div className='mt-10 w-full md:w-3/4 text-center'>
-          <h1 className='text-xl my-2 underline font-semibold'>Problem Statement</h1>
-          <p className='leading-relaxed'>
-            Moringa School, a renowned institution for coding and software development training, 
-            lacks a dedicated platform for students and instructors to share knowledge, ask questions,
-            and collaborate on coding problems. Existing platforms such as Stack Overflow are too broad 
-            and do not cater specifically to the unique needs and curriculum of Moringa School. 
-            The absence of a tailored platform leads to scattered information, reduced collaboration, 
-            and missed learning opportunities.
-          </p>
           <br/>
           <h1 className='text-xl my-2 underline font-semibold'>Solution</h1>
           <p className='leading-relaxed'>
