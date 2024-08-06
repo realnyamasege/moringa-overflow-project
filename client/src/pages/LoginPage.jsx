@@ -13,17 +13,14 @@ const LoginPage = () => {
     fetch("http://localhost:3000/users")
       .then((response) => response.json())
       .then((users) => {
-        // Find the user with the matching email and password
         const user = users.find(
           (user) => user.email === email && user.password === password
         );
 
         if (user) {
-          // Assuming the user is found and authentication is successful
-          localStorage.setItem("access_token", user.id); // Example token; in real apps, use proper tokens
+          localStorage.setItem("access_token", user.id); // Example token; use a proper token in real apps
           navigate("/Profile");
         } else {
-          // If user not found or credentials are incorrect
           toast.error("Invalid email or password.");
         }
       })
@@ -39,10 +36,7 @@ const LoginPage = () => {
         <h1 className="text-2xl font-bold mb-6">Login</h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
               Email
             </label>
             <input
@@ -55,10 +49,7 @@ const LoginPage = () => {
             />
           </div>
           <div className="mb-6">
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
               Password
             </label>
             <input

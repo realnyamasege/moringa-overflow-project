@@ -180,7 +180,7 @@ const Questions = () => {
               </div>
               <div className="text-gray-500 text-sm">
                 <span>By {question.author}</span> &middot;
-                <span className="ml-2">{question.comments.length} {question.comments.length === 1 ? 'comment' : 'comments'}</span>
+                <span className="ml-2">{question.answers?.length || 0} {question.answers?.length === 1 ? 'answer' : 'answers'}</span>
               </div>
             </div>
             {(currentUser?.admin || currentUser?.name === question.author) && (

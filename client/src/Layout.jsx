@@ -1,24 +1,36 @@
-import React from "react";
-import { Link, Outlet, Route, Routes } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Layout() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem('access_token');
+    setIsAuthenticated(!!accessToken);
+  }, []);
+
+  const handleLogin = () => {
+    localStorage.setItem('access_token', 'some-token'); // Example token; replace with real one
+    setIsAuthenticated(true);
+    navigate("/Profile");
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('access_token');
+    setIsAuthenticated(false);
+    navigate("/"); // Redirect to home page or any other page
+  };
+
   return (
     <div>
       <nav className="bg-white mt-6 border-gray-200 dark:bg-gray-900">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-          <Link
-            to="/"
-            className="flex items-center space-x-3 rtl:space-x-reverse"
-          >
+          <Link to="/" className="flex items-center space-x-3 rtl:space-x-reverse">
             <span>
-              <img
-                src="./images/Logo.jpeg"
-                alt="logo"
-                width="250"
-                height="95%"
-              />
+              <img src="./images/Logo.jpeg" alt="logo" width="250" height="95%" />
             </span>
           </Link>
           <button
@@ -93,39 +105,48 @@ export default function Layout() {
                   className="search block py-2 px-3 text-lg text-gray-900 rounded bg-gray-100 hover:bg-gray-200 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
                   type="text"
                   id="search"
-                  onKeyUp={() => search()}
                   placeholder="Search"
                 />
               </li>
-              <li>
-                <Link to="/LoginPage">
+              {!isAuthenticated ? (
+                <>
+                  <li>
+                    <Link to="/LoginPage">
+                      <button
+                        onClick={handleLogin}
+                        className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        type="button"
+                      >
+                        Log in
+                      </button>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/Signup">
+                      <button
+                        className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        type="button"
+                      >
+                        Sign up
+                      </button>
+                    </Link>
+                  </li>
+                </>
+              ) : (
+                <li>
                   <button
-                    data-modal-target="default-modal"
-                    data-modal-toggle="default-modal"
+                    onClick={handleLogout}
                     className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    type="button"
                   >
-                    Log in
+                    Log out
                   </button>
-                </Link>
-              </li>
-              <li>
-                <Link to="/Signup">
-                  <button
-                    data-modal-target="default-modal"
-                    data-modal-toggle="default-modal"
-                    className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    type="button"
-                  >
-                    Sign up
-                  </button>
-                </Link>
-              </li>
+                </li>
+              )}
             </ul>
           </div>
         </div>
       </nav>
-      {/* component */}
+
       <div className="bg-gray-100 text-lg container mx-auto min-h-[90vh]">
         <ToastContainer
           position="top-right"
@@ -139,7 +160,6 @@ export default function Layout() {
           pauseOnHover
           theme="dark"
         />
-        <ToastContainer />
         <Outlet />
       </div>
 

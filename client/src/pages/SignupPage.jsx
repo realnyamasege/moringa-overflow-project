@@ -55,10 +55,7 @@ const SignupPage = () => {
         <h1 className="text-2xl font-bold mb-6">Sign Up</h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label
-              htmlFor="name"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
               Name
             </label>
             <input
@@ -71,10 +68,7 @@ const SignupPage = () => {
             />
           </div>
           <div className="mb-4">
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
               Email
             </label>
             <input
@@ -87,10 +81,7 @@ const SignupPage = () => {
             />
           </div>
           <div className="mb-4">
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
               Password
             </label>
             <input
@@ -103,10 +94,7 @@ const SignupPage = () => {
             />
           </div>
           <div className="mb-4">
-            <label
-              htmlFor="confirmPassword"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
               Confirm Password
             </label>
             <input
@@ -119,10 +107,7 @@ const SignupPage = () => {
             />
           </div>
           <div className="mb-4">
-            <label
-              htmlFor="profileImage"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="profileImage" className="block text-sm font-medium text-gray-700">
               Profile Image URL
             </label>
             <input
@@ -134,10 +119,7 @@ const SignupPage = () => {
             />
           </div>
           <div className="mb-4">
-            <label
-              htmlFor="phoneNumber"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
               Phone Number
             </label>
             <input
@@ -149,10 +131,7 @@ const SignupPage = () => {
             />
           </div>
           <div className="mb-6">
-            <label
-              htmlFor="admin"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="admin" className="block text-sm font-medium text-gray-700">
               Admin
             </label>
             <input
