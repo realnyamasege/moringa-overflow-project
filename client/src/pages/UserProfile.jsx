@@ -51,6 +51,13 @@ const UserProfile = () => {
           className="w-32 h-32 rounded-full object-cover"
         />
       </div>
+      {currentUser.admin && (
+        <div className="flex justify-center mb-4">
+          <span className="inline-block bg-yellow-500 text-white text-sm font-semibold mr-2 px-2.5 py-0.5 rounded-full">
+            Admin
+          </span>
+        </div>
+      )}
       <div className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700">

@@ -17,34 +17,6 @@
       "phone_number": "07198765432"
     },
     {
-      "name": "max",
-      "password": "1234",
-      "profile_image": "https://www.google.com/imgres?q=kfc%20wallpaper%204k&imgurl=https%3A%2F%2Fc4.wallpaperflare.com%2Fwallpaper%2F124%2F52%2F871%2Fkfc-wallpaper-preview.jpg&imgrefurl=https%3A%2F%2Fwww.wallpaperflare.com%2Fsearch%3Fwallpaper%3DKFC&docid=5D75_sNTxOUbdM&tbnid=TzZt6PoH0ksLkM&vet=12ahUKEwjpoqiSgtmHAxU5lP0HHUWFG38QM3oECGMQAA..i&w=728&h=455&hcb=2&ved=2ahUKEwjpoqiSgtmHAxU5lP0HHUWFG38QM3oECGMQAA",
-      "phone_number": "0712345678",
-      "id": "b089"
-    },
-    {
-      "name": "Ice Rube",
-      "password": "1223",
-      "profile_image": "http://qqwertyui.com",
-      "phone_number": "1234567",
-      "id": "2a68"
-    },
-    {
-      "name": "kfc",
-      "password": "12qw1",
-      "profile_image": "http://qwertyuio.com",
-      "phone_number": "1234567",
-      "id": "5956"
-    },
-    {
-      "name": "bb",
-      "password": "qwerty22",
-      "profile_image": "http://qwertyuiokj.com",
-      "phone_number": "123456",
-      "id": "b04b"
-    },
-    {
       "id": "e4d6",
       "name": "rr",
       "email": "rr@gmail.com",
@@ -59,6 +31,24 @@
       "password": "1234",
       "profile_image": "https://c4.wallpaperflare.com/wallpaper/827/65/320/firewatch-4k-best-wallpaper-preview.jpg",
       "phone_number": "1234567"
+    },
+    {
+      "id": "b839",
+      "name": "qq",
+      "email": "qq@gmail.com",
+      "password": "1q2w",
+      "profile_image": "https://c4.wallpaperflare.com/wallpaper/448/174/357/neon-4k-hd-best-for-desktop-wallpaper-thumb.jpg",
+      "phone_number": "0723232323",
+      "admin": true
+    },
+    {
+      "id": "13a0",
+      "name": "Cynthia",
+      "email": "SeenThere@gmail.com",
+      "password": "12345",
+      "profile_image": "https://img.freepik.com/free-photo/majestic-mountain-peak-tranquil-winter-landscape-generated-by-ai_188544-15662.jpg",
+      "phone_number": "0712131415",
+      "admin": true
     }
   ],
   "questions": [
@@ -104,6 +94,18 @@
           "comment": "wertyuio",
           "author": "ertyu",
           "id": "1722928440019"
+        },
+        {
+          "comment": "good Question",
+          "author": "Ezekiel",
+          "id": "1722931675068"
+        }
+      ],
+      "answers": [
+        {
+          "answer": "wertyui",
+          "author": "wertgh",
+          "id": "1722933767018"
         }
       ]
     },
@@ -119,21 +121,20 @@
         "Git"
       ],
       "awards": 1,
-      "comments": []
-    },
-    {
-      "id": "2b1e",
-      "title": "What is continuous integration?",
-      "content": "Continuous integration (CI) is a practice in software development where code changes are automatically tested and integrated into the main codebase frequently.",
-      "author": "Frank",
-      "upvotes": 30,
-      "downvotes": 2,
-      "tags": [
-        "CI/CD",
-        "DevOps"
+      "comments": [
+        {
+          "comment": "qwertyui",
+          "author": "cynthia",
+          "id": "1722933317438"
+        }
       ],
-      "awards": 3,
-      "comments": []
+      "answers": [
+        {
+          "answer": "werftgyuj",
+          "author": "wertyu",
+          "id": "1722933446951"
+        }
+      ]
     },
     {
       "id": "f392",
@@ -507,12 +508,34 @@
       "content": "DevOps is a set of practices that combines software development (Dev) and IT operations (Ops) to shorten the development lifecycle.",
       "author": "George",
       "upvotes": 30,
-      "downvotes": 1,
+      "downvotes": 3,
       "tags": [
         "DevOps",
         "Software Development"
       ],
       "awards": 3,
+      "comments": []
+    },
+    {
+      "id": "aea7",
+      "title": "ertyu",
+      "content": "wertyu",
+      "author": "wertyu",
+      "comments": [
+        {
+          "comment": "asdfghj",
+          "author": "asdfgh",
+          "id": "1722933034630"
+        }
+      ],
+      "downvotes": 2,
+      "upvotes": 1
+    },
+    {
+      "id": "fb53",
+      "title": "rtyugyuhd",
+      "content": "asdfghj",
+      "author": "ertyui",
       "comments": []
     }
   ]

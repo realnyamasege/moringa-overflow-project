@@ -1,19 +1,44 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FaArrowUp, FaArrowDown } from 'react-icons/fa';
+import { FaArrowUp, FaArrowDown, FaTrash } from 'react-icons/fa';
 
 const UpdateQuestions = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [question, setQuestion] = useState({});
-  const [comment, setComment] = useState('');
+  const [answer, setAnswer] = useState('');
   const [author, setAuthor] = useState('');
   const [upvotes, setUpvotes] = useState(0);
   const [downvotes, setDownvotes] = useState(0);
-  const [userVote, setUserVote] = useState(null); // null: no vote, 'up': upvote, 'down': downvote
+  const [userVote, setUserVote] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
+    const userId = localStorage.getItem("access_token");
+    if (!userId) {
+      toast.error("No user logged in");
+      navigate("/login");
+      return;
+    }
+
+    const fetchCurrentUser = async () => {
+      try {
+        const response = await fetch(`http://localhost:3000/users/${userId}`);
+        if (response.ok) {
+          const data = await response.json();
+          setCurrentUser(data);
+        } else {
+          throw new Error("Failed to fetch current user");
+        }
+      } catch (error) {
+        console.error("Error fetching current user:", error);
+        toast.error("Failed to fetch current user");
+      }
+    };
+
+    fetchCurrentUser();
+
     const fetchQuestion = async () => {
       try {
         const response = await fetch(`http://localhost:3000/questions/${id}`);
@@ -31,7 +56,7 @@ const UpdateQuestions = () => {
     };
 
     fetchQuestion();
-  }, [id]);
+  }, [id, navigate]);
 
   const updateVotes = async (newUpvotes, newDownvotes) => {
     try {
@@ -84,31 +109,54 @@ const UpdateQuestions = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const newComment = {
-        comment,
+      const newAnswer = {
+        answer,
         author,
-        id: Date.now().toString() // unique id for the comment
+        id: Date.now().toString()
       };
-      const updatedComments = question.comments ? [...question.comments, newComment] : [newComment];
+      const updatedAnswers = question.answers ? [...question.answers, newAnswer] : [newAnswer];
 
       const response = await fetch(`http://localhost:3000/questions/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ comments: updatedComments }),
+        body: JSON.stringify({ answers: updatedAnswers }),
       });
 
       if (response.ok) {
-        toast.success('Comment added successfully');
-        setQuestion({ ...question, comments: updatedComments });
-        setComment('');
+        toast.success('Answer added successfully');
+        setQuestion({ ...question, answers: updatedAnswers });
+        setAnswer('');
         setAuthor('');
       } else {
-        throw new Error('Failed to add comment');
+        throw new Error('Failed to add answer');
       }
     } catch (error) {
-      console.error('Error adding comment:', error);
+      console.error('Error adding answer:', error);
+    }
+  };
+
+  const handleDeleteAnswer = async (answerId) => {
+    try {
+      const updatedAnswers = question.answers.filter(ans => ans.id !== answerId);
+
+      const response = await fetch(`http://localhost:3000/questions/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ answers: updatedAnswers }),
+      });
+
+      if (response.ok) {
+        toast.success('Answer deleted successfully');
+        setQuestion({ ...question, answers: updatedAnswers });
+      } else {
+        throw new Error('Failed to delete answer');
+      }
+    } catch (error) {
+      console.error('Error deleting answer:', error);
     }
   };
 
@@ -145,16 +193,26 @@ const UpdateQuestions = () => {
             <span>By {question.author}</span>
           </div>
           <div className="mt-6">
-            <h2 className="text-lg font-semibold text-gray-900">Comments</h2>
+            <h2 className="text-lg font-semibold text-gray-900">Answers</h2>
             <div className="mt-4 space-y-4">
-              {question.comments && question.comments.map((cmt, index) => (
-                <div key={index} className="border border-gray-300 rounded-lg p-4">
-                  <p className="text-gray-800">{cmt.comment}</p>
-                  <p className="text-sm text-gray-500 mt-2">- {cmt.author}</p>
+              {question.answers && question.answers.map((cmt, index) => (
+                <div key={index} className="border border-gray-300 rounded-lg p-4 flex justify-between items-start">
+                  <div>
+                    <p className="text-gray-800">{cmt.answer}</p>
+                    <p className="text-sm text-gray-500 mt-2">- {cmt.author}</p>
+                  </div>
+                  {(currentUser?.admin || currentUser?.name === cmt.author) && (
+                    <button
+                      onClick={() => handleDeleteAnswer(cmt.id)}
+                      className="text-red-600 hover:text-red-800"
+                    >
+                      <FaTrash className="text-xl" />
+                    </button>
+                  )}
                 </div>
               ))}
-              {question.comments && question.comments.length === 0 && (
-                <p className="text-gray-500">No comments yet.</p>
+              {question.answers && question.answers.length === 0 && (
+                <p className="text-gray-500">No Answers yet.</p>
               )}
             </div>
           </div>
@@ -165,8 +223,8 @@ const UpdateQuestions = () => {
             <div className="mb-5">
               <label className="block mb-2 text-sm font-medium text-gray-700">Your Answer</label>
               <textarea
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
+                value={answer}
+                onChange={(e) => setAnswer(e.target.value)}
                 className="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500"
                 required
               />

@@ -1,13 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaArrowUp, FaArrowDown, FaAward } from 'react-icons/fa';
+import { FaArrowUp, FaArrowDown, FaAward, FaTrash } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 const Questions = () => {
   const [questions, setQuestions] = useState([]);
   const [votes, setVotes] = useState({});
+  const [currentUser, setCurrentUser] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
+    const userId = localStorage.getItem("access_token");
+    if (!userId) {
+      toast.error("No user logged in");
+      navigate("/login");
+      return;
+    }
+
+    const fetchCurrentUser = async () => {
+      try {
+        const response = await fetch(`http://localhost:3000/users/${userId}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch current user");
+        }
+        const data = await response.json();
+        setCurrentUser(data);
+      } catch (error) {
+        console.error("Error fetching current user:", error);
+        toast.error("Failed to fetch current user");
+      }
+    };
+
+    fetchCurrentUser();
+
     const fetchQuestions = async () => {
       try {
         const response = await fetch('http://localhost:3000/questions');
@@ -16,13 +41,12 @@ const Questions = () => {
         }
         const data = await response.json();
         setQuestions(data);
-        // Initialize votes state with current upvotes and downvotes
         const initialVotes = {};
         data.forEach((question) => {
           initialVotes[question.id] = {
             upvotes: question.upvotes,
             downvotes: question.downvotes,
-            userVote: null, // no initial vote by the user
+            userVote: null,
           };
         });
         setVotes(initialVotes);
@@ -32,7 +56,7 @@ const Questions = () => {
     };
 
     fetchQuestions();
-  }, []);
+  }, [navigate]);
 
   const handlePostClick = (id) => {
     navigate(`/UpdateQuestion/${id}`);
@@ -83,7 +107,6 @@ const Questions = () => {
         }
       }
 
-      // Update state and backend
       updateVotes(id, newUpvotes, newDownvotes);
 
       return {
@@ -91,6 +114,22 @@ const Questions = () => {
         [id]: { upvotes: newUpvotes, downvotes: newDownvotes, userVote: newUserVote },
       };
     });
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:3000/questions/${id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        throw new Error('Failed to delete question');
+      }
+      setQuestions((prevQuestions) => prevQuestions.filter((q) => q.id !== id));
+      toast.success('Question deleted successfully');
+    } catch (error) {
+      console.error('Error deleting question:', error);
+      toast.error('Failed to delete question');
+    }
   };
 
   return (
@@ -144,6 +183,16 @@ const Questions = () => {
                 <span className="ml-2">{question.comments.length} {question.comments.length === 1 ? 'comment' : 'comments'}</span>
               </div>
             </div>
+            {(currentUser?.admin || currentUser?.name === question.author) && (
+              <div className="flex-shrink-0">
+                <button
+                  onClick={() => handleDelete(question.id)}
+                  className="text-red-600 hover:text-red-800"
+                >
+                  <FaTrash className="text-2xl" />
+                </button>
+              </div>
+            )}
           </div>
         ))}
       </div>

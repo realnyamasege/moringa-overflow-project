@@ -9,6 +9,7 @@ const SignupPage = () => {
   const [name, setName] = useState("");
   const [profileImage, setProfileImage] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -27,6 +28,7 @@ const SignupPage = () => {
         password,
         profile_image: profileImage,
         phone_number: phoneNumber,
+        admin: isAdmin,
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
@@ -131,7 +133,7 @@ const SignupPage = () => {
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             />
           </div>
-          <div className="mb-6">
+          <div className="mb-4">
             <label
               htmlFor="phoneNumber"
               className="block text-sm font-medium text-gray-700"
@@ -144,6 +146,21 @@ const SignupPage = () => {
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            />
+          </div>
+          <div className="mb-6">
+            <label
+              htmlFor="admin"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Admin
+            </label>
+            <input
+              type="checkbox"
+              id="admin"
+              checked={isAdmin}
+              onChange={(e) => setIsAdmin(e.target.checked)}
+              className="mt-1"
             />
           </div>
           <button
