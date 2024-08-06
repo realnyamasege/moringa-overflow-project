@@ -68,6 +68,14 @@ const LoginPage = () => {
             Login
           </button>
         </form>
+        <div className="mt-4">
+          <button
+            onClick={() => navigate("/reset-password")}
+            className="text-blue-500 hover:underline focus:outline-none"
+          >
+            Reset Password
+          </button>
+        </div>
       </div>
     </div>
   );

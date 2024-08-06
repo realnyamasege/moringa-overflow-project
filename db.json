@@ -107,6 +107,15 @@
       "profile_image": "https://mrwallpaper.com/images/hd/3d-phone-glowing-squares-illusion-5caz7bhoq104m211.jpg",
       "phone_number": "123456789",
       "admin": true
+    },
+    {
+      "id": "1a27",
+      "name": "asdfg",
+      "email": "a@gmail.com",
+      "password": "1234",
+      "profile_image": "http://we3ededdc.com",
+      "phone_number": "1234567",
+      "admin": true
     }
   ],
   "questions": [
@@ -474,14 +483,21 @@
       "title": "What are the different types of testing in software development?",
       "content": "Types of testing include unit testing, integration testing, system testing, acceptance testing, performance testing, and more.",
       "author": "Yvonne",
-      "upvotes": 26,
-      "downvotes": 2,
+      "upvotes": 27,
+      "downvotes": 3,
       "tags": [
         "Testing",
         "Software Development"
       ],
       "awards": 2,
-      "comments": []
+      "comments": [],
+      "answers": [
+        {
+          "answer": "sdfgtre",
+          "author": "yes",
+          "id": "1722975525649"
+        }
+      ]
     },
     {
       "id": "f8e3",
