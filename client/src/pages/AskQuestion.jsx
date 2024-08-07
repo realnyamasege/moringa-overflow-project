@@ -17,7 +17,7 @@ export default function AskQuestion() {
     const userId = localStorage.getItem("access_token");
     if (!userId) {
       toast.error("No user logged in");
-      navigate("/loginPage");
+      navigate("/LoginPage");
       return;
     }
 
@@ -62,18 +62,18 @@ export default function AskQuestion() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        userId: currentUser.id,
+        author: currentUser.name,
         title,
         content,
-        author: currentUser?.name, // Automatically set the author to the current user's name
         tags,
         codeSnippet,
         link,
-        comments: [],
         upvotes: 0,
         downvotes: 0,
-        awards: 0,
         resolved: false,
-        answers: []
+        answers: [],
+        badges: [],
       }),
     })
       .then((response) => response.json())
@@ -123,7 +123,7 @@ export default function AskQuestion() {
             value={codeSnippet}
             onChange={(e) => setCodeSnippet(e.target.value)}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-            placeholder="Enter code snippet"
+            placeholder="Enter code snippet (optional)"
             rows="3"
           />
         </div>
@@ -134,7 +134,7 @@ export default function AskQuestion() {
             value={link}
             onChange={(e) => setLink(e.target.value)}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-            placeholder="Enter link"
+            placeholder="Enter link (optional)"
           />
         </div>
         <div className="mb-4">

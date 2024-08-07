@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FaArrowUp, FaArrowDown, FaTrash, FaCheck } from 'react-icons/fa';
+import { FaArrowUp, FaArrowDown, FaTrash, FaCheck, FaStar } from 'react-icons/fa';
 
 const UpdateQuestions = () => {
   const navigate = useNavigate();
@@ -71,7 +71,7 @@ const UpdateQuestions = () => {
         },
         body: JSON.stringify({ upvotes: newUpvotes, downvotes: newDownvotes, userVote: voteType }),
       });
-  
+
       if (!response.ok) {
         throw new Error('Failed to update vote count');
       }
@@ -79,12 +79,12 @@ const UpdateQuestions = () => {
       console.error('Error updating vote count:', error);
     }
   };
-  
+
   const handleVote = (voteType) => {
     let newUpvotes = upvotes;
     let newDownvotes = downvotes;
     let newVote = null;
-  
+
     if (voteType === 'up') {
       if (userVote === 'up') {
         newUpvotes -= 1;
@@ -102,23 +102,23 @@ const UpdateQuestions = () => {
       }
       newVote = userVote === 'down' ? null : 'down';
     }
-  
+
     setUpvotes(newUpvotes);
     setDownvotes(newDownvotes);
     setUserVote(newVote);
     updateVotes(newUpvotes, newDownvotes, newVote);
   };
-  
+
   const handleUpvote = () => handleVote('up');
   const handleDownvote = () => handleVote('down');
-  
+
   const handleAnswerVote = async (answerId, voteType) => {
     const updatedAnswers = question.answers.map(answer => {
       if (answer.id === answerId) {
         const previousVote = answer.userVote || null;
         let newUpvotes = answer.upvotes || 0;
         let newDownvotes = answer.downvotes || 0;
-  
+
         if (voteType === 'upvote') {
           if (previousVote === 'upvote') {
             newUpvotes -= 1;
@@ -138,7 +138,7 @@ const UpdateQuestions = () => {
             answer.userVote = 'downvote';
           }
         }
-  
+
         return {
           ...answer,
           upvotes: newUpvotes,
@@ -147,7 +147,7 @@ const UpdateQuestions = () => {
       }
       return answer;
     });
-  
+
     try {
       const response = await fetch(`http://localhost:3000/questions/${id}`, {
         method: 'PATCH',
@@ -156,7 +156,7 @@ const UpdateQuestions = () => {
         },
         body: JSON.stringify({ answers: updatedAnswers }),
       });
-  
+
       if (response.ok) {
         setQuestion({ ...question, answers: updatedAnswers });
       } else {
@@ -166,7 +166,6 @@ const UpdateQuestions = () => {
       console.error('Error updating answer votes:', error);
     }
   };
-  
 
   const handleSelectAcceptedAnswer = async (answerId) => {
     const updatedAnswers = question.answers.map(answer => ({
@@ -186,6 +185,27 @@ const UpdateQuestions = () => {
       if (response.ok) {
         setQuestion({ ...question, answers: updatedAnswers, resolved: true });
         toast.success('Answer accepted and question marked as resolved');
+        // Update the user who provided the accepted answer
+        const answer = updatedAnswers.find(ans => ans.id === answerId);
+        if (answer) {
+          const userResponse = await fetch(`http://localhost:3000/users/${answer.userId}`);
+          if (userResponse.ok) {
+            const userData = await userResponse.json();
+            userData.reputation_points += 5;
+            const userUpdateResponse = await fetch(`http://localhost:3000/users/${answer.userId}`, {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ reputation_points: userData.reputation_points }),
+            });
+            if (!userUpdateResponse.ok) {
+              throw new Error('Failed to update user reputation points');
+            }
+          } else {
+            throw new Error('Failed to fetch user data');
+          }
+        }
       } else {
         throw new Error('Failed to accept answer');
       }
@@ -199,13 +219,15 @@ const UpdateQuestions = () => {
     e.preventDefault();
     try {
       const newAnswer = {
-        answer,
-        author: currentUser?.name, // Automatically set the author to the current user's name
         id: Date.now().toString(),
-        link: link, // Add the link to the answer
+        userId: currentUser?.id,
+        author: currentUser?.name,
+        questionId: question.id,
+        answer,
+        link,
         upvotes: 0,
         downvotes: 0,
-        accepted: false
+        accepted: false,
       };
       const updatedAnswers = question.answers ? [...question.answers, newAnswer] : [newAnswer];
 
@@ -222,6 +244,25 @@ const UpdateQuestions = () => {
         setQuestion({ ...question, answers: updatedAnswers });
         setAnswer('');
         setLink('');
+        // Update user's reputation points
+        const userResponse = await fetch(`http://localhost:3000/users/${currentUser.id}`);
+        if (userResponse.ok) {
+          const userData = await userResponse.json();
+          userData.reputation_points += 5;
+          const userUpdateResponse = await fetch(`http://localhost:3000/users/${currentUser.id}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ reputation_points: userData.reputation_points }),
+          });
+          if (!userUpdateResponse.ok) {
+            throw new Error('Failed to update user reputation points');
+          }
+          setCurrentUser(userData);
+        } else {
+          throw new Error('Failed to fetch user data');
+        }
       } else {
         throw new Error('Failed to add answer');
       }
@@ -250,6 +291,69 @@ const UpdateQuestions = () => {
       }
     } catch (error) {
       console.error('Error deleting answer:', error);
+    }
+  };
+
+  const handleBadge = async () => {
+    const userBadgeCount = question.badges?.filter(badge => badge.adminId === currentUser.id).length || 0;
+    if (userBadgeCount >= 5) {
+      return toast.error('You have already added 5 badges to this question');
+    }
+
+    const newBadge = {
+      adminId: currentUser.id,
+      count: 1,
+    };
+
+    const updatedBadges = [...(question.badges || []), newBadge];
+
+    try {
+      const response = await fetch(`http://localhost:3000/questions/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ badges: updatedBadges }),
+      });
+
+      if (response.ok) {
+        setQuestion({ ...question, badges: updatedBadges });
+        toast.success('Badge added to the question');
+      } else {
+        throw new Error('Failed to add badge');
+      }
+    } catch (error) {
+      console.error('Error adding badge:', error);
+    }
+  };
+
+  const handleRemoveBadge = async () => {
+    let removedBadgesCount = 0;
+    const updatedBadges = question.badges?.filter(badge => {
+      if (badge.adminId === currentUser.id && removedBadgesCount < 5) {
+        removedBadgesCount++;
+        return false;
+      }
+      return true;
+    }) || [];
+
+    try {
+      const response = await fetch(`http://localhost:3000/questions/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ badges: updatedBadges }),
+      });
+
+      if (response.ok) {
+        setQuestion({ ...question, badges: updatedBadges });
+        toast.success('Badge removed from the question');
+      } else {
+        throw new Error('Failed to remove badge');
+      }
+    } catch (error) {
+      console.error('Error removing badge:', error);
     }
   };
 
@@ -304,6 +408,27 @@ const UpdateQuestions = () => {
               <span>{downvotes}</span>
             </div>
           </div>
+          {question.resolved && (
+            <div className="mt-4 text-sm text-green-500">
+              Approved
+            </div>
+          )}
+          {currentUser?.admin && (
+            <>
+              <div
+                onClick={handleBadge}
+                className="mt-4 flex items-center cursor-pointer text-yellow-500 hover:text-yellow-600"
+              >
+                <FaStar className="mr-2" /> Add Badge
+              </div>
+              <div
+                onClick={handleRemoveBadge}
+                className="mt-4 flex items-center cursor-pointer text-yellow-500 hover:text-yellow-600"
+              >
+                <FaStar className="mr-2" /> Remove Badge
+              </div>
+            </>
+          )}
           <div className="mt-4 text-sm text-gray-500">
             <span>By {question.author}</span>
           </div>
@@ -338,7 +463,7 @@ const UpdateQuestions = () => {
                         <FaArrowDown className={`text-xl mr-2 ${cmt.userVote === 'downvote' ? 'text-red-500' : 'text-gray-500'}`} />
                         <span>{cmt.downvotes || 0}</span>
                       </div>
-                      {(currentUser?.admin || currentUser?.name === question.author) && (
+                      {(currentUser?.admin || currentUser?.id === question.userId) && (
                         <button
                           onClick={() => handleSelectAcceptedAnswer(cmt.id)}
                           className="text-green-600 hover:text-green-800"
@@ -348,7 +473,7 @@ const UpdateQuestions = () => {
                       )}
                     </div>
                   </div>
-                  {(currentUser?.admin || currentUser?.name === cmt.author) && (
+                  {(currentUser?.admin || currentUser?.id === cmt.userId) && (
                     <button
                       onClick={() => handleDeleteAnswer(cmt.id)}
                       className="text-red-600 hover:text-red-800"

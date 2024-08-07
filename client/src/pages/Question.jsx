@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaArrowUp, FaArrowDown, FaAward, FaTrash, FaCheck } from 'react-icons/fa';
+import { FaArrowUp, FaArrowDown, FaStar, FaTrash, FaCheck } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
 const Questions = () => {
@@ -161,6 +161,72 @@ const Questions = () => {
     }
   };
 
+  const handleBadge = async (id) => {
+    const question = questions.find(q => q.id === id);
+    if (!question) return;
+
+    const userBadges = question.badges.filter(badge => badge.adminId === currentUser.id);
+    if (userBadges.length >= 5) {
+      return toast.error('You have already added 5 badges to this question');
+    }
+
+    const newBadge = {
+      adminId: currentUser.id,
+      count: 1,
+    };
+
+    const updatedBadges = [...question.badges, newBadge];
+
+    try {
+      const response = await fetch(`http://localhost:3000/questions/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ badges: updatedBadges }),
+      });
+
+      if (response.ok) {
+        setQuestions(prevQuestions =>
+          prevQuestions.map(q => q.id === id ? { ...q, badges: updatedBadges } : q)
+        );
+        toast.success('Badge added to the question');
+      } else {
+        throw new Error('Failed to add badge');
+      }
+    } catch (error) {
+      console.error('Error adding badge:', error);
+    }
+  };
+
+  const handleRemoveBadge = async (id) => {
+    const question = questions.find(q => q.id === id);
+    if (!question) return;
+
+    const updatedBadges = question.badges.filter(badge => badge.adminId !== currentUser.id);
+
+    try {
+      const response = await fetch(`http://localhost:3000/questions/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ badges: updatedBadges }),
+      });
+
+      if (response.ok) {
+        setQuestions(prevQuestions =>
+          prevQuestions.map(q => q.id === id ? { ...q, badges: updatedBadges } : q)
+        );
+        toast.success('Badge removed from the question');
+      } else {
+        throw new Error('Failed to remove badge');
+      }
+    } catch (error) {
+      console.error('Error removing badge:', error);
+    }
+  };
+
   const filteredQuestions = questions
     .filter((question) =>
       question.title.toLowerCase().includes(searchKeyword.toLowerCase()) ||
@@ -229,8 +295,10 @@ const Questions = () => {
                 </div>
               </div>
               <div className="flex items-center text-yellow-600 mb-4">
-                <FaAward className="text-yellow-500 text-2xl mr-2" />
-                <span>{question.awards} {question.awards > 1 ? 'times' : 'time'}</span>
+                <FaStar
+                  className="text-yellow-500 text-2xl mr-2 cursor-pointer"
+                />
+                <span>{question.badges?.length || 0} {question.badges?.length > 1 ? 'times' : 'time'}</span>
               </div>
               <div className="flex flex-wrap gap-2 mb-4">
                 {question.tags && question.tags.map((tag, index) => (
@@ -245,7 +313,7 @@ const Questions = () => {
               </div>
             </div>
             <div className="flex-shrink-0 flex flex-col space-y-2">
-              {(currentUser?.admin || currentUser?.name === question.author) && (
+              {(currentUser?.admin || currentUser?.id === question.userId) && (
                 <button
                   onClick={() => handleDelete(question.id)}
                   className="text-red-600 hover:text-red-800"
@@ -253,7 +321,7 @@ const Questions = () => {
                   <FaTrash className="text-2xl" />
                 </button>
               )}
-              {currentUser?.name === question.author && !question.resolved && (
+              {currentUser?.id === question.userId && !question.resolved && (
                 <button
                   onClick={() => handleMarkResolved(question.id)}
                   className="text-green-600 hover:text-green-800"

@@ -8,10 +8,9 @@
       "profile_image": "https://c4.wallpaperflare.com/wallpaper/448/174/357/neon-4k-hd-best-for-desktop-wallpaper-thumb.jpg",
       "phone_number": "0723232323",
       "admin": true,
-      "reputation_points": 150,
+      "reputation_points": 0,
       "badges": [
-        "Contributor",
-        "Question Master"
+        "New Member"
       ]
     },
     {
@@ -22,10 +21,9 @@
       "profile_image": "https://img.freepik.com/free-photo/majestic-mountain-peak-tranquil-winter-landscape-generated-by-ai_188544-15662.jpg",
       "phone_number": "0712131415",
       "admin": true,
-      "reputation_points": 200,
+      "reputation_points": 0,
       "badges": [
-        "Helper",
-        "Answer Pro"
+        "New Member"
       ]
     },
     {
@@ -36,9 +34,9 @@
       "profile_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbt6VjYbBvi0lD8OYeIcbuYzKqrqFCBT5k3w&s",
       "phone_number": "0712345678",
       "admin": true,
-      "reputation_points": 100,
+      "reputation_points": 0,
       "badges": [
-        "Newbie"
+        "New Member"
       ]
     },
     {
@@ -49,150 +47,72 @@
       "profile_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpy4G31X521U0de_lP8-1TWCAaE4U2FbGqag&s",
       "phone_number": "0777777777",
       "admin": false,
-      "reputation_points": 50,
+      "reputation_points": 20,
       "badges": [
-        "Learner"
+        "New Member"
       ]
     },
     {
-      "id": "27ee",
-      "name": "re",
-      "email": "re@gmail.com",
-      "password": "1qaz",
-      "profile_image": "https://i.pinimg.com/564x/4b/05/0c/4b050ca4fcf588eedc58aa6135f5eecf.jpg",
-      "phone_number": "0779797979",
-      "admin": false,
-      "reputation_points": 75,
-      "badges": [
-        "Rookie"
-      ]
-    },
-    {
-      "id": "f6f8",
-      "name": "qw",
-      "email": "qw@gmail.com",
-      "password": "1234",
-      "profile_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyMCAAueSJpJ_56vnMhYRdCIX3Hx_Ag1uJpQ&s",
-      "phone_number": "12345678",
-      "admin": false,
-      "reputation_points": 80,
-      "badges": [
-        "Contributor"
-      ]
-    },
-    {
-      "id": "90b2",
-      "name": "qwertyu",
-      "email": "as@gmail.com",
-      "password": "1234",
-      "profile_image": "https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTEwL3Jhd3BpeGVsX29mZmljZV8yOF9waG90b19vZl9vYWtfdHJlZV9sZWF2ZXNfaW5fYXV0dW1uLV9zdW5ueV9nb181OTk3NzJmMC1lZGU4LTQxZmQtYWUyYi1lOTFhZTRmYzZjMGUtYl8xLmpwZw.jpg",
-      "phone_number": "12345678",
-      "admin": true,
-      "reputation_points": 300,
-      "badges": [
-        "Veteran",
-        "Leader"
-      ]
-    },
-    {
-      "id": "9a7f",
-      "name": "qwertyu",
-      "email": "po@gmail.com",
-      "password": "1234",
-      "profile_image": "https://cdn.magicdecor.in/com/2023/02/29230524/image-1683286986-8083-710x488.jpg",
-      "phone_number": "1234567",
-      "admin": false,
-      "reputation_points": 60,
-      "badges": [
-        "Beginner"
-      ]
-    },
-    {
-      "id": "1aa1",
-      "name": "qwertyuio",
-      "email": "rq@gmail.com",
-      "password": "1234",
-      "profile_image": "https://cdn.magicdecor.in/com/2023/02/29230524/image-1683286986-8083-710x488.jpg",
-      "phone_number": "12345678",
-      "admin": true,
-      "reputation_points": 250,
-      "badges": [
-        "Pro",
-        "Expert"
-      ]
-    },
-    {
-      "id": "d638",
-      "name": "Kamau",
-      "email": "qa@gmail.com",
-      "password": "1234",
-      "profile_image": "https://i.pinimg.com/originals/d4/b8/f3/d4b8f3aef6c5b68933d27f8afc032211.jpg",
-      "phone_number": "123456789",
-      "admin": false,
-      "reputation_points": 90,
-      "badges": [
-        "Helper"
-      ]
-    },
-    {
-      "id": "ca15",
-      "name": "asdfhjk",
-      "email": "Q@gmail.com",
-      "password": "1234",
-      "profile_image": "https://mrwallpaper.com/images/hd/3d-phone-glowing-squares-illusion-5caz7bhoq104m211.jpg",
-      "phone_number": "123456789",
-      "admin": true,
-      "reputation_points": 120,
-      "badges": [
-        "Contributor",
-        "Active"
-      ]
-    },
-    {
-      "id": "1a27",
-      "name": "asdfg",
-      "email": "a@gmail.com",
-      "password": "1234",
-      "profile_image": "",
-      "phone_number": "1234567",
-      "admin": true,
-      "reputation_points": 110,
-      "badges": [
-        "Participant"
-      ]
-    },
-    {
-      "id": "381d",
-      "name": "Ezekiel",
-      "email": "Ezekiel@gmail.com",
-      "password": "1234",
-      "profile_image": "https://e0.pxfuel.com/wallpapers/485/879/desktop-wallpaper-anime-3d-android-thumbnail.jpg",
-      "phone_number": "123456789",
-      "admin": true,
-      "reputation_points": 230,
-      "badges": [
-        "Contributor",
-        "Leader"
-      ]
-    },
-    {
-      "id": "5d38",
-      "name": "Qwqwert",
-      "email": "qs@gmail.com",
-      "password": "1234",
-      "profile_image": "https://mrwallpaper.com/images/hd/3d-anime-demon-slayer-8k-h3miza84u4pzvznb.jpg",
-      "phone_number": "123456789",
-      "admin": false
-    },
-    {
-      "id": "d0ac",
-      "name": "we",
-      "email": "we@gmail.com",
-      "password": "1234",
-      "profile_image": "https://mrwallpaper.com/images/hd/3d-anime-demon-slayer-8k-h3miza84u4pzvznb.jpg",
-      "phone_number": "2345678",
+      "id": "d2f7",
+      "name": "John",
+      "email": "john@gmail.com",
+      "password": "john123",
+      "profile_image": "https://example.com/john.jpg",
+      "phone_number": "0712345678",
       "admin": false,
       "reputation_points": 0,
+      "badges": [
+        "New Member"
+      ]
+    },
+    {
+      "id": "f5e8",
+      "name": "Alice",
+      "email": "alice@gmail.com",
+      "password": "alice123",
+      "profile_image": "https://example.com/alice.jpg",
+      "phone_number": "0712345679",
+      "admin": false,
+      "reputation_points": 0,
+      "badges": [
+        "New Member"
+      ]
+    },
+    {
+      "id": "e8f5",
+      "name": "qwerty",
+      "email": "qw@gmail.com",
+      "password": "1234",
+      "profile_image": "https://mrwallpaper.com/images/hd/3d-anime-demon-slayer-8k-h3miza84u4pzvznb.jpg",
+      "phone_number": "1234567",
+      "admin": true,
+      "reputation_points": 75,
+      "badges": [
+        "New Member"
+      ]
+    },
+    {
+      "id": "83c4",
+      "name": "Graham",
+      "email": "q@gmail.com",
+      "password": "1234",
+      "profile_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS510RYx940igzfqFmb2nNkGzPsXtsE02YwEg&s",
+      "phone_number": "12345678",
+      "admin": false,
+      "reputation_points": 45,
+      "badges": [
+        "New Member"
+      ]
+    },
+    {
+      "id": "8599",
+      "name": "qqqqqq",
+      "email": "az@gmail.com",
+      "password": "1234",
+      "profile_image": "https://i.pinimg.com/736x/f1/d1/b9/f1d1b9b4618b024f13507ea7826d6a4e.jpg",
+      "phone_number": "1234567",
+      "admin": true,
+      "reputation_points": 5,
       "badges": [
         "New Member"
       ]
@@ -200,145 +120,192 @@
   ],
   "questions": [
     {
-      "id": "2e6a",
-      "title": "What is Agile methodology?",
-      "content": "Agile methodology is an iterative approach to software development that emphasizes flexibility, collaboration, and customer feedback.",
-      "author": "Karen",
-      "upvotes": 34,
-      "downvotes": 1,
+      "id": "q1",
+      "userId": "b839",
+      "title": "How to center a div in CSS?",
+      "content": "I'm struggling to center a div in CSS. Can someone help?",
       "tags": [
-        "Agile",
-        "Methodology"
-      ],
-      "awards": 3,
-      "comments": [],
-      "answers": [
-        {
-          "answer": "ertyui",
-          "author": "ww",
-          "id": "1723031103354",
-          "upvotes": 3,
-          "downvotes": 2,
-          "accepted": false
-        }
-      ],
-      "resolved": true
-    },
-    {
-      "id": "9b4f",
-      "title": "How does a compiler differ from an interpreter?",
-      "content": "A compiler translates source code into machine code before execution, while an interpreter translates code line-by-line during execution.",
-      "author": "Leo",
-      "upvotes": 19,
-      "downvotes": 2,
-      "tags": [
-        "Compiler",
-        "Interpreter"
-      ],
-      "awards": 1,
-      "comments": []
-    },
-    {
-      "id": "a7db",
-      "title": "What is the purpose of garbage collection in programming?",
-      "content": "Garbage collection is a form of automatic memory management that reclaims memory occupied by objects no longer in use.",
-      "author": "Paul",
-      "upvotes": 14,
-      "downvotes": 1,
-      "tags": [
-        "Memory Management",
-        "Garbage Collection"
-      ],
-      "awards": 1,
-      "comments": []
-    },
-    {
-      "id": "c92e",
-      "title": "How does HTTP work?",
-      "content": "HTTP is a protocol used for transmitting data over the web, operating as a request-response protocol between a client and server.",
-      "author": "Steve",
-      "upvotes": 29,
-      "downvotes": 1,
-      "tags": [
-        "HTTP",
+        "CSS",
+        "HTML",
         "Web Development"
       ],
-      "awards": 3,
-      "comments": []
-    },
-    {
-      "id": "a4e6",
-      "title": "What is a callback function?",
-      "content": "A callback function is a function passed into another function as an argument, which is then invoked inside the outer function.",
-      "author": "Caleb",
-      "upvotes": 17,
-      "downvotes": 1,
-      "tags": [
-        "JavaScript",
-        "Callback"
-      ],
-      "awards": 1,
-      "comments": []
-    },
-    {
-      "id": "aea7",
-      "title": "ertyu",
-      "content": "wertyu",
-      "author": "wertyu",
-      "comments": [
+      "codeSnippet": "<div class=\"center-me\">Hello World</div>",
+      "link": "http://example.com",
+      "upvotes": 1,
+      "downvotes": 2,
+      "resolved": false,
+      "answers": [
         {
-          "comment": "asdfghj",
-          "author": "asdfgh",
-          "id": "1722933034630"
+          "answer": "wertyu",
+          "author": "qwerty",
+          "id": "1723051995244",
+          "link": "",
+          "upvotes": 1,
+          "downvotes": 0,
+          "accepted": false,
+          "userVote": "upvote"
         }
       ],
-      "downvotes": 2,
-      "upvotes": 1
+      "userVote": "up"
     },
     {
-      "id": "fb53",
-      "title": "rtyugyuhd",
-      "content": "asdfghj",
-      "author": "ertyui",
-      "comments": []
-    },
-    {
-      "id": "1a25",
-      "title": "qwertyui",
-      "content": "ertyuio",
-      "author": "ww",
-      "tags": [],
-      "comments": [],
-      "upvotes": 1,
+      "id": "q2",
+      "userId": "13a0",
+      "title": "What is the difference between let and var in JavaScript?",
+      "content": "Can someone explain the difference between let and var in JavaScript?",
+      "tags": [
+        "JavaScript",
+        "ES6",
+        "Web Development"
+      ],
+      "codeSnippet": "",
+      "link": "http://example.com",
+      "upvotes": 0,
       "downvotes": 0,
-      "awards": 0,
       "resolved": false,
       "answers": []
     },
     {
-      "id": "e6cf",
-      "title": "Git ",
-      "content": "Blah Blah",
-      "author": "ww",
+      "id": "q3",
+      "userId": "d2f7",
+      "title": "How to create a responsive layout in CSS?",
+      "content": "I want to create a responsive layout in CSS. Any tips or resources?",
+      "tags": [
+        "CSS",
+        "Responsive Design",
+        "Web Development"
+      ],
+      "codeSnippet": "",
+      "link": "http://example.com",
+      "upvotes": 0,
+      "downvotes": 0,
+      "resolved": false,
+      "answers": []
+    },
+    {
+      "id": "q4",
+      "userId": "f5e8",
+      "title": "What is the use of useEffect in React?",
+      "content": "I've seen useEffect in many React codebases. What is it used for?",
+      "tags": [
+        "React",
+        "JavaScript",
+        "Web Development"
+      ],
+      "codeSnippet": "",
+      "link": "http://example.com",
+      "upvotes": 1,
+      "downvotes": 0,
+      "resolved": false,
+      "answers": []
+    },
+    {
+      "id": "ee6f",
+      "userId": "e8f5",
+      "title": "qwerty",
+      "content": "qwertygv",
       "tags": [],
-      "comments": [],
-      "upvotes": 2,
-      "downvotes": 1,
-      "awards": 0,
-      "resolved": true,
+      "codeSnippet": "<div className=\"mb-5\">\n              <label className=\"block mb-2 text-sm font-medium text-gray-700\">Link</label>\n              <input\n                type=\"url\"\n                value={link}\n                onChange={(e) => setLink(e.target.value)}\n                className=\"w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500\"\n                placeholder=\"Enter link (optional)\"\n              />\n            </div>",
+      "link": "https://c4.wallpaperflare.com/wallpaper/458/464/899/genshin-impact-anime-boys-zhongli-genshin-impact-3d-hd-wallpaper-preview.jpg",
+      "downvotes": 0,
+      "upvotes": 3,
+      "userVote": "up",
       "answers": [
         {
-          "answer": "wertyui",
-          "author": "ww",
-          "id": "1723032762215",
-          "upvotes": 19,
+          "id": "1723058164532",
+          "userId": "e8f5",
+          "questionId": "ee6f",
+          "answer": "qwerty",
+          "link": "",
+          "upvotes": 1,
           "downvotes": 0,
-          "accepted": true
+          "accepted": false,
+          "userVote": "upvote"
         },
         {
-          "answer": "dfghj",
-          "author": "ww",
-          "id": "1723032769334",
+          "id": "1723058144186",
+          "userId": "e8f5",
+          "questionId": "ee6f",
+          "answer": "qwert",
+          "link": "https://c4.wallpaperflare.com/wallpaper/458/464/899/genshin-impact-anime-boys-zhongli-genshin-impact-3d-hd-wallpaper-preview.jpg",
+          "upvotes": 1,
+          "downvotes": 0,
+          "accepted": false,
+          "userVote": "upvote"
+        }
+      ],
+      "badges": [
+        {
+          "adminId": "8599",
+          "count": 1
+        },
+        {
+          "adminId": "8599",
+          "count": 1
+        },
+        {
+          "adminId": "8599",
+          "count": 1
+        },
+        {
+          "adminId": "8599",
+          "count": 1
+        },
+        {
+          "adminId": "8599",
+          "count": 1
+        },
+        {
+          "adminId": "a9b6",
+          "count": 1
+        },
+        {
+          "adminId": "a9b6",
+          "count": 1
+        },
+        {
+          "adminId": "a9b6",
+          "count": 1
+        },
+        {
+          "adminId": "a9b6",
+          "count": 1
+        },
+        {
+          "adminId": "a9b6",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "4e58",
+      "userId": "83c4",
+      "title": "qwert",
+      "content": "qwerty",
+      "tags": [],
+      "codeSnippet": "",
+      "link": "",
+      "upvotes": 0,
+      "userVote": "down",
+      "downvotes": 1
+    },
+    {
+      "id": "e849",
+      "userId": "83c4",
+      "title": "werty",
+      "content": "erty",
+      "tags": [],
+      "codeSnippet": "",
+      "link": "",
+      "upvotes": 1,
+      "userVote": "up",
+      "answers": [
+        {
+          "id": "1723058897092",
+          "userId": "83c4",
+          "questionId": "e849",
+          "answer": "wert",
+          "link": "",
           "upvotes": 0,
           "downvotes": 0,
           "accepted": false
@@ -346,74 +313,248 @@
       ]
     },
     {
-      "id": "7c0f",
-      "title": "Ruby",
-      "content": "qwerty",
-      "author": "Ezekiel",
+      "id": "4232",
+      "userId": "83c4",
+      "author": "Graham",
+      "title": "werty",
+      "content": "qwert",
       "tags": [],
-      "comments": [],
-      "upvotes": 0,
-      "downvotes": 0,
-      "awards": 0,
-      "resolved": false,
-      "answers": []
-    },
-    {
-      "id": "7189",
-      "title": "fgh",
-      "content": "<div className=\"mb-4\">\n          <label className=\"block text-sm font-medium text-gray-900 dark:text-black\">Content</label>\n          <textarea\n            value={content}\n            onChange={(e) => setContent(e.target.value)}\n            className=\"bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5\"\n            placeholder=\"Enter question content\"\n            rows=\"5\"\n            required\n          />",
-      "author": "Ezekiel",
-      "tags": [],
-      "comments": [],
-      "upvotes": 2,
-      "downvotes": 0,
-      "awards": 0,
-      "resolved": true,
-      "answers": []
-    },
-    {
-      "id": "0173",
-      "title": "React",
-      "content": "What is React?",
-      "author": "Ezekiel",
-      "tags": [],
-      "codeSnippet": "import React, { useEffect, useState } from 'react';\nimport { toast } from 'react-toastify';\nimport { useNavigate } from 'react-router-dom';\n\nexport default function AskQuestion() {\n  const [title, setTitle] = useState('');\n  const [content, setContent] = useState('');\n  const [tags, setTags] = useState([]);\n  const [codeSnippet, setCodeSnippet] = useState('');\n  const [link, setLink] = useState('');\n  const [currentUser, setCurrentUser] = useState(null);\n  const [loading, setLoading] = useState(true);\n  const [tagInput, setTagInput] = useState('');\n  const navigate = useNavigate();\n\n  useEffect(() => {\n    const userId = localStorage.getItem(\"access_token\");\n    if (!userId) {\n      toast.error(\"No user logged in\");\n      navigate(\"/loginPage\");\n      return;\n    }\n\n    const fetchCurrentUser = async () => {\n      try {\n        const response = await fetch(`http://localhost:3000/users/${userId}`);\n        if (response.ok) {\n          const data = await response.json();\n          setCurrentUser(data);\n        } else {\n          throw new Error(\"Failed to fetch current user\");\n        }\n      } catch (error) {\n        console.error(\"Error fetching current user:\", error);\n        toast.error(\"Failed to fetch current user\");\n      } finally {\n        setLoading(false);\n      }\n    };\n\n    fetchCurrentUser();\n  }, [navigate]);\n\n  const handleTagKeyPress = (e) => {\n    if (e.key === 'Enter' && tagInput.trim() !== '') {\n      e.preventDefault();\n      setTags([...tags, tagInput.trim()]);\n      setTagInput('');\n    }\n  };\n\n  const handleTagRemove = (tag) => {\n    setTags(tags.filter(t => t !== tag));\n  };\n\n  const handleSubmit = (e) => {\n    e.preventDefault();\n\n    fetch('http://localhost:3000/questions', {\n      method: 'POST',\n      headers: {\n        'Content-Type': 'application/json',\n      },\n      body: JSON.stringify({\n        title,\n        content,\n        author: currentUser?.name, // Automatically set the author to the current user's name\n        tags,\n        codeSnippet,\n        link,\n        comments: [],\n        upvotes: 0,\n        downvotes: 0,\n        awards: 0,\n        resolved: false,\n        answers: []\n      }),\n    })\n      .then((response) => response.json())\n      .then(() => {\n        toast.success('Question submitted successfully!');\n        navigate('/Questions');\n      })\n      .catch((error) => {\n        toast.error('Failed to submit the question.');\n        console.error('Error:', error);\n      });\n  };\n\n  if (loading) {\n    return <div>Loading...</div>; // Display a loading indicator while checking authentication\n  }\n\n  return (\n    <div className=\"p-6\">\n      <h1 className=\"text-2xl font-bold mb-4\">Ask a Question</h1>\n      <form onSubmit={handleSubmit} className=\"max-w-md mx-auto\">\n        <div className=\"mb-4\">\n          <label className=\"block text-sm font-medium text-gray-900 dark:text-black\">Title</label>\n          <input\n            type=\"text\"\n            value={title}\n            onChange={(e) => setTitle(e.target.value)}\n            className=\"bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5\"\n            placeholder=\"Enter question title\"\n            required\n          />\n        </div>\n        <div className=\"mb-4\">\n          <label className=\"block text-sm font-medium text-gray-900 dark:text-black\">Content</label>\n          <textarea\n            value={content}\n            onChange={(e) => setContent(e.target.value)}\n            className=\"bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5\"\n            placeholder=\"Enter question content\"\n            rows=\"5\"\n            required\n          />\n        </div>\n        <div className=\"mb-4\">\n          <label className=\"block text-sm font-medium text-gray-900 dark:text-black\">Code Snippet</label>\n          <textarea\n            value={codeSnippet}\n            onChange={(e) => setCodeSnippet(e.target.value)}\n            className=\"bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5\"\n            placeholder=\"Enter code snippet\"\n            rows=\"3\"\n          />\n        </div>\n        <div className=\"mb-4\">\n          <label className=\"block text-sm font-medium text-gray-900 dark:text-black\">Link</label>\n          <input\n            type=\"url\"\n            value={link}\n            onChange={(e) => setLink(e.target.value)}\n            className=\"bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5\"\n            placeholder=\"Enter link\"\n          />\n        </div>\n        <div className=\"mb-4\">\n          <label className=\"block text-sm font-medium text-gray-900 dark:text-black\">Tags</label>\n          <input\n            type=\"text\"\n            value={tagInput}\n            onChange={(e) => setTagInput(e.target.value)}\n            onKeyPress={handleTagKeyPress}\n            className=\"bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5\"\n            placeholder=\"Enter tags and press Enter\"\n          />\n          <div className=\"mt-2 flex flex-wrap gap-2\">\n            {tags.map((tag, index) => (\n              <span\n                key={index}\n                className=\"bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm flex items-center\"\n              >\n                {tag}\n                <button\n                  type=\"button\"\n                  onClick={() => handleTagRemove(tag)}\n                  className=\"ml-2 text-red-500 hover:text-red-700\"\n                >\n                  &times;\n                </button>\n              </span>\n            ))}\n          </div>\n        </div>\n        <button\n          type=\"submit\"\n          className=\"w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center\"\n        >\n          Submit Question\n        </button>\n      </form>\n    </div>\n  );\n}\n",
-      "link": "https://stackoverflow.com/questions",
-      "comments": [],
-      "upvotes": 0,
+      "codeSnippet": "",
+      "link": "",
+      "upvotes": 1,
       "downvotes": 1,
-      "awards": 0,
       "resolved": true,
       "answers": [
         {
-          "answer": "https://stackoverflow.com/questions",
-          "author": "Ezekiel",
-          "id": "1723034259379",
-          "upvotes": 28,
-          "downvotes": 1,
+          "id": "1723059968515",
+          "userId": "83c4",
+          "author": "Graham",
+          "questionId": "4232",
+          "answer": "qwerty",
+          "link": "",
+          "upvotes": 1,
+          "downvotes": 0,
+          "accepted": true,
+          "userVote": "upvote"
+        }
+      ],
+      "badges": [
+        "Star",
+        "Star",
+        "Star"
+      ],
+      "userVote": "down"
+    },
+    {
+      "id": "f085",
+      "userId": "a9b6",
+      "author": "yy",
+      "title": "qwert",
+      "content": "qwqwew",
+      "tags": [],
+      "codeSnippet": "",
+      "link": "",
+      "upvotes": 0,
+      "downvotes": 1,
+      "resolved": false,
+      "answers": [
+        {
+          "id": "1723060233708",
+          "userId": "a9b6",
+          "author": "yy",
+          "questionId": "f085",
+          "answer": "wefqwf",
+          "link": "",
+          "upvotes": 1,
+          "downvotes": 0,
           "accepted": false,
-          "userVote": "downvote"
+          "userVote": "upvote"
         },
         {
-          "answer": "qwrtrewq",
-          "author": "Ezekiel",
-          "id": "1723034204988",
-          "upvotes": 27,
-          "downvotes": 12,
-          "accepted": true
+          "id": "1723060227771",
+          "userId": "a9b6",
+          "author": "yy",
+          "questionId": "f085",
+          "answer": "wrerer",
+          "link": "",
+          "upvotes": 0,
+          "downvotes": 0,
+          "accepted": false
         },
         {
-          "answer": "fghjk",
-          "author": "Ezekiel",
-          "id": "1723034866779",
-          "link": "https://stackoverflow.com/questions",
-          "upvotes": 9,
-          "downvotes": 32,
+          "id": "1723060243874",
+          "userId": "a9b6",
+          "author": "yy",
+          "questionId": "f085",
+          "answer": "qwdqawd",
+          "link": "",
+          "upvotes": 0,
+          "downvotes": 0,
+          "accepted": false
+        }
+      ],
+      "badges": [],
+      "userVote": "down"
+    },
+    {
+      "id": "3d7c",
+      "userId": "83c4",
+      "author": "Graham",
+      "title": "qew",
+      "content": "qwwq",
+      "tags": [],
+      "codeSnippet": "",
+      "link": "",
+      "upvotes": 2,
+      "downvotes": 0,
+      "resolved": true,
+      "answers": [
+        {
+          "id": "1723062985145",
+          "userId": "8599",
+          "author": "qqqqqq",
+          "questionId": "3d7c",
+          "answer": "qwert",
+          "link": "",
+          "upvotes": 1,
+          "downvotes": 0,
+          "accepted": false,
+          "userVote": "upvote"
+        },
+        {
+          "id": "1723066045096",
+          "userId": "a9b6",
+          "author": "yy",
+          "questionId": "3d7c",
+          "answer": "qwertyui",
+          "link": "",
+          "upvotes": 0,
+          "downvotes": 1,
           "accepted": false,
           "userVote": "downvote"
         }
       ],
-      "userVote": null
+      "badges": [
+        {
+          "adminId": "8599",
+          "count": 1
+        },
+        {
+          "adminId": "8599",
+          "count": 1
+        },
+        {
+          "adminId": "8599",
+          "count": 1
+        },
+        {
+          "adminId": "8599",
+          "count": 1
+        },
+        {
+          "adminId": "8599",
+          "count": 1
+        }
+      ],
+      "userVote": "up"
+    },
+    {
+      "id": "922e",
+      "userId": "83c4",
+      "author": "Graham",
+      "title": "qwert",
+      "content": "qwert",
+      "tags": [],
+      "codeSnippet": "",
+      "link": "",
+      "upvotes": 0,
+      "downvotes": 0,
+      "resolved": false,
+      "answers": [
+        {
+          "id": "1723061366478",
+          "userId": "83c4",
+          "author": "Graham",
+          "questionId": "922e",
+          "answer": "qwert",
+          "link": "",
+          "upvotes": 1,
+          "downvotes": 0,
+          "accepted": false,
+          "userVote": "upvote"
+        }
+      ],
+      "badges": [
+        {
+          "adminId": "8599",
+          "count": 1
+        },
+        {
+          "adminId": "8599",
+          "count": 1
+        },
+        {
+          "adminId": "8599",
+          "count": 1
+        },
+        {
+          "adminId": "8599",
+          "count": 1
+        },
+        {
+          "adminId": "8599",
+          "count": 1
+        }
+      ]
+    }
+  ],
+  "answers": [
+    {
+      "id": "a1",
+      "questionId": "q1",
+      "userId": "13a0",
+      "answer": "You can use margin: auto to center a div.",
+      "link": "",
+      "upvotes": 0,
+      "downvotes": 0,
+      "accepted": false
+    },
+    {
+      "id": "a2",
+      "questionId": "q2",
+      "userId": "b839",
+      "answer": "let has block scope while var has function scope.",
+      "link": "http://example.com",
+      "upvotes": 0,
+      "downvotes": 0,
+      "accepted": false
+    },
+    {
+      "id": "a3",
+      "questionId": "q3",
+      "userId": "f5e8",
+      "answer": "Use media queries and flexible grid layouts to create responsive designs.",
+      "link": "http://example.com",
+      "upvotes": 0,
+      "downvotes": 0,
+      "accepted": false
+    },
+    {
+      "id": "a4",
+      "questionId": "q4",
+      "userId": "d2f7",
+      "answer": "useEffect is used to handle side effects in functional components.",
+      "link": "http://example.com",
+      "upvotes": 0,
+      "downvotes": 0,
+      "accepted": false
+    },
+    {
+      "id": "14da",
+      "userId": "e8f5",
+      "questionId": "q2",
+      "answer": "qwert",
+      "link": ""
     }
   ]
 }
