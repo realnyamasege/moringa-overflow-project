@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import { FaAward } from 'react-icons/fa';
 import { useNavigate } from "react-router-dom";
 
 const UserProfile = () => {
@@ -70,6 +71,27 @@ const UserProfile = () => {
             Phone Number
           </label>
           <p className="mt-1 text-gray-800">{currentUser.phone_number}</p>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Reputation Points
+          </label>
+          <p className="mt-1 text-gray-800">{currentUser.reputation_points}</p>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Badges
+          </label>
+          <div className="mt-1 flex flex-wrap">
+            {currentUser.badges.map((badge, index) => (
+              <span
+                key={index}
+                className="inline-flex items-center bg-blue-500 text-white text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full mb-1"
+              >
+                <FaAward className="mr-1" /> {badge}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
       <button

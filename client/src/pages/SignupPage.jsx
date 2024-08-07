@@ -20,6 +20,10 @@ const SignupPage = () => {
       return;
     }
 
+    // Default values for reputation points and badges
+    const reputationPoints = 0;
+    const badges = ["New Member"];
+
     fetch("http://localhost:3000/users", {
       method: "POST",
       body: JSON.stringify({
@@ -29,6 +33,8 @@ const SignupPage = () => {
         profile_image: profileImage,
         phone_number: phoneNumber,
         admin: isAdmin,
+        reputation_points: reputationPoints,
+        badges: badges,
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
