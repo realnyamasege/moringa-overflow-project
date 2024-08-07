@@ -10,7 +10,7 @@ const UserProfile = () => {
     const userId = localStorage.getItem("access_token");
     if (!userId) {
       toast.error("No user logged in");
-      navigate("/login");
+      navigate("/LoginPage");
       return;
     }
 

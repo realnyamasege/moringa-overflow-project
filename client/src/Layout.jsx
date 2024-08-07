@@ -78,12 +78,6 @@ export default function Layout() {
               </li>
             </ul>
             <div className="hidden md:flex md:items-center md:space-x-4">
-              <input
-                className="search block py-2 px-3 text-lg text-gray-900 rounded bg-gray-100 hover:bg-gray-200 dark:text-white dark:bg-gray-800 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                type="text"
-                id="search"
-                placeholder="Search"
-              />
               {!isAuthenticated ? (
                 <>
                   <Link to="/LoginPage">

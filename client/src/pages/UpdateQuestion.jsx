@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FaArrowUp, FaArrowDown, FaTrash } from 'react-icons/fa';
+import { FaArrowUp, FaArrowDown, FaTrash, FaCheck } from 'react-icons/fa';
 
 const UpdateQuestions = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [question, setQuestion] = useState({});
   const [answer, setAnswer] = useState('');
-  const [author, setAuthor] = useState('');
+  const [link, setLink] = useState('');
   const [upvotes, setUpvotes] = useState(0);
   const [downvotes, setDownvotes] = useState(0);
   const [userVote, setUserVote] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const userId = localStorage.getItem("access_token");
@@ -37,8 +38,6 @@ const UpdateQuestions = () => {
       }
     };
 
-    fetchCurrentUser();
-
     const fetchQuestion = async () => {
       try {
         const response = await fetch(`http://localhost:3000/questions/${id}`);
@@ -47,6 +46,11 @@ const UpdateQuestions = () => {
           setQuestion(data);
           setUpvotes(data.upvotes);
           setDownvotes(data.downvotes);
+          // Check user vote status for the question
+          const userVoteStatus = data.votes?.find(vote => vote.userId === userId);
+          if (userVoteStatus) {
+            setUserVote(userVoteStatus.type);
+          }
         } else {
           throw new Error('Failed to fetch question');
         }
@@ -55,19 +59,19 @@ const UpdateQuestions = () => {
       }
     };
 
-    fetchQuestion();
+    fetchCurrentUser().then(fetchQuestion).finally(() => setLoading(false));
   }, [id, navigate]);
 
-  const updateVotes = async (newUpvotes, newDownvotes) => {
+  const updateVotes = async (newUpvotes, newDownvotes, voteType) => {
     try {
       const response = await fetch(`http://localhost:3000/questions/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ upvotes: newUpvotes, downvotes: newDownvotes }),
+        body: JSON.stringify({ upvotes: newUpvotes, downvotes: newDownvotes, userVote: voteType }),
       });
-
+  
       if (!response.ok) {
         throw new Error('Failed to update vote count');
       }
@@ -75,34 +79,119 @@ const UpdateQuestions = () => {
       console.error('Error updating vote count:', error);
     }
   };
-
-  const handleUpvote = () => {
-    if (userVote === 'up') {
-      setUpvotes(upvotes - 1);
-      setUserVote(null);
-      updateVotes(upvotes - 1, downvotes);
-    } else {
-      const newUpvotes = userVote === 'down' ? upvotes + 1 : upvotes + 1;
-      const newDownvotes = userVote === 'down' ? downvotes - 1 : downvotes;
-      setUpvotes(newUpvotes);
-      setDownvotes(newDownvotes);
-      setUserVote('up');
-      updateVotes(newUpvotes, newDownvotes);
+  
+  const handleVote = (voteType) => {
+    let newUpvotes = upvotes;
+    let newDownvotes = downvotes;
+    let newVote = null;
+  
+    if (voteType === 'up') {
+      if (userVote === 'up') {
+        newUpvotes -= 1;
+      } else {
+        newUpvotes += 1;
+        if (userVote === 'down') newDownvotes -= 1;
+      }
+      newVote = userVote === 'up' ? null : 'up';
+    } else if (voteType === 'down') {
+      if (userVote === 'down') {
+        newDownvotes -= 1;
+      } else {
+        newDownvotes += 1;
+        if (userVote === 'up') newUpvotes -= 1;
+      }
+      newVote = userVote === 'down' ? null : 'down';
+    }
+  
+    setUpvotes(newUpvotes);
+    setDownvotes(newDownvotes);
+    setUserVote(newVote);
+    updateVotes(newUpvotes, newDownvotes, newVote);
+  };
+  
+  const handleUpvote = () => handleVote('up');
+  const handleDownvote = () => handleVote('down');
+  
+  const handleAnswerVote = async (answerId, voteType) => {
+    const updatedAnswers = question.answers.map(answer => {
+      if (answer.id === answerId) {
+        const previousVote = answer.userVote || null;
+        let newUpvotes = answer.upvotes || 0;
+        let newDownvotes = answer.downvotes || 0;
+  
+        if (voteType === 'upvote') {
+          if (previousVote === 'upvote') {
+            newUpvotes -= 1;
+            answer.userVote = null;
+          } else {
+            newUpvotes += 1;
+            if (previousVote === 'downvote') newDownvotes -= 1;
+            answer.userVote = 'upvote';
+          }
+        } else if (voteType === 'downvote') {
+          if (previousVote === 'downvote') {
+            newDownvotes -= 1;
+            answer.userVote = null;
+          } else {
+            newDownvotes += 1;
+            if (previousVote === 'upvote') newUpvotes -= 1;
+            answer.userVote = 'downvote';
+          }
+        }
+  
+        return {
+          ...answer,
+          upvotes: newUpvotes,
+          downvotes: newDownvotes,
+        };
+      }
+      return answer;
+    });
+  
+    try {
+      const response = await fetch(`http://localhost:3000/questions/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ answers: updatedAnswers }),
+      });
+  
+      if (response.ok) {
+        setQuestion({ ...question, answers: updatedAnswers });
+      } else {
+        throw new Error('Failed to update answer votes');
+      }
+    } catch (error) {
+      console.error('Error updating answer votes:', error);
     }
   };
+  
 
-  const handleDownvote = () => {
-    if (userVote === 'down') {
-      setDownvotes(downvotes - 1);
-      setUserVote(null);
-      updateVotes(upvotes, downvotes - 1);
-    } else {
-      const newUpvotes = userVote === 'up' ? upvotes - 1 : upvotes;
-      const newDownvotes = userVote === 'up' ? downvotes + 1 : downvotes + 1;
-      setUpvotes(newUpvotes);
-      setDownvotes(newDownvotes);
-      setUserVote('down');
-      updateVotes(newUpvotes, newDownvotes);
+  const handleSelectAcceptedAnswer = async (answerId) => {
+    const updatedAnswers = question.answers.map(answer => ({
+      ...answer,
+      accepted: answer.id === answerId
+    }));
+
+    try {
+      const response = await fetch(`http://localhost:3000/questions/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ answers: updatedAnswers, resolved: true }),
+      });
+
+      if (response.ok) {
+        setQuestion({ ...question, answers: updatedAnswers, resolved: true });
+        toast.success('Answer accepted and question marked as resolved');
+      } else {
+        throw new Error('Failed to accept answer');
+      }
+    } catch (error) {
+      console.error('Error accepting answer:', error);
+      toast.error('Failed to accept answer');
     }
   };
 
@@ -111,8 +200,12 @@ const UpdateQuestions = () => {
     try {
       const newAnswer = {
         answer,
-        author,
-        id: Date.now().toString()
+        author: currentUser?.name, // Automatically set the author to the current user's name
+        id: Date.now().toString(),
+        link: link, // Add the link to the answer
+        upvotes: 0,
+        downvotes: 0,
+        accepted: false
       };
       const updatedAnswers = question.answers ? [...question.answers, newAnswer] : [newAnswer];
 
@@ -128,7 +221,7 @@ const UpdateQuestions = () => {
         toast.success('Answer added successfully');
         setQuestion({ ...question, answers: updatedAnswers });
         setAnswer('');
-        setAuthor('');
+        setLink('');
       } else {
         throw new Error('Failed to add answer');
       }
@@ -160,28 +253,34 @@ const UpdateQuestions = () => {
     }
   };
 
+  if (loading) {
+    return <div>Loading...</div>; // You can customize this loading indicator
+  }
+
+  const sortedAnswers = question.answers?.sort((a, b) => b.upvotes - a.upvotes) || [];
+
   return (
     <div className="container mx-auto p-6">
       <div className="bg-white rounded-lg shadow-lg p-6 flex flex-col md:flex-row items-start gap-6">
         <div className="flex-1">
           <h1 className="text-3xl font-bold text-gray-900">{question.title}</h1>
           <p className="text-gray-700 mt-4">{question.content}</p>
-          <div className="flex items-center mt-4 space-x-4">
-            <div
-              className={`flex items-center space-x-1 cursor-pointer ${userVote === 'up' ? 'text-blue-500' : 'text-gray-500'}`}
-              onClick={handleUpvote}
-            >
-              <FaArrowUp className="text-2xl mr-4" />
-              <span>{upvotes}</span>
+          {question.codeSnippet && (
+            <div className="mt-4 bg-gray-100 p-4 rounded-lg overflow-x-auto">
+              <h3 className="text-lg font-semibold">Code Snippet:</h3>
+              <pre className="bg-gray-200 p-2 rounded-lg">
+                <code className="whitespace-pre-wrap break-words">{question.codeSnippet}</code>
+              </pre>
             </div>
-            <div
-              className={`flex items-center space-x-1 cursor-pointer ${userVote === 'down' ? 'text-red-500' : 'text-gray-500'}`}
-              onClick={handleDownvote}
-            >
-              <FaArrowDown className="text-2xl mr-4" />
-              <span>{downvotes}</span>
+          )}
+          {question.link && (
+            <div className="mt-4">
+              <h3 className="text-lg font-semibold">Link:</h3>
+              <a href={question.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+                {question.link}
+              </a>
             </div>
-          </div>
+          )}
           <div className="mt-4 flex flex-wrap gap-2">
             {question.tags && question.tags.map((tag, index) => (
               <span key={index} className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">
@@ -189,17 +288,65 @@ const UpdateQuestions = () => {
               </span>
             ))}
           </div>
+          <div className="flex items-center mt-4 space-x-4">
+            <div
+              className={`flex items-center space-x-1 cursor-pointer ${userVote === 'up' ? 'text-blue-500' : 'text-gray-500'}`}
+              onClick={handleUpvote}
+            >
+              <FaArrowUp className={`text-2xl mr-4 ${userVote === 'up' ? 'text-blue-500' : 'text-gray-500'}`} />
+              <span>{upvotes}</span>
+            </div>
+            <div
+              className={`flex items-center space-x-1 cursor-pointer ${userVote === 'down' ? 'text-red-500' : 'text-gray-500'}`}
+              onClick={handleDownvote}
+            >
+              <FaArrowDown className={`text-2xl mr-4 ${userVote === 'down' ? 'text-red-500' : 'text-gray-500'}`} />
+              <span>{downvotes}</span>
+            </div>
+          </div>
           <div className="mt-4 text-sm text-gray-500">
             <span>By {question.author}</span>
           </div>
           <div className="mt-6">
             <h2 className="text-lg font-semibold text-gray-900">Answers</h2>
             <div className="mt-4 space-y-4">
-              {question.answers && question.answers.map((cmt, index) => (
-                <div key={index} className="border border-gray-300 rounded-lg p-4 flex justify-between items-start">
+              {sortedAnswers.map((cmt, index) => (
+                <div key={index} className={`border border-gray-300 rounded-lg p-4 flex justify-between items-start ${cmt.accepted ? 'bg-green-100' : ''}`}>
                   <div>
                     <p className="text-gray-800">{cmt.answer}</p>
+                    {cmt.link && (
+                      <div className="mt-2">
+                        <h3 className="text-sm font-semibold">Link:</h3>
+                        <a href={cmt.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+                          {cmt.link}
+                        </a>
+                      </div>
+                    )}
                     <p className="text-sm text-gray-500 mt-2">- {cmt.author}</p>
+                    <div className="flex items-center mt-2 space-x-4">
+                      <div
+                        className={`flex items-center space-x-1 cursor-pointer ${cmt.userVote === 'upvote' ? 'text-blue-500' : 'text-gray-500'}`}
+                        onClick={() => handleAnswerVote(cmt.id, 'upvote')}
+                      >
+                        <FaArrowUp className={`text-xl mr-2 ${cmt.userVote === 'upvote' ? 'text-blue-500' : 'text-gray-500'}`} />
+                        <span>{cmt.upvotes || 0}</span>
+                      </div>
+                      <div
+                        className={`flex items-center space-x-1 cursor-pointer ${cmt.userVote === 'downvote' ? 'text-red-500' : 'text-gray-500'}`}
+                        onClick={() => handleAnswerVote(cmt.id, 'downvote')}
+                      >
+                        <FaArrowDown className={`text-xl mr-2 ${cmt.userVote === 'downvote' ? 'text-red-500' : 'text-gray-500'}`} />
+                        <span>{cmt.downvotes || 0}</span>
+                      </div>
+                      {(currentUser?.admin || currentUser?.name === question.author) && (
+                        <button
+                          onClick={() => handleSelectAcceptedAnswer(cmt.id)}
+                          className="text-green-600 hover:text-green-800"
+                        >
+                          <FaCheck className="text-xl" />
+                        </button>
+                      )}
+                    </div>
                   </div>
                   {(currentUser?.admin || currentUser?.name === cmt.author) && (
                     <button
@@ -230,13 +377,13 @@ const UpdateQuestions = () => {
               />
             </div>
             <div className="mb-5">
-              <label className="block mb-2 text-sm font-medium text-gray-700">Author</label>
+              <label className="block mb-2 text-sm font-medium text-gray-700">Link</label>
               <input
-                value={author}
-                onChange={(e) => setAuthor(e.target.value)}
-                type="text"
+                type="url"
+                value={link}
+                onChange={(e) => setLink(e.target.value)}
                 className="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500"
-                required
+                placeholder="Enter link (optional)"
               />
             </div>
             <button

@@ -116,184 +116,88 @@
       "profile_image": "http://we3ededdc.com",
       "phone_number": "1234567",
       "admin": true
+    },
+    {
+      "id": "2207",
+      "name": "Reuben",
+      "email": "rickr6129@gmail.com",
+      "password": "12345",
+      "profile_image": "https://wallpapercave.com/wp/wp4901965.jpg",
+      "phone_number": "1234567",
+      "admin": true
+    },
+    {
+      "id": "187e",
+      "email": "rickr6129@gmail.com"
+    },
+    {
+      "id": "2064",
+      "email": "rickr6129@gmail.com"
+    },
+    {
+      "id": "a812",
+      "email": "rickr6129@gmail.com"
+    },
+    {
+      "id": "711e",
+      "email": "rickr6129@gmail.com"
+    },
+    {
+      "id": "3304",
+      "name": "Rick Ruben",
+      "email": "rickr6129@gmail.com",
+      "password": "james21kinya",
+      "profile_image": "https://motionbgs.com/i/c/364x205/media/1194/vegeta-ultra-ego.jpg",
+      "phone_number": "12345678",
+      "admin": true
+    },
+    {
+      "id": "101a",
+      "email": "rickr6129@gmail.com"
+    },
+    {
+      "id": "7d9e",
+      "email": "rickr6129@gmail.com"
+    },
+    {
+      "id": "a949",
+      "email": "rickr6129@gmail.com"
+    },
+    {
+      "id": "381d",
+      "name": "Ezekiel",
+      "email": "Ezekiel@gmail.com",
+      "password": "1234",
+      "profile_image": "https://e0.pxfuel.com/wallpapers/485/879/desktop-wallpaper-anime-3d-android-thumbnail.jpg",
+      "phone_number": "123456789",
+      "admin": true
     }
   ],
   "questions": [
-    {
-      "id": "8b7d",
-      "title": "What is the SOLID principle?",
-      "content": "The SOLID principles are a set of design principles in object-oriented programming aimed at making software designs more understandable, flexible, and maintainable.",
-      "author": "Derek",
-      "upvotes": 21,
-      "downvotes": 13,
-      "tags": [
-        "Software Engineering",
-        "Design Principles"
-      ],
-      "awards": 2,
-      "comments": [
-        {
-          "comment": "dfgh",
-          "author": "bee",
-          "id": "1722927345537"
-        },
-        {
-          "comment": "tyu",
-          "author": "ert",
-          "id": "1722927463234"
-        },
-        {
-          "comment": "rtyu",
-          "author": "rty",
-          "id": "1722927480025"
-        },
-        {
-          "comment": "qwert",
-          "author": "hhh",
-          "id": "1722927711566"
-        },
-        {
-          "comment": "yes that's true",
-          "author": "ben",
-          "id": "1722927767257"
-        },
-        {
-          "comment": "wertyuio",
-          "author": "ertyu",
-          "id": "1722928440019"
-        },
-        {
-          "comment": "good Question",
-          "author": "Ezekiel",
-          "id": "1722931675068"
-        }
-      ],
-      "answers": [
-        {
-          "answer": "sdrftyuio",
-          "author": "me",
-          "id": "1722963366164"
-        },
-        {
-          "answer": "wertyui",
-          "author": "qwertyuio",
-          "id": "1722964517294"
-        },
-        {
-          "answer": "asdfio",
-          "author": "qwertyui",
-          "id": "1722964965043"
-        }
-      ]
-    },
-    {
-      "id": "7f8a",
-      "title": "How does version control work?",
-      "content": "Version control systems help manage changes to source code over time, allowing multiple developers to work on a project simultaneously.",
-      "author": "Eve",
-      "upvotes": 20,
-      "downvotes": 2,
-      "tags": [
-        "Version Control",
-        "Git"
-      ],
-      "awards": 1,
-      "comments": [
-        {
-          "comment": "qwertyui",
-          "author": "cynthia",
-          "id": "1722933317438"
-        }
-      ],
-      "answers": [
-        {
-          "answer": "werftgyuj",
-          "author": "wertyu",
-          "id": "1722933446951"
-        }
-      ]
-    },
-    {
-      "id": "f392",
-      "title": "What is microservices architecture?",
-      "content": "Microservices architecture is an approach to software development where an application is composed of small, independent services that communicate over a network.",
-      "author": "Grace",
-      "upvotes": 22,
-      "downvotes": 4,
-      "tags": [
-        "Microservices",
-        "Architecture"
-      ],
-      "awards": 2,
-      "comments": [],
-      "answers": [
-        {
-          "answer": "ertyuiortyui",
-          "author": "wertyutyui",
-          "id": "1722963403351"
-        },
-        {
-          "answer": "wertyertyu",
-          "author": "wertyuertyu",
-          "id": "1722963409204"
-        }
-      ]
-    },
-    {
-      "id": "c94d",
-      "title": "What are design patterns?",
-      "content": "Design patterns are general, reusable solutions to common problems in software design.",
-      "author": "Hannah",
-      "upvotes": 18,
-      "downvotes": 0,
-      "tags": [
-        "Design Patterns",
-        "Software Engineering"
-      ],
-      "awards": 2,
-      "comments": []
-    },
-    {
-      "id": "4a7c",
-      "title": "What is the purpose of unit testing?",
-      "content": "Unit testing involves testing individual units or components of a software to ensure they work as expected.",
-      "author": "Ian",
-      "upvotes": 28,
-      "downvotes": 1,
-      "tags": [
-        "Testing",
-        "Unit Testing"
-      ],
-      "awards": 2,
-      "comments": []
-    },
-    {
-      "id": "6f2d",
-      "title": "What is a RESTful API?",
-      "content": "A RESTful API is an API that adheres to the principles of Representational State Transfer (REST), allowing for interaction with web services using standard HTTP methods.",
-      "author": "Jack",
-      "upvotes": 25,
-      "downvotes": 3,
-      "tags": [
-        "API",
-        "REST"
-      ],
-      "awards": 2,
-      "comments": []
-    },
     {
       "id": "2e6a",
       "title": "What is Agile methodology?",
       "content": "Agile methodology is an iterative approach to software development that emphasizes flexibility, collaboration, and customer feedback.",
       "author": "Karen",
-      "upvotes": 33,
-      "downvotes": 0,
+      "upvotes": 34,
+      "downvotes": 1,
       "tags": [
         "Agile",
         "Methodology"
       ],
       "awards": 3,
-      "comments": []
+      "comments": [],
+      "answers": [
+        {
+          "answer": "ertyui",
+          "author": "ww",
+          "id": "1723031103354",
+          "upvotes": 3,
+          "downvotes": 2,
+          "accepted": false
+        }
+      ],
+      "resolved": true
     },
     {
       "id": "9b4f",
@@ -307,48 +211,6 @@
         "Interpreter"
       ],
       "awards": 1,
-      "comments": []
-    },
-    {
-      "id": "e8f3",
-      "title": "What is dependency injection?",
-      "content": "Dependency injection is a design pattern in which an object's dependencies are provided to it, rather than the object creating them itself.",
-      "author": "Mia",
-      "upvotes": 21,
-      "downvotes": 1,
-      "tags": [
-        "Design Patterns",
-        "Dependency Injection"
-      ],
-      "awards": 2,
-      "comments": []
-    },
-    {
-      "id": "0cfa",
-      "title": "What are some common database normalization forms?",
-      "content": "Database normalization involves organizing tables to reduce redundancy and improve data integrity. Common forms include 1NF, 2NF, 3NF, and BCNF.",
-      "author": "Noah",
-      "upvotes": 27,
-      "downvotes": 2,
-      "tags": [
-        "Database",
-        "Normalization"
-      ],
-      "awards": 3,
-      "comments": []
-    },
-    {
-      "id": "f5b9",
-      "title": "What is the difference between a thread and a process?",
-      "content": "A thread is the smallest unit of a process that can be scheduled, while a process is an independent executing instance of a program.",
-      "author": "Olivia",
-      "upvotes": 16,
-      "downvotes": 0,
-      "tags": [
-        "Concurrency",
-        "Threads"
-      ],
-      "awards": 2,
       "comments": []
     },
     {
@@ -366,34 +228,6 @@
       "comments": []
     },
     {
-      "id": "d5b8",
-      "title": "What is a race condition?",
-      "content": "A race condition occurs when the behavior of a software system depends on the timing or order of uncontrollable events, leading to unpredictable outcomes.",
-      "author": "Quincy",
-      "upvotes": 20,
-      "downvotes": 2,
-      "tags": [
-        "Concurrency",
-        "Race Condition"
-      ],
-      "awards": 2,
-      "comments": []
-    },
-    {
-      "id": "f4c6",
-      "title": "What is the Model-View-Controller (MVC) pattern?",
-      "content": "MVC is a design pattern that separates an application into three interconnected components: Model, View, and Controller.",
-      "author": "Rachel",
-      "upvotes": 23,
-      "downvotes": 3,
-      "tags": [
-        "Design Patterns",
-        "MVC"
-      ],
-      "awards": 2,
-      "comments": []
-    },
-    {
       "id": "c92e",
       "title": "How does HTTP work?",
       "content": "HTTP is a protocol used for transmitting data over the web, operating as a request-response protocol between a client and server.",
@@ -408,140 +242,6 @@
       "comments": []
     },
     {
-      "id": "b6f1",
-      "title": "What is the purpose of a load balancer?",
-      "content": "A load balancer distributes network or application traffic across multiple servers to ensure reliability and performance.",
-      "author": "Tina",
-      "upvotes": 17,
-      "downvotes": 1,
-      "tags": [
-        "Load Balancing",
-        "Infrastructure"
-      ],
-      "awards": 2,
-      "comments": []
-    },
-    {
-      "id": "f9b7",
-      "title": "What is a deadlock in computing?",
-      "content": "A deadlock is a situation in a concurrent system where two or more processes are unable to proceed because each is waiting for the other to release a resource.",
-      "author": "Ulysses",
-      "upvotes": 19,
-      "downvotes": 0,
-      "tags": [
-        "Concurrency",
-        "Deadlock"
-      ],
-      "awards": 2,
-      "comments": []
-    },
-    {
-      "id": "d9c3",
-      "title": "What is a software framework?",
-      "content": "A software framework is a platform for developing software applications, providing a foundation with predefined classes and functions.",
-      "author": "Victoria",
-      "upvotes": 24,
-      "downvotes": 1,
-      "tags": [
-        "Software Framework",
-        "Development"
-      ],
-      "awards": 2,
-      "comments": []
-    },
-    {
-      "id": "e5a6",
-      "title": "What is the difference between an abstract class and an interface?",
-      "content": "An abstract class can have method implementations and can be inherited from, while an interface only defines a contract and cannot have implementations.",
-      "author": "Walter",
-      "upvotes": 22,
-      "downvotes": 3,
-      "tags": [
-        "OOP",
-        "Abstract Class",
-        "Interface"
-      ],
-      "awards": 2,
-      "comments": []
-    },
-    {
-      "id": "b4a1",
-      "title": "What is the purpose of an API gateway?",
-      "content": "An API gateway acts as an entry point for API requests, handling routing, authentication, and other functions.",
-      "author": "Xena",
-      "upvotes": 18,
-      "downvotes": 0,
-      "tags": [
-        "API Gateway",
-        "Microservices"
-      ],
-      "awards": 2,
-      "comments": []
-    },
-    {
-      "id": "c7b2",
-      "title": "What are the different types of testing in software development?",
-      "content": "Types of testing include unit testing, integration testing, system testing, acceptance testing, performance testing, and more.",
-      "author": "Yvonne",
-      "upvotes": 27,
-      "downvotes": 3,
-      "tags": [
-        "Testing",
-        "Software Development"
-      ],
-      "awards": 2,
-      "comments": [],
-      "answers": [
-        {
-          "answer": "sdfgtre",
-          "author": "yes",
-          "id": "1722975525649"
-        }
-      ]
-    },
-    {
-      "id": "f8e3",
-      "title": "What is the purpose of a database index?",
-      "content": "A database index improves the speed of data retrieval operations on a database table by providing quick access to rows.",
-      "author": "Zach",
-      "upvotes": 20,
-      "downvotes": 1,
-      "tags": [
-        "Database",
-        "Indexing"
-      ],
-      "awards": 2,
-      "comments": []
-    },
-    {
-      "id": "e6b4",
-      "title": "What is object-oriented programming (OOP)?",
-      "content": "OOP is a programming paradigm based on the concept of objects, which contain data and methods.",
-      "author": "Aaron",
-      "upvotes": 28,
-      "downvotes": 0,
-      "tags": [
-        "OOP",
-        "Programming"
-      ],
-      "awards": 2,
-      "comments": []
-    },
-    {
-      "id": "c8d5",
-      "title": "What is a singleton pattern?",
-      "content": "The singleton pattern ensures that a class has only one instance and provides a global point of access to it.",
-      "author": "Bella",
-      "upvotes": 16,
-      "downvotes": 1,
-      "tags": [
-        "Design Patterns",
-        "Singleton"
-      ],
-      "awards": 2,
-      "comments": []
-    },
-    {
       "id": "a4e6",
       "title": "What is a callback function?",
       "content": "A callback function is a function passed into another function as an argument, which is then invoked inside the outer function.",
@@ -553,63 +253,6 @@
         "Callback"
       ],
       "awards": 1,
-      "comments": []
-    },
-    {
-      "id": "f7e9",
-      "title": "What is the difference between synchronous and asynchronous programming?",
-      "content": "Synchronous programming executes tasks sequentially, while asynchronous programming allows tasks to be executed without waiting for other tasks to complete.",
-      "author": "Diana",
-      "upvotes": 24,
-      "downvotes": 2,
-      "tags": [
-        "Programming",
-        "Asynchronous"
-      ],
-      "awards": 2,
-      "comments": []
-    },
-    {
-      "id": "b9a2",
-      "title": "What is the purpose of a cache?",
-      "content": "A cache stores frequently accessed data to reduce the time needed to retrieve it from a slower data source.",
-      "author": "Edward",
-      "upvotes": 21,
-      "downvotes": 1,
-      "tags": [
-        "Cache",
-        "Performance"
-      ],
-      "awards": 2,
-      "comments": []
-    },
-    {
-      "id": "d3b5",
-      "title": "What is the difference between SQL and NoSQL databases?",
-      "content": "SQL databases use structured query language and are relational, while NoSQL databases are non-relational and can store unstructured data.",
-      "author": "Fiona",
-      "upvotes": 29,
-      "downvotes": 0,
-      "tags": [
-        "Database",
-        "SQL",
-        "NoSQL"
-      ],
-      "awards": 3,
-      "comments": []
-    },
-    {
-      "id": "e2c4",
-      "title": "What is DevOps?",
-      "content": "DevOps is a set of practices that combines software development (Dev) and IT operations (Ops) to shorten the development lifecycle.",
-      "author": "George",
-      "upvotes": 30,
-      "downvotes": 3,
-      "tags": [
-        "DevOps",
-        "Software Development"
-      ],
-      "awards": 3,
       "comments": []
     },
     {
@@ -633,6 +276,119 @@
       "content": "asdfghj",
       "author": "ertyui",
       "comments": []
+    },
+    {
+      "id": "1a25",
+      "title": "qwertyui",
+      "content": "ertyuio",
+      "author": "ww",
+      "tags": [],
+      "comments": [],
+      "upvotes": 1,
+      "downvotes": 0,
+      "awards": 0,
+      "resolved": false,
+      "answers": []
+    },
+    {
+      "id": "e6cf",
+      "title": "Git ",
+      "content": "Blah Blah",
+      "author": "ww",
+      "tags": [],
+      "comments": [],
+      "upvotes": 2,
+      "downvotes": 1,
+      "awards": 0,
+      "resolved": true,
+      "answers": [
+        {
+          "answer": "wertyui",
+          "author": "ww",
+          "id": "1723032762215",
+          "upvotes": 19,
+          "downvotes": 0,
+          "accepted": true
+        },
+        {
+          "answer": "dfghj",
+          "author": "ww",
+          "id": "1723032769334",
+          "upvotes": 0,
+          "downvotes": 0,
+          "accepted": false
+        }
+      ]
+    },
+    {
+      "id": "7c0f",
+      "title": "Ruby",
+      "content": "qwerty",
+      "author": "Ezekiel",
+      "tags": [],
+      "comments": [],
+      "upvotes": 0,
+      "downvotes": 0,
+      "awards": 0,
+      "resolved": false,
+      "answers": []
+    },
+    {
+      "id": "7189",
+      "title": "fgh",
+      "content": "<div className=\"mb-4\">\n          <label className=\"block text-sm font-medium text-gray-900 dark:text-black\">Content</label>\n          <textarea\n            value={content}\n            onChange={(e) => setContent(e.target.value)}\n            className=\"bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5\"\n            placeholder=\"Enter question content\"\n            rows=\"5\"\n            required\n          />",
+      "author": "Ezekiel",
+      "tags": [],
+      "comments": [],
+      "upvotes": 2,
+      "downvotes": 0,
+      "awards": 0,
+      "resolved": true,
+      "answers": []
+    },
+    {
+      "id": "0173",
+      "title": "React",
+      "content": "What is React?",
+      "author": "Ezekiel",
+      "tags": [],
+      "codeSnippet": "import React, { useEffect, useState } from 'react';\nimport { toast } from 'react-toastify';\nimport { useNavigate } from 'react-router-dom';\n\nexport default function AskQuestion() {\n  const [title, setTitle] = useState('');\n  const [content, setContent] = useState('');\n  const [tags, setTags] = useState([]);\n  const [codeSnippet, setCodeSnippet] = useState('');\n  const [link, setLink] = useState('');\n  const [currentUser, setCurrentUser] = useState(null);\n  const [loading, setLoading] = useState(true);\n  const [tagInput, setTagInput] = useState('');\n  const navigate = useNavigate();\n\n  useEffect(() => {\n    const userId = localStorage.getItem(\"access_token\");\n    if (!userId) {\n      toast.error(\"No user logged in\");\n      navigate(\"/loginPage\");\n      return;\n    }\n\n    const fetchCurrentUser = async () => {\n      try {\n        const response = await fetch(`http://localhost:3000/users/${userId}`);\n        if (response.ok) {\n          const data = await response.json();\n          setCurrentUser(data);\n        } else {\n          throw new Error(\"Failed to fetch current user\");\n        }\n      } catch (error) {\n        console.error(\"Error fetching current user:\", error);\n        toast.error(\"Failed to fetch current user\");\n      } finally {\n        setLoading(false);\n      }\n    };\n\n    fetchCurrentUser();\n  }, [navigate]);\n\n  const handleTagKeyPress = (e) => {\n    if (e.key === 'Enter' && tagInput.trim() !== '') {\n      e.preventDefault();\n      setTags([...tags, tagInput.trim()]);\n      setTagInput('');\n    }\n  };\n\n  const handleTagRemove = (tag) => {\n    setTags(tags.filter(t => t !== tag));\n  };\n\n  const handleSubmit = (e) => {\n    e.preventDefault();\n\n    fetch('http://localhost:3000/questions', {\n      method: 'POST',\n      headers: {\n        'Content-Type': 'application/json',\n      },\n      body: JSON.stringify({\n        title,\n        content,\n        author: currentUser?.name, // Automatically set the author to the current user's name\n        tags,\n        codeSnippet,\n        link,\n        comments: [],\n        upvotes: 0,\n        downvotes: 0,\n        awards: 0,\n        resolved: false,\n        answers: []\n      }),\n    })\n      .then((response) => response.json())\n      .then(() => {\n        toast.success('Question submitted successfully!');\n        navigate('/Questions');\n      })\n      .catch((error) => {\n        toast.error('Failed to submit the question.');\n        console.error('Error:', error);\n      });\n  };\n\n  if (loading) {\n    return <div>Loading...</div>; // Display a loading indicator while checking authentication\n  }\n\n  return (\n    <div className=\"p-6\">\n      <h1 className=\"text-2xl font-bold mb-4\">Ask a Question</h1>\n      <form onSubmit={handleSubmit} className=\"max-w-md mx-auto\">\n        <div className=\"mb-4\">\n          <label className=\"block text-sm font-medium text-gray-900 dark:text-black\">Title</label>\n          <input\n            type=\"text\"\n            value={title}\n            onChange={(e) => setTitle(e.target.value)}\n            className=\"bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5\"\n            placeholder=\"Enter question title\"\n            required\n          />\n        </div>\n        <div className=\"mb-4\">\n          <label className=\"block text-sm font-medium text-gray-900 dark:text-black\">Content</label>\n          <textarea\n            value={content}\n            onChange={(e) => setContent(e.target.value)}\n            className=\"bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5\"\n            placeholder=\"Enter question content\"\n            rows=\"5\"\n            required\n          />\n        </div>\n        <div className=\"mb-4\">\n          <label className=\"block text-sm font-medium text-gray-900 dark:text-black\">Code Snippet</label>\n          <textarea\n            value={codeSnippet}\n            onChange={(e) => setCodeSnippet(e.target.value)}\n            className=\"bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5\"\n            placeholder=\"Enter code snippet\"\n            rows=\"3\"\n          />\n        </div>\n        <div className=\"mb-4\">\n          <label className=\"block text-sm font-medium text-gray-900 dark:text-black\">Link</label>\n          <input\n            type=\"url\"\n            value={link}\n            onChange={(e) => setLink(e.target.value)}\n            className=\"bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5\"\n            placeholder=\"Enter link\"\n          />\n        </div>\n        <div className=\"mb-4\">\n          <label className=\"block text-sm font-medium text-gray-900 dark:text-black\">Tags</label>\n          <input\n            type=\"text\"\n            value={tagInput}\n            onChange={(e) => setTagInput(e.target.value)}\n            onKeyPress={handleTagKeyPress}\n            className=\"bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5\"\n            placeholder=\"Enter tags and press Enter\"\n          />\n          <div className=\"mt-2 flex flex-wrap gap-2\">\n            {tags.map((tag, index) => (\n              <span\n                key={index}\n                className=\"bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm flex items-center\"\n              >\n                {tag}\n                <button\n                  type=\"button\"\n                  onClick={() => handleTagRemove(tag)}\n                  className=\"ml-2 text-red-500 hover:text-red-700\"\n                >\n                  &times;\n                </button>\n              </span>\n            ))}\n          </div>\n        </div>\n        <button\n          type=\"submit\"\n          className=\"w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center\"\n        >\n          Submit Question\n        </button>\n      </form>\n    </div>\n  );\n}\n",
+      "link": "https://stackoverflow.com/questions",
+      "comments": [],
+      "upvotes": 0,
+      "downvotes": 1,
+      "awards": 0,
+      "resolved": true,
+      "answers": [
+        {
+          "answer": "https://stackoverflow.com/questions",
+          "author": "Ezekiel",
+          "id": "1723034259379",
+          "upvotes": 28,
+          "downvotes": 1,
+          "accepted": false,
+          "userVote": "downvote"
+        },
+        {
+          "answer": "qwrtrewq",
+          "author": "Ezekiel",
+          "id": "1723034204988",
+          "upvotes": 27,
+          "downvotes": 12,
+          "accepted": true
+        },
+        {
+          "answer": "fghjk",
+          "author": "Ezekiel",
+          "id": "1723034866779",
+          "link": "https://stackoverflow.com/questions",
+          "upvotes": 9,
+          "downvotes": 32,
+          "accepted": false,
+          "userVote": "downvote"
+        }
+      ],
+      "userVote": null
     }
   ]
 }
