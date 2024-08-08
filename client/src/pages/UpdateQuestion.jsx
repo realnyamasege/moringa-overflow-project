@@ -115,27 +115,38 @@ const UpdateQuestions = () => {
   const handleAnswerVote = async (answerId, voteType) => {
     const updatedAnswers = question.answers.map(answer => {
       if (answer.id === answerId) {
-        const previousVote = answer.userVote || null;
+        if (!answer.votes) answer.votes = [];
+        const existingVote = answer.votes.find(vote => vote.userId === currentUser.id);
         let newUpvotes = answer.upvotes || 0;
         let newDownvotes = answer.downvotes || 0;
 
         if (voteType === 'upvote') {
-          if (previousVote === 'upvote') {
-            newUpvotes -= 1;
-            answer.userVote = null;
+          if (existingVote) {
+            if (existingVote.type === 'upvote') {
+              newUpvotes -= 1;
+              answer.votes = answer.votes.filter(vote => vote.userId !== currentUser.id);
+            } else {
+              newUpvotes += 1;
+              newDownvotes -= 1;
+              existingVote.type = 'upvote';
+            }
           } else {
             newUpvotes += 1;
-            if (previousVote === 'downvote') newDownvotes -= 1;
-            answer.userVote = 'upvote';
+            answer.votes.push({ userId: currentUser.id, type: 'upvote' });
           }
         } else if (voteType === 'downvote') {
-          if (previousVote === 'downvote') {
-            newDownvotes -= 1;
-            answer.userVote = null;
+          if (existingVote) {
+            if (existingVote.type === 'downvote') {
+              newDownvotes -= 1;
+              answer.votes = answer.votes.filter(vote => vote.userId !== currentUser.id);
+            } else {
+              newDownvotes += 1;
+              newUpvotes -= 1;
+              existingVote.type = 'downvote';
+            }
           } else {
             newDownvotes += 1;
-            if (previousVote === 'upvote') newUpvotes -= 1;
-            answer.userVote = 'downvote';
+            answer.votes.push({ userId: currentUser.id, type: 'downvote' });
           }
         }
 
@@ -228,6 +239,7 @@ const UpdateQuestions = () => {
         upvotes: 0,
         downvotes: 0,
         accepted: false,
+        votes: [],
       };
       const updatedAnswers = question.answers ? [...question.answers, newAnswer] : [newAnswer];
 
@@ -450,17 +462,17 @@ const UpdateQuestions = () => {
                     <p className="text-sm text-gray-500 mt-2">- {cmt.author}</p>
                     <div className="flex items-center mt-2 space-x-4">
                       <div
-                        className={`flex items-center space-x-1 cursor-pointer ${cmt.userVote === 'upvote' ? 'text-blue-500' : 'text-gray-500'}`}
+                        className={`flex items-center space-x-1 cursor-pointer ${cmt.votes?.find(vote => vote.userId === currentUser.id && vote.type === 'upvote') ? 'text-blue-500' : 'text-gray-500'}`}
                         onClick={() => handleAnswerVote(cmt.id, 'upvote')}
                       >
-                        <FaArrowUp className={`text-xl mr-2 ${cmt.userVote === 'upvote' ? 'text-blue-500' : 'text-gray-500'}`} />
+                        <FaArrowUp className={`text-xl mr-2 ${cmt.votes?.find(vote => vote.userId === currentUser.id && vote.type === 'upvote') ? 'text-blue-500' : 'text-gray-500'}`} />
                         <span>{cmt.upvotes || 0}</span>
                       </div>
                       <div
-                        className={`flex items-center space-x-1 cursor-pointer ${cmt.userVote === 'downvote' ? 'text-red-500' : 'text-gray-500'}`}
+                        className={`flex items-center space-x-1 cursor-pointer ${cmt.votes?.find(vote => vote.userId === currentUser.id && vote.type === 'downvote') ? 'text-red-500' : 'text-gray-500'}`}
                         onClick={() => handleAnswerVote(cmt.id, 'downvote')}
                       >
-                        <FaArrowDown className={`text-xl mr-2 ${cmt.userVote === 'downvote' ? 'text-red-500' : 'text-gray-500'}`} />
+                        <FaArrowDown className={`text-xl mr-2 ${cmt.votes?.find(vote => vote.userId === currentUser.id && vote.type === 'downvote') ? 'text-red-500' : 'text-gray-500'}`} />
                         <span>{cmt.downvotes || 0}</span>
                       </div>
                       {(currentUser?.admin || currentUser?.id === question.userId) && (
