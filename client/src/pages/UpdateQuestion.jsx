@@ -342,7 +342,7 @@ const UpdateQuestions = () => {
   const handleRemoveBadge = async () => {
     let removedBadgesCount = 0;
     const updatedBadges = question.badges?.filter(badge => {
-      if (badge.adminId === currentUser.id && removedBadgesCount < 5) {
+      if (badge.adminId === currentUser.id && removedBadgesCount < 1) {
         removedBadgesCount++;
         return false;
       }

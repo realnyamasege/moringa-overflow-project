@@ -53,15 +53,18 @@ export default function AskQuestion() {
     setTags(tags.filter(t => t !== tag));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    fetch('http://localhost:3000/questions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+    try {
+      // Fetch existing questions to generate a new unique ID
+      const questionsResponse = await fetch('http://localhost:3000/questions');
+      const questions = await questionsResponse.json();
+      const newId = `q${questions.length + 1}`;
+
+      // Prepare the question data
+      const questionData = {
+        id: newId,
         userId: currentUser.id,
         author: currentUser.name,
         title,
@@ -74,17 +77,27 @@ export default function AskQuestion() {
         resolved: false,
         answers: [],
         badges: [],
-      }),
-    })
-      .then((response) => response.json())
-      .then(() => {
+      };
+
+      // Submit the question
+      const response = await fetch('http://localhost:3000/questions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(questionData),
+      });
+
+      if (response.ok) {
         toast.success('Question submitted successfully!');
         navigate('/Questions');
-      })
-      .catch((error) => {
-        toast.error('Failed to submit the question.');
-        console.error('Error:', error);
-      });
+      } else {
+        throw new Error('Failed to submit the question.');
+      }
+    } catch (error) {
+      toast.error('Failed to submit the question.');
+      console.error('Error:', error);
+    }
   };
 
   if (loading) {
