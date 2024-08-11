@@ -1,99 +1,104 @@
-from flask import Blueprint, jsonify, request, abort, make_response
+from flask import Blueprint, request, jsonify
+from models import db, User
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from sqlalchemy.exc import IntegrityError, SQLAlchemyError
-from models import db, User, Question, Vote
 
 user_bp = Blueprint('user_bp', __name__)
 
-# Get all users
+# Create a new user
+@user_bp.route('/users', methods=['POST'])
+def create_user():
+    data = request.get_json()
+    
+    # Check if required fields are present
+    required_fields = ['name', 'email', 'password']
+    if not all(field in data for field in required_fields):
+        return jsonify({'message': 'Missing required fields'}), 400
+
+    # Check if user already exists
+    existing_user = User.query.filter_by(email=data['email']).first()
+    if existing_user:
+        return jsonify({'message': 'User with this ID already exists'}), 400
+
+    existing_user_by_email = User.query.filter_by(email=data['email']).first()
+    if existing_user_by_email:
+        return jsonify({'message': 'User with this email already exists'}), 400
+
+    # Create and add new user
+    hashed_password = generate_password_hash(data['password'])
+    new_user = User(
+        name=data['name'],
+        email=data['email'],
+        password=hashed_password,
+        profile_image=data.get('profile_image'),
+        phone_number=data.get('phone_number'),
+        admin=data.get('admin', False),
+        reputation_points=data.get('reputation_points', 0)
+    )
+    
+    db.session.add(new_user)
+    db.session.commit()
+    return jsonify({'message': 'User created successfully'}), 201
+
 @user_bp.route('/users', methods=['GET'])
 def get_users():
     try:
         users = User.query.all()
+        if not users:
+            return jsonify({'message': 'No users found'}), 404
         return jsonify([user.to_dict() for user in users]), 200
     except Exception as e:
-        print(e)
-        return jsonify({"message": "An error occurred while retrieving users."}), 500
-
-# Get a single user
-@user_bp.route('/users/<int:user_id>', methods=['GET'])
+        print(f"Error occurred: {e}")  # This logs the error to the console
+        return jsonify({'message': 'Internal Server Error'}), 500
+    
+# Get a specific user by ID
+@user_bp.route('/users/<user_id>', methods=['GET'])
 def get_user(user_id):
-    try:
-        user = User.query.get(user_id)
-        if user:
-            return jsonify(user.to_dict()), 200
-        else:
-            return jsonify({"message": "User not found."}), 404
-    except Exception as e:
-        print(e)
-        return jsonify({"message": "An error occurred while retrieving the user."}), 500
+    user = User.query.get(user_id)
+    if user:
+        return jsonify(user.to_dict())
+    return jsonify({'message': 'User not found'}), 404
 
-# Update a user
-@user_bp.route('/users/<int:user_id>', methods=['PUT'])
+@user_bp.route('/users/<user_id>', methods=['PATCH'])
 @jwt_required()
 def update_user(user_id):
-    try:
-        current_user_id = get_jwt_identity()
-        user = User.query.get(user_id)
-        if not user:
-            return jsonify({"message": "User not found."}), 404
-
-        current_user = User.query.get(current_user_id)
-        if not current_user.is_admin and current_user_id != user.id:
-            return jsonify({"message": "Unauthorized"}), 403
-
-        data = request.get_json()
-        username = data.get('username')
-        email = data.get('email')
-        password = data.get('password')
-
-        if username:
-            user.username = username
-        if email:
-            user.email = email
-        if password:
-            user.set_password(password)
-
-        db.session.commit()
-        return jsonify(user.to_dict()), 200
-    except Exception as e:
-        print(e)
-        return jsonify({"message": "An error occurred while updating the user."}), 500
-
-# delete user
-@user_bp.route("/users", methods=["DELETE"])
-@jwt_required()
-def delete_user():
-    user_id = get_jwt_identity()
+    data = request.get_json()
     user = User.query.get(user_id)
-    
-    if user:
-        try:
-            # Remove associations from the `question_tag` table
-            for question in user.questions:
-                question.tags = []  # This will remove the association from the question_tag table
-            
-            # Clean up related votes
-            Vote.query.filter_by(user_id=user.id).delete()
 
-            # Remove the user
-            db.session.delete(user)
-            db.session.commit()
-            
-            return jsonify({"success": "User deleted successfully"}), 200
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
 
-        except IntegrityError as e:
-            db.session.rollback()
-            return jsonify({"error": "Integrity error occurred", "details": str(e)}), 500
+    if 'name' in data:
+        user.name = data['name']
+    if 'email' in data:
+        user.email = data['email']
+    if 'password' in data:
+        user.password = generate_password_hash(data['password'])
+    if 'profile_image' in data:
+        user.profile_image = data['profile_image']
+    if 'phone_number' in data:
+        user.phone_number = data['phone_number']
+    if 'admin' in data:
+        user.admin = data['admin']
+    if 'reputation_points' in data:
+        user.reputation_points = data['reputation_points']
 
-        except SQLAlchemyError as e:
-            db.session.rollback()
-            return jsonify({"error": "Database error occurred", "details": str(e)}), 500
+    db.session.commit()
+    return jsonify({'message': 'User updated successfully'})
 
-        except Exception as e:
-            db.session.rollback()
-            return jsonify({"error": "An unexpected error occurred", "details": str(e)}), 500
+@user_bp.route('/users/<user_id>', methods=['DELETE'])
+@jwt_required()
+def delete_user(user_id):
+    try:
+        user = User.query.get(user_id)
 
-    else:
-        return jsonify({"error": "User you are trying to delete is not found!"}), 404
+        if not user:
+            return jsonify({'message': 'User not found'}), 404
 
+        db.session.delete(user)
+        db.session.commit()
+        return jsonify({'message': 'User deleted successfully'})
+    except Exception as e:
+        print(f"Error occurred: {e}")  # Log the error to the console
+        db.session.rollback()  # Rollback any changes if an error occurs
+        return jsonify({'message': 'Internal Server Error'}), 500
