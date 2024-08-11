@@ -1,101 +1,120 @@
-from flask import Blueprint, jsonify, request
-from models import Question, db, User
-from sqlalchemy.orm import joinedload
-from flask_jwt_extended import  jwt_required, get_jwt_identity
+from flask import Blueprint, request, jsonify, make_response
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from models import db, Question, Tag, User
 
 question_bp = Blueprint('question_bp', __name__)
 
-
+# Create a new question
 @question_bp.route('/questions', methods=['POST'])
 @jwt_required()
-def create_question():
-    data = request.get_json()
-    
-    # Validate the data
-    if not all(key in data for key in ['title', 'content', 'author', 'tags']):
-        return jsonify({"error": "Missing required fields"}), 422
-
+def ask_question():
     try:
-        new_question = Question(
-            title=data['title'],
-            content=data['content'],
-            author=data['author'],
-            tags=data['tags'],
-            code_snippet=data.get('codeSnippet'),
-            link=data.get('link'),
-            upvotes=data.get('upvotes', 0),
-            downvotes=data.get('downvotes', 0),
-            awards=data.get('awards', 0),
-            resolved=data.get('resolved', False),
-            answers=data.get('answers', [])
-        )
+        data = request.get_json()
+        title = data.get('title')
+        body = data.get('body')
+        tags = data.get('tags', [])
+
+        # Debugging prints
+        print(f"Request Data: {data}")
+        print(f"Title: {title}, Body: {body}, Tags: {tags}")
+
+        # Validate data
+        if not title or not body:
+            return make_response(jsonify({"message": "Title and body are required"}), 400)
+
+        # Check JWT identity
+        current_user = get_jwt_identity()
+        print(f"JWT Identity: {current_user}")  # Debugging line
+        if not isinstance(current_user, int):
+            return make_response(jsonify({"message": "Invalid JWT identity format"}), 400)
+
+        user_id = current_user
+        user = User.query.get(user_id)
+
+        if not user:
+            return make_response(jsonify({"message": "User not found"}), 404)
+
+        new_question = Question(title=title, body=body, user_id=user.id)
+
+        # Handle tags
+        for tag_name in tags:
+            tag = Tag.query.filter_by(name=tag_name).first()
+            if not tag:
+                tag = Tag(name=tag_name)
+                db.session.add(tag)
+            new_question.tags.append(tag)
+
         db.session.add(new_question)
         db.session.commit()
-        return jsonify({"message": "Question submitted successfully!"}), 201
+
+        return make_response(jsonify({"message": "Question created successfully"}), 201)
+
     except Exception as e:
-        db.session.rollback()
-        return jsonify({"error": str(e)}), 500
+        # Log error and return detailed message
+        print(f"Error in ask_question: {e}")
+        return make_response(jsonify({"message": "An error occurred", "error": str(e)}), 500)
 
-
+# Get all questions
 @question_bp.route('/questions', methods=['GET'])
 def get_questions():
     try:
-        questions = Question.query.options(joinedload(Question.author)).all()
-        return jsonify([question.to_dict() for question in questions])
+        questions = Question.query.all()
+        questions_list = [question.to_dict() for question in questions]
+        return jsonify(questions_list)
     except Exception as e:
-        print(f"Error fetching questions: {e}")
-        return jsonify({'error': 'An error occurred while fetching questions'}), 500
+        print(f"Error while retrieving questions: {e}")
+        return make_response(jsonify({"message": "An error occurred while retrieving questions."}), 500)
 
-@question_bp.route('/questions/<question_id>', methods=['GET'])
-def get_question(question_id):
-    question = Question.query.options(joinedload(Question.author)).get(question_id)
-    if question:
+# Get a single question
+@question_bp.route('/questions/<int:id>', methods=['GET'])
+def get_question(id):
+    try:
+        question = Question.query.get_or_404(id)
         return jsonify(question.to_dict())
-    return jsonify({'message': 'Question not found'}), 404
+    except Exception as e:
+        print(f"Error while retrieving question {id}: {e}")
+        return make_response(jsonify({"message": "An error occurred while retrieving the question."}), 500)
 
 # Update a question
-@question_bp.route('/questions/<question_id>', methods=['PATCH'])
+@question_bp.route('/questions/<int:id>', methods=['PUT'])
 @jwt_required()
-def update_question(question_id):
-    data = request.get_json()
-    question = Question.query.get(question_id)
-
-    if not question:
-        return jsonify({'message': 'Question not found'}), 404
-
-    if 'title' in data:
-        question.title = data['title']
-    if 'content' in data:
-        question.content = data['content']
-    if 'tags' in data:
-        question.tags = data['tags']
-    if 'code_snippet' in data:
-        question.code_snippet = data['code_snippet']
-    if 'link' in data:
-        question.link = data['link']
-    if 'upvotes' in data:
-        question.upvotes = data['upvotes']
-    if 'downvotes' in data:
-        question.downvotes = data['downvotes']
-    if 'resolved' in data:
-        question.resolved = data['resolved']
-
-    db.session.commit()
-    return jsonify({'message': 'Question updated successfully'})
-
-@question_bp.route('/questions/<question_id>', methods=['DELETE'])
-@jwt_required()
-def delete_question(question_id):
+def update_question(id):
     try:
-        question = Question.query.get(question_id)
+        question = Question.query.get_or_404(id)
+        data = request.get_json()
+        title = data.get('title')
+        body = data.get('body')
+        tags = data.get('tags', [])
 
-        if not question:
-            return jsonify({'message': 'Question not found'}), 404
+        if title:
+            question.title = title
+        if body:
+            question.body = body
 
+        if tags is not None:
+            question.tags = []
+            for tag_name in tags:
+                tag = Tag.query.filter_by(name=tag_name).first()
+                if not tag:
+                    tag = Tag(name=tag_name)
+                    db.session.add(tag)
+                question.tags.append(tag)
+
+        db.session.commit()
+        return jsonify({"message": "Question updated successfully"})
+    except Exception as e:
+        print(f"Error while updating question {id}: {e}")
+        return make_response(jsonify({"message": "An error occurred while updating the question."}), 500)
+
+# Delete a question
+@question_bp.route('/questions/<int:id>', methods=['DELETE'])
+@jwt_required()
+def delete_question(id):
+    try:
+        question = Question.query.get_or_404(id)
         db.session.delete(question)
         db.session.commit()
-        return jsonify({'message': 'Question deleted successfully'})
+        return jsonify({"message": "Question deleted successfully"})
     except Exception as e:
-        db.session.rollback()
-        print(f"Error occurred: {e}")  # Logs the error message to the console
-        return jsonify({'message': 'Internal Server Error'}), 500
+        print(f"Error while deleting question {id}: {e}")
+        return make_response(jsonify({"message": "An error occurred while deleting the question."}), 500)

@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy_serializer import SerializerMixin
-from sqlalchemy.orm import validates, relationship
+from sqlalchemy.orm import validates
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from flask_bcrypt import Bcrypt
@@ -8,170 +8,172 @@ from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt()
 db = SQLAlchemy()
 
-class User(db.Model):
-    __tablename__ = 'users'
+# Define the association table
+question_tag = db.Table('question_tag',
+    db.Column('question_id', db.Integer, db.ForeignKey('question.id'), primary_key=True),
+    db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'), primary_key=True)
+)
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String, unique=True, nullable=False)
-    email = db.Column(db.String, unique=True, nullable=False)
-    password = db.Column(db.String, nullable=False)
-    profile_image = db.Column(db.String)
-    phone_number = db.Column(db.String)
-    admin = db.Column(db.Boolean, default=False)
-    reputation_points = db.Column(db.Integer, default=0)
+class User(db.Model, SerializerMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128), nullable=False)
+    reputation = db.Column(db.Integer, default=0)
+    is_admin = db.Column(db.Boolean, default=False)
 
-    # Relationships
-    questions = db.relationship('Question', back_populates='author', cascade='all, delete-orphan')
+    
+    questions = db.relationship('Question', back_populates='user', cascade='all, delete-orphan')
     answers = db.relationship('Answer', back_populates='user')
     votes = db.relationship('Vote', back_populates='user')
-    created_badges = db.relationship('Badge', foreign_keys='Badge.admin_id', back_populates='creator')
-    received_badges = db.relationship('Badge', foreign_keys='Badge.user_id', back_populates='recipient')
+    badges = db.relationship('Badge', back_populates='user', cascade='all, delete-orphan')
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
     def to_dict(self):
         return {
             'id': self.id,
-            'name': self.name,
+            'username': self.username,
             'email': self.email,
-            'profile_image': self.profile_image,
-            'phone_number': self.phone_number,
-            'admin': self.admin,
-            'reputation_points': self.reputation_points,
-            'questions': [{'id': q.id, 'title': q.title} for q in self.questions],
-            'answers': [{'id': a.id, 'answer': a.answer} for a in self.answers],
-            'votes': [{'id': v.id, 'vote_type': v.vote_type} for v in self.votes],
-            'created_badges': [{'id': b.id, 'count': b.count} for b in self.created_badges],
-            'received_badges': [{'id': b.id, 'count': b.count} for b in self.received_badges]
+            'reputation': self.reputation,
+            'is_admin': self.is_admin
         }
 
-class Question(db.Model):
-    __tablename__ = 'questions'
+    def __repr__(self):
+        return f'<User {self.username}>'
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    title = db.Column(db.String, nullable=False)
-    content = db.Column(db.Text, nullable=False)
-    tags = db.Column(db.JSON)
-    code_snippet = db.Column(db.Text)
-    link = db.Column(db.String)
-    upvotes = db.Column(db.Integer, default=0)
-    downvotes = db.Column(db.Integer, default=0)
-    resolved = db.Column(db.Boolean, default=False)
+class Question(db.Model, SerializerMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), nullable=False)
+    body = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
-    # Relationships
-    author = db.relationship('User', back_populates='questions')
-    answers = db.relationship('Answer', back_populates='question', cascade='all, delete-orphan')
-    badges = db.relationship('Badge', back_populates='question')
+    user = db.relationship('User', back_populates='questions')
+    answers = db.relationship('Answer', back_populates='question')
+    tags = db.relationship('Tag', secondary='question_tag', back_populates='questions')
     votes = db.relationship('Vote', back_populates='question')
+    views = db.relationship('Views', back_populates='question')
 
     def to_dict(self):
         return {
             'id': self.id,
-            'user_id': self.user_id,
             'title': self.title,
-            'content': self.content,
-            'tags': self.tags,
-            'code_snippet': self.code_snippet,
-            'link': self.link,
-            'upvotes': self.upvotes,
-            'downvotes': self.downvotes,
-            'resolved': self.resolved,
-            'author': {'id': self.author.id, 'name': self.author.name} if self.author else None,
-            'answers': [{'id': a.id, 'answer': a.answer} for a in self.answers],
-            'badges': [{'id': b.id, 'count': b.count} for b in self.badges],
-            'votes': [{'id': v.id, 'vote_type': v.vote_type} for v in self.votes]
+            'body': self.body,
+            'created_at': self.created_at.isoformat(),
+            'user_id': self.user_id
         }
 
-class Answer(db.Model):
-    __tablename__ = 'answers'
+    def __repr__(self):
+        return f'<Question {self.title}>'
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)  # Use Integer here
-    question_id = db.Column(db.Integer, db.ForeignKey('questions.id'), nullable=False)  # Ensure correct reference
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)  # Ensure correct reference
-    answer = db.Column(db.Text, nullable=False)
-    link = db.Column(db.String)
-    upvotes = db.Column(db.Integer, default=0)
-    downvotes = db.Column(db.Integer, default=0)
-    accepted = db.Column(db.Boolean, default=False)
+class Answer(db.Model, SerializerMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    status = db.Column(db.String(20), default='pending')
+    question_id = db.Column(db.Integer, db.ForeignKey('question.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
-    # Relationships
     question = db.relationship('Question', back_populates='answers')
     user = db.relationship('User', back_populates='answers')
     votes = db.relationship('Vote', back_populates='answer')
 
     def to_dict(self):
         return {
-             'id': self.id,
+            'id': self.id,
+            'body': self.body,
+            'created_at': self.created_at.isoformat(),
+            'status': self.status,
             'question_id': self.question_id,
-            'user_id': self.user_id,
-            'answer': self.answer,
-            'link': self.link,
-            'upvotes': self.upvotes,
-            'downvotes': self.downvotes,
-            'accepted': self.accepted,
-            'question': {'id': self.question.id, 'title': self.question.title} if self.question else None,
-            'user': {'id': self.user.id, 'name': self.user.name} if self.user else None,
-            'votes': [{'id': v.id, 'vote_type': v.vote_type} for v in self.votes]
+            'user_id': self.user_id
         }
 
-class Badge(db.Model):
-    __tablename__ = 'badges'
+    def __repr__(self):
+        return f'<Answer {self.id}>'
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String, nullable=False)
-    admin_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    count = db.Column(db.Integer)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    question_id = db.Column(db.Integer, db.ForeignKey('questions.id'))
+class Tag(db.Model, SerializerMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True, nullable=False)
 
-    # Relationships
-    creator = relationship('User', foreign_keys=[admin_id], back_populates='created_badges')
-    recipient = relationship('User', foreign_keys=[user_id], back_populates='received_badges')
-    question = relationship('Question', back_populates='badges')
-
-    def to_dict(self):
-        return {
-             'id': self.id,
-            'admin_id': self.admin_id,
-            'count': self.count,
-            'user_id': self.user_id,
-            'question_id': self.question_id,
-            'creator': {'id': self.creator.id, 'name': self.creator.name} if self.creator else None,
-            'recipient': {'id': self.recipient.id, 'name': self.recipient.name} if self.recipient else None,
-            'question': {'id': self.question.id, 'title': self.question.title} if self.question else None
-        }
-    
-class Vote(db.Model):
-    __tablename__ = 'votes'
-
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    question_id = db.Column(db.Integer, db.ForeignKey('questions.id'))
-    answer_id = db.Column(db.Integer, db.ForeignKey('answers.id'))
-    vote_type = db.Column(db.String)  # 'upvote' or 'downvote'
-
-    # Relationships
-    user = relationship('User', back_populates='votes')
-    question = relationship('Question', back_populates='votes')
-    answer = relationship('Answer', back_populates='votes')
+    questions = db.relationship('Question', secondary=question_tag, back_populates='tags')
 
     def to_dict(self):
         return {
             'id': self.id,
-            'user_id': self.user_id,
-            'question_id': self.question_id,
-            'answer_id': self.answer_id,
-            'vote_type': self.vote_type,
-            'user': {'id': self.user.id, 'name': self.user.name} if self.user else None,
-            'question': {'id': self.question.id, 'title': self.question.title} if self.question else None,
-            'answer': {'id': self.answer.id, 'answer': self.answer.answer} if self.answer else None
+            'name': self.name
         }
 
-class TokenBlocklist(db.Model):
-    __tablename__ = 'token_blocklist'
+    def __repr__(self):
+        return f'<Tag {self.name}>'
+    
+class Vote(db.Model, SerializerMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    value = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    question_id = db.Column(db.Integer, db.ForeignKey('question.id'), nullable=True)
+    answer_id = db.Column(db.Integer, db.ForeignKey('answer.id'), nullable=True)
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    jti = db.Column(db.String, unique=True, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    user = db.relationship('User', back_populates='votes')
+    question = db.relationship('Question', back_populates='votes')
+    answer = db.relationship('Answer', back_populates='votes')
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'value': self.value,
+            'user_id': self.user_id,
+            'question_id': self.question_id,
+            'answer_id': self.answer_id
+        }
+
+    def __repr__(self):
+        return f'<Vote {self.id}>'
+
+class Badge(db.Model, SerializerMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='SET NULL'), nullable=False)
+
+    user = db.relationship('User', back_populates='badges')
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'user_id': self.user_id
+        }
+
+    def __repr__(self):
+        return f'<Badge {self.name}>'
+
+class Views(db.Model, SerializerMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    question_id = db.Column(db.Integer, db.ForeignKey('question.id'), nullable=False)
+    viewed_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    question = db.relationship('Question', back_populates='views')
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'question_id': self.question_id,
+            'viewed_at': self.viewed_at.isoformat()
+        }
+
+    def __repr__(self):
+        return f'<Views {self.id}>'
+
+class TokenBlocklist(db.Model, SerializerMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    jti = db.Column(db.String(36), nullable=False, unique=True)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     def to_dict(self):
         return {
@@ -179,3 +181,7 @@ class TokenBlocklist(db.Model):
             'jti': self.jti,
             'created_at': self.created_at.isoformat()
         }
+
+    def __repr__(self):
+        return f'<TokenBlocklist {self.jti}>'
+
