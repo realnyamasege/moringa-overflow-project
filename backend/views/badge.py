@@ -1,78 +1,48 @@
-from models import db, Badge, User
-from flask import Blueprint, request, jsonify
-from flask_jwt_extended import  jwt_required, get_jwt_identity
+from flask import Blueprint, jsonify, request
+from models import db, Badge
 
 badge_bp = Blueprint('badge_bp', __name__)
 
 
-# Create a new badge
-@badge_bp.route('/badges', methods=['POST'])
-def create_badge():
-    data = request.get_json()
-    
-    # Check if required fields are present
-    required_fields = ['admin_id', 'count', 'user_id', 'question_id']
-    if not all(field in data for field in required_fields):
-        return jsonify({'message': 'Missing required fields'}), 400
-
-    # Create and add new badge
-    try:
-        new_badge = Badge(
-            admin_id=data['admin_id'],
-            count=data['count'],
-            user_id=data['user_id'],
-            question_id=data['question_id']
-        )
-        
-        db.session.add(new_badge)
-        db.session.commit()
-        return jsonify({'message': 'Badge created successfully'}), 201
-    except Exception as e:
-        return jsonify({'message': str(e)}), 422
-
 # Get all badges
-@badge_bp.route('/badges', methods=['GET'])
+@badge_bp.route('/', methods=['GET'])
 def get_badges():
     badges = Badge.query.all()
-    return jsonify([badge.to_dict() for badge in badges])
+    return jsonify([b.to_dict() for b in badges]), 200
 
-# Get a specific badge by ID
-@badge_bp.route('/badges/<int:badge_id>', methods=['GET'])
+# Get a single badge
+@badge_bp.route('/<int:badge_id>', methods=['GET'])
 def get_badge(badge_id):
-    badge = Badge.query.get(badge_id)
-    if badge:
-        return jsonify(badge.to_dict())
-    return jsonify({'message': 'Badge not found'}), 404
+    badge = Badge.query.get_or_404(badge_id)
+    return jsonify(badge.to_dict()), 200
 
-# Update a badge
-@badge_bp.route('/badges/<int:badge_id>', methods=['PATCH'])
-def update_badge(badge_id):
-    data = request.get_json()
-    badge = Badge.query.get(badge_id)
-
-    if not badge:
-        return jsonify({'message': 'Badge not found'}), 404
-
-    if 'admin_id' in data:
-        badge.admin_id = data['admin_id']
-    if 'count' in data:
-        badge.count = data['count']
-    if 'user_id' in data:
-        badge.user_id = data['user_id']
-    if 'question_id' in data:
-        badge.question_id = data['question_id']
-
+# Create a new badge
+@badge_bp.route('/', methods=['POST'])
+def create_badge():
+    data = request.json
+    new_badge = Badge(
+        name=data['name'],
+        description=data['description'],
+        user_id=data['user_id']
+    )
+    db.session.add(new_badge)
     db.session.commit()
-    return jsonify({'message': 'Badge updated successfully'})
+    return jsonify(new_badge.to_dict()), 201
 
-# Delete a badge
-@badge_bp.route('/badges/<int:badge_id>', methods=['DELETE'])
+# Update an existing badge
+@badge_bp.route('/<int:badge_id>', methods=['PUT'])
+def update_badge(badge_id):
+    data = request.json
+    badge = Badge.query.get_or_404(badge_id)
+    badge.name = data.get('name', badge.name)
+    badge.description = data.get('description', badge.description)
+    db.session.commit()
+    return jsonify(badge.to_dict()), 200
+
+# Delete an existing badge
+@badge_bp.route('/<int:badge_id>', methods=['DELETE'])
 def delete_badge(badge_id):
-    badge = Badge.query.get(badge_id)
-
-    if not badge:
-        return jsonify({'message': 'Badge not found'}), 404
-
+    badge = Badge.query.get_or_404(badge_id)
     db.session.delete(badge)
     db.session.commit()
-    return jsonify({'message': 'Badge deleted successfully'})
+    return '', 204
