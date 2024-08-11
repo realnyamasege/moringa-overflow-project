@@ -1,71 +1,80 @@
 from flask import Blueprint, jsonify, request
 from models import Answer, db
+from sqlalchemy.orm import joinedload
 from flask_jwt_extended import  jwt_required, get_jwt_identity
 
 answer_bp = Blueprint('answer_bp', __name__)
 
-
-# Create an answer
+# Create a new answer
 @answer_bp.route('/answers', methods=['POST'])
 @jwt_required()
 def create_answer():
-    data = request.json 
+    data = request.get_json()
+    
+    # Check if required fields are present
+    required_fields = ['question_id', 'answer']
+    if not all(field in data for field in required_fields):
+        return jsonify({'message': 'Missing required fields'}), 400
 
-    new_answer = Answer(body=data['body'], question_id=data['question_id'], user_id=get_jwt_identity())
+    # Get current user
+    user_id = get_jwt_identity()
 
+    # Create and add new answer
+    new_answer = Answer(
+        question_id=data['question_id'],
+        user_id=user_id,
+        answer=data['answer'],
+        link=data.get('link'),
+        accepted=data.get('accepted', False)
+    )
+    
     db.session.add(new_answer)
     db.session.commit()
+    return jsonify({'message': 'Answer created successfully'}), 201
 
-    return jsonify({'message': 'Answer created successfully'})
+# Get all answers
+@answer_bp.route('/answers', methods=['GET'])
+def get_answers():
+    answers = Answer.query.options(joinedload(Answer.question), joinedload(Answer.user)).all()
+    return jsonify([answer.to_dict() for answer in answers])
 
-# Get all answers for a specific question
-@answer_bp.route('/answers/<int:question_id>', methods=['GET'])
-def get_answers_for_question(question_id):
-    answers = Answer.query.filter_by(question_id=question_id).all()
-
-    if not answers:
-        return jsonify({'message': 'No answers found for the specified question'})
-
-    answer_list = [{'id': answer.id, 'body': answer.body, 'user_id': answer.user_id} for answer in answers]
-
-    return jsonify({'answers': answer_list})
+# Get a specific answer by ID
+@answer_bp.route('/answers/<answer_id>', methods=['GET'])
+def get_answer(answer_id):
+    answer = Answer.query.options(joinedload(Answer.question), joinedload(Answer.user)).get(answer_id)
+    if answer:
+        return jsonify(answer.to_dict())
+    return jsonify({'message': 'Answer not found'}), 404
 
 # Update an answer
-@answer_bp.route('/answers/<int:answer_id>', methods=['PUT'])
+@answer_bp.route('/answers/<answer_id>', methods=['PATCH'])
 @jwt_required()
 def update_answer(answer_id):
-    data = request.json  # Use request.json to parse JSON data
-
-    # Check if the answer exists
+    data = request.get_json()
     answer = Answer.query.get(answer_id)
+
     if not answer:
-        return jsonify({"error": "Answer not found!"}), 404
+        return jsonify({'message': 'Answer not found'}), 404
 
-    # Check if the current user is authorized to update the answer
-    if answer.user_id != get_jwt_identity():
-        return jsonify({"error": "Unauthorized action!"}), 403
+    if 'answer' in data:
+        answer.answer = data['answer']
+    if 'link' in data:
+        answer.link = data['link']
+    if 'accepted' in data:
+        answer.accepted = data['accepted']
 
-    # Update the answer's body
-    answer.body = data.get('body', answer.body)  # Default to current body if 'body' not provided
-
-    # Commit changes to the database
     db.session.commit()
-    return jsonify({'message': 'Answer updated successfully'}), 200
+    return jsonify({'message': 'Answer updated successfully'})
 
 # Delete an answer
-@answer_bp.route('/answers/<int:answer_id>', methods=['DELETE'])
+@answer_bp.route('/answers/<answer_id>', methods=['DELETE'])
 @jwt_required()
 def delete_answer(answer_id):
     answer = Answer.query.get(answer_id)
 
-    if answer:
-        if answer.user_id == get_jwt_identity():
-            db.session.delete(answer)
-            db.session.commit()
+    if not answer:
+        return jsonify({'message': 'Answer not found'}), 404
 
-            return jsonify({'message': 'Answer deleted successfully'})
-        else:
-            return jsonify({"error": "You are trying to delete someone's answer!"}), 404
-
-    else:
-        return jsonify({"error": "Answer you are trying to delete is not found!"}), 404
+    db.session.delete(answer)
+    db.session.commit()
+    return jsonify({'message': 'Answer deleted successfully'})
