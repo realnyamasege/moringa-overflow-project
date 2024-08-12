@@ -71,9 +71,8 @@ def get_votes_by_item(item_id):
         'answer_votes': [vote.to_dict() for vote in answer_votes]
     })
 
-# Update a vote
+
 @vote_bp.route('/votes/<int:vote_id>', methods=['PATCH'])
-@jwt_required()
 def update_vote(vote_id):
     data = request.get_json()
     vote = Vote.query.get(vote_id)
@@ -87,11 +86,7 @@ def update_vote(vote_id):
             return jsonify({'message': 'Invalid vote type'}), 400
         vote.vote_type = data['vote_type']
     
-    # Ensure the user making the request is the one who cast the vote
-    user_id = get_jwt_identity()
-    if vote.user_id != user_id:
-        return jsonify({'message': 'Unauthorized to update this vote'}), 403
-
+    # Commit the changes to the database
     db.session.commit()
     return jsonify({'message': 'Vote updated successfully'})
 

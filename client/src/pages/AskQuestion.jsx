@@ -96,7 +96,7 @@ export default function AskQuestion() {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         },
-        body: JSON.stringify(questionData),
+        body: JSON.stringify({ title, content, tags, codeSnippet, link, userId: currentUser.id }),
       });
   
       if (!response.ok) {

@@ -78,6 +78,7 @@ const Questions = () => {
       const response = await fetch(`http://localhost:5000/questions/${id}`, {
         method: 'PATCH',
         headers: {
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ upvotes: newUpvotes, downvotes: newDownvotes }),
@@ -145,6 +146,7 @@ const Questions = () => {
       const response = await fetch(`http://localhost:5000/questions/${id}`, {
         method: 'PATCH',
         headers: {
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ resolved: true }),
