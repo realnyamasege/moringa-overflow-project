@@ -7,35 +7,36 @@ question_bp = Blueprint('question_bp', __name__)
 
 
 @question_bp.route('/questions', methods=['POST'])
-@jwt_required()
+@jwt_required()  # Ensure the user is authenticated
 def create_question():
-    data = request.get_json()
-    
-    # Validate the data
-    if not all(key in data for key in ['title', 'content', 'author', 'tags']):
-        return jsonify({"error": "Missing required fields"}), 422
-
+    data = request.json
     try:
+        # Extract user ID from JWT token
+        current_user_id = get_jwt_identity()
+        
+        # Ensure the data matches the expected model structure
         new_question = Question(
-            title=data['title'],
-            content=data['content'],
-            author=data['author'],
-            tags=data['tags'],
-            code_snippet=data.get('codeSnippet'),
-            link=data.get('link'),
+            user_id=current_user_id,  # Use the logged-in user's ID
+            title=data.get('title'),
+            content=data.get('content'),
+            tags=data.get('tags', []),  # Provide default empty list if not present
+            code_snippet=data.get('codeSnippet', ''),
+            link=data.get('link', ''),
             upvotes=data.get('upvotes', 0),
             downvotes=data.get('downvotes', 0),
-            awards=data.get('awards', 0),
             resolved=data.get('resolved', False),
-            answers=data.get('answers', [])
+            answers=data.get('answers', []),
+            badges=data.get('badges', [])
         )
+        
+        # Add to the session and commit
         db.session.add(new_question)
         db.session.commit()
-        return jsonify({"message": "Question submitted successfully!"}), 201
+        return jsonify({'message': 'Question created successfully!'}), 201
+
     except Exception as e:
         db.session.rollback()
-        return jsonify({"error": str(e)}), 500
-
+        return jsonify({'error': str(e)}), 500
 
 @question_bp.route('/questions', methods=['GET'])
 def get_questions():
