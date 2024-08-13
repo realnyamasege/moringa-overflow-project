@@ -13,20 +13,24 @@ const UpdateQuestions = () => {
   const [userVote, setUserVote] = useState(null);
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
-  useEffect(() => {
-    const fetchQuestion = async () => {
-      try {
-        const response = await fetch(`http://localhost:5000/questions/${id}`);
-        const data = await response.json();
-        setQuestion(data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching question:', error);
-        toast.error('Failed to fetch question');
+ useEffect(() => {
+  const fetchQuestion = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/questions/${id}`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
       }
-    };
-    fetchQuestion();
-  }, [id]);
+      const data = await response.json();
+      console.log(data); // Add this line to debug and see the actual data fetched
+      setQuestion(data);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching question:', error);
+      toast.error('Failed to fetch question');
+    }
+  };
+  fetchQuestion();
+}, [id]);
 
   const handleVote = async (type) => {
     try {
@@ -151,9 +155,9 @@ const UpdateQuestions = () => {
       <div className="question-details" style={{ flex: '2', marginRight: '20px', backgroundColor: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
         <h1 style={{ fontSize: '24px', marginBottom: '10px' }}>{question.title}</h1>
         <p style={{ fontSize: '16px', marginBottom: '10px' }}>{question.content}</p>
-        {question.codeSnippet && (
+        {question.code_snippet && (
           <pre style={{ backgroundColor: '#f0f0f0', padding: '10px', borderRadius: '4px', overflowX: 'auto', marginBottom: '20px' }}>
-            <code>{question.codeSnippet}</code>
+            <code>{question.code_snippet}</code>
           </pre>
         )}
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
@@ -190,46 +194,52 @@ const UpdateQuestions = () => {
                   <FaArrowDown />
                 </button>
                 <span style={{ fontSize: '18px', marginRight: '10px' }}>{answer.downvotes}</span>
+                {question.acceptedAnswerId === answer.id && (
+                  <span style={{ color: '#4caf50', fontSize: '18px', marginLeft: '10px' }}>
+                    <FaCheck /> Accepted
+                  </span>
+                )}
               </div>
-              {currentUser?.id === question.userId && !answer.accepted && (
-                <button onClick={() => handleSelectAcceptedAnswer(answer.id)} style={{ backgroundColor: '#4caf50', color: '#fff', border: 'none', padding: '10px 20px', borderRadius: '4px', cursor: 'pointer' }}>
+              {currentUser && !question.acceptedAnswerId && (
+                <button onClick={() => handleSelectAcceptedAnswer(answer.id)} style={{ backgroundColor: '#4caf50', color: '#fff', padding: '10px', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
                   Mark as Accepted
                 </button>
               )}
-              {answer.accepted && <p style={{ color: '#4caf50', fontSize: '16px' }}>Accepted <FaCheck /></p>}
             </div>
           ))}
         </div>
       </div>
       <div className="answer-form" style={{ flex: '1', backgroundColor: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
-        <h2 style={{ fontSize: '20px', marginBottom: '10px' }}>Submit Your Answer</h2>
+        <h2 style={{ fontSize: '20px', marginBottom: '20px' }}>Add Answer</h2>
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: '10px' }}>
             <textarea
+              rows="5"
+              placeholder="Write your answer here..."
               value={answer}
               onChange={(e) => setAnswer(e.target.value)}
-              placeholder="Your answer"
-              style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ddd', minHeight: '100px' }}
+              style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc' }}
             />
           </div>
           <div style={{ marginBottom: '10px' }}>
             <input
-              type="url"
+              type="text"
+              placeholder="Optional link"
               value={link}
               onChange={(e) => setLink(e.target.value)}
-              placeholder="Related link (optional)"
-              style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ddd' }}
+              style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc' }}
             />
           </div>
           <div style={{ marginBottom: '10px' }}>
             <textarea
+              rows="5"
+              placeholder="Optional code snippet"
               value={codeSnippet}
               onChange={(e) => setCodeSnippet(e.target.value)}
-              placeholder="Code snippet (optional)"
-              style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ddd', minHeight: '100px' }}
+              style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc' }}
             />
           </div>
-          <button type="submit" style={{ backgroundColor: '#4caf50', color: '#fff', border: 'none', padding: '10px 20px', borderRadius: '4px', cursor: 'pointer' }}>
+          <button type="submit" style={{ backgroundColor: '#4caf50', color: '#fff', padding: '10px', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
             Submit Answer
           </button>
         </form>
