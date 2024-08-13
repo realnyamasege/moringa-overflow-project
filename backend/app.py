@@ -4,8 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
-from models import db, User, Question, Answer, Vote, Badge, TokenBlocklist
-from views import user_bp, auth_bp, question_bp, answer_bp, vote_bp, badge_bp
+from models import db, User, Question, Answer, Vote, Badge, View, TokenBlocklist
+from views import user_bp, auth_bp, question_bp, answer_bp, vote_bp, badge_bp, views_bp
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///moringa_overflow.db'
@@ -27,6 +27,7 @@ app.register_blueprint(question_bp, url_prefix='/')
 app.register_blueprint(answer_bp, url_prefix='/')
 app.register_blueprint(vote_bp, url_prefix='/')
 app.register_blueprint(badge_bp, url_prefix='/')
+app.register_blueprint(views_bp, url_prefix='/')
 
 # JWT token blocklist loader
 @jwt.token_in_blocklist_loader
