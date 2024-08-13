@@ -136,7 +136,7 @@ const SignupPage = () => {
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             />
           </div>
-          <div className="mb-6">
+          {/* <div className="mb-6">
             <label htmlFor="admin" className="block text-sm font-medium text-gray-700">
               Admin
             </label>
@@ -147,7 +147,8 @@ const SignupPage = () => {
               onChange={(e) => setIsAdmin(e.target.checked)}
               className="mt-1"
             />
-          </div>
+          </div> */}
+          {/* uncomment the above code only if necessary */}
           <button
             type="submit"
             className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"

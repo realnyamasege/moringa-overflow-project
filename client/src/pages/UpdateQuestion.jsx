@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FaArrowUp, FaArrowDown, FaTrash, FaCheck, FaStar } from 'react-icons/fa';
+import { FaArrowUp, FaArrowDown, FaTrash, FaCheck, FaStar, FaPencilAlt } from 'react-icons/fa';
 
 const UpdateQuestions = () => {
   const navigate = useNavigate();
@@ -14,6 +14,8 @@ const UpdateQuestions = () => {
   const [userVote, setUserVote] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [editingAnswerId, setEditingAnswerId] = useState(null);
+  const [editedAnswerContent, setEditedAnswerContent] = useState('');
 
   useEffect(() => {
     const userId = localStorage.getItem("access_token");
@@ -43,10 +45,30 @@ const UpdateQuestions = () => {
         const response = await fetch(`http://localhost:3000/questions/${id}`);
         if (response.ok) {
           const data = await response.json();
+
+          // Check if the current user has already viewed the question
+          if (!data.views.includes(userId)) {
+            data.views.push(userId);
+            data.viewCount += 1;
+
+            // Update the views and viewCount in the database
+            await fetch(`http://localhost:3000/questions/${id}`, {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                views: data.views,
+                viewCount: data.viewCount,
+              }),
+            });
+          }
+
           setQuestion(data);
           setUpvotes(data.upvotes);
           setDownvotes(data.downvotes);
-          // Check user vote status for the question
+
+          // Check if the user has already voted on this question
           const userVoteStatus = data.votes?.find(vote => vote.userId === userId);
           if (userVoteStatus) {
             setUserVote(userVoteStatus.type);
@@ -369,8 +391,46 @@ const UpdateQuestions = () => {
     }
   };
 
+  const handleEditAnswer = (answer) => {
+    if (answer.userId === currentUser.id) {
+      setEditingAnswerId(answer.id);
+      setEditedAnswerContent(answer.answer);
+    } else {
+      toast.error('You can only edit your own answers.');
+    }
+  };
+
+  const handleSaveAnswerEdit = async () => {
+    const updatedAnswers = question.answers.map(answer => {
+      if (answer.id === editingAnswerId) {
+        return { ...answer, answer: editedAnswerContent };
+      }
+      return answer;
+    });
+
+    try {
+      const response = await fetch(`http://localhost:3000/questions/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ answers: updatedAnswers }),
+      });
+
+      if (response.ok) {
+        setQuestion({ ...question, answers: updatedAnswers });
+        setEditingAnswerId(null);
+        toast.success('Answer updated successfully');
+      } else {
+        throw new Error('Failed to update answer');
+      }
+    } catch (error) {
+      console.error('Error updating answer:', error);
+    }
+  };
+
   if (loading) {
-    return <div>Loading...</div>; // You can customize this loading indicator
+    return <div>Loading...</div>;
   }
 
   const sortedAnswers = question.answers?.sort((a, b) => b.upvotes - a.upvotes) || [];
@@ -379,8 +439,12 @@ const UpdateQuestions = () => {
     <div className="container mx-auto p-6">
       <div className="bg-white rounded-lg shadow-lg p-6 flex flex-col md:flex-row items-start gap-6">
         <div className="flex-1">
-          <h1 className="text-3xl font-bold text-gray-900">{question.title}</h1>
-          <p className="text-gray-700 mt-4">{question.content}</p>
+          <div className="flex justify-between">
+            <h1 className="text-3xl font-bold text-gray-900">{question.title}</h1>
+          </div>
+          <div className="mt-4">
+            <p className="text-gray-700 mt-4">{question.content}</p>
+          </div>
           {question.codeSnippet && (
             <div className="mt-4 bg-gray-100 p-4 rounded-lg overflow-x-auto">
               <h3 className="text-lg font-semibold">Code Snippet:</h3>
@@ -449,15 +513,34 @@ const UpdateQuestions = () => {
             <div className="mt-4 space-y-4">
               {sortedAnswers.map((cmt, index) => (
                 <div key={index} className={`border border-gray-300 rounded-lg p-4 flex justify-between items-start ${cmt.accepted ? 'bg-green-100' : ''}`}>
-                  <div>
-                    <p className="text-gray-800">{cmt.answer}</p>
-                    {cmt.link && (
-                      <div className="mt-2">
-                        <h3 className="text-sm font-semibold">Link:</h3>
-                        <a href={cmt.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
-                          {cmt.link}
-                        </a>
-                      </div>
+                  <div className="flex-1">
+                    {editingAnswerId === cmt.id ? (
+                      <>
+                        <textarea
+                          value={editedAnswerContent}
+                          onChange={(e) => setEditedAnswerContent(e.target.value)}
+                          className="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500"
+                          rows="3"
+                        />
+                        <button
+                          onClick={handleSaveAnswerEdit}
+                          className="text-blue-600 hover:text-blue-800 mt-2"
+                        >
+                          Save
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <p className="text-gray-800">{cmt.answer}</p>
+                        {cmt.link && (
+                          <div className="mt-2">
+                            <h3 className="text-sm font-semibold">Link:</h3>
+                            <a href={cmt.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+                              {cmt.link}
+                            </a>
+                          </div>
+                        )}
+                      </>
                     )}
                     <p className="text-sm text-gray-500 mt-2">- {cmt.author}</p>
                     <div className="flex items-center mt-2 space-x-4">
@@ -475,24 +558,22 @@ const UpdateQuestions = () => {
                         <FaArrowDown className={`text-xl mr-2 ${cmt.votes?.find(vote => vote.userId === currentUser.id && vote.type === 'downvote') ? 'text-red-500' : 'text-gray-500'}`} />
                         <span>{cmt.downvotes || 0}</span>
                       </div>
-                      {(currentUser?.admin || currentUser?.id === question.userId) && (
-                        <button
-                          onClick={() => handleSelectAcceptedAnswer(cmt.id)}
-                          className="text-green-600 hover:text-green-800"
-                        >
-                          <FaCheck className="text-xl" />
-                        </button>
+                      {currentUser?.id === cmt.userId && (
+                        <div className="flex items-center space-x-4">
+                          <FaPencilAlt
+                            onClick={() => handleEditAnswer(cmt)}
+                            className="text-gray-600 cursor-pointer"
+                          />
+                          <button
+                            onClick={() => handleDeleteAnswer(cmt.id)}
+                            className="text-red-600 hover:text-red-800"
+                          >
+                            <FaTrash className="text-xl" />
+                          </button>
+                        </div>
                       )}
                     </div>
                   </div>
-                  {(currentUser?.admin || currentUser?.id === cmt.userId) && (
-                    <button
-                      onClick={() => handleDeleteAnswer(cmt.id)}
-                      className="text-red-600 hover:text-red-800"
-                    >
-                      <FaTrash className="text-xl" />
-                    </button>
-                  )}
                 </div>
               ))}
               {question.answers && question.answers.length === 0 && (

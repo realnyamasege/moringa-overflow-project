@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaArrowUp, FaArrowDown, FaStar, FaTrash, FaCheck } from 'react-icons/fa';
+import { FaArrowUp, FaArrowDown, FaStar, FaTrash, FaCheck, FaEye, FaEdit, FaSave, FaTimes } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
 const Questions = () => {
@@ -44,12 +44,20 @@ const Questions = () => {
         const data = await response.json();
         setQuestions(data);
         const initialVotes = {};
-        data.forEach((question) => {
+        data.forEach(async (question) => {
           initialVotes[question.id] = {
             upvotes: question.upvotes,
             downvotes: question.downvotes,
             userVote: null,
           };
+          // Track view
+          await fetch(`http://localhost:3000/questions/${question.id}/view`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userId }),
+          });
         });
         setVotes(initialVotes);
       } catch (error) {
@@ -227,6 +235,40 @@ const Questions = () => {
     }
   };
 
+  const handleEditToggle = (id) => {
+    setQuestions((prevQuestions) =>
+      prevQuestions.map((q) =>
+        q.id === id ? { ...q, isEditing: !q.isEditing } : q
+      )
+    );
+  };
+
+  const handleSaveEdit = async (id, updatedTitle, updatedContent) => {
+    try {
+      const response = await fetch(`http://localhost:3000/questions/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ title: updatedTitle, content: updatedContent }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save question edits');
+      }
+
+      setQuestions((prevQuestions) =>
+        prevQuestions.map((q) =>
+          q.id === id ? { ...q, title: updatedTitle, content: updatedContent, isEditing: false } : q
+        )
+      );
+      toast.success('Question updated successfully');
+    } catch (error) {
+      console.error('Error saving question edits:', error);
+      toast.error('Failed to save question edits');
+    }
+  };
+
   const filteredQuestions = questions
     .filter((question) =>
       question.title.toLowerCase().includes(searchKeyword.toLowerCase()) ||
@@ -270,13 +312,56 @@ const Questions = () => {
           >
             <div className="flex-grow">
               <div className="mb-4">
-                <h2
-                  className="text-2xl font-bold text-gray-800 cursor-pointer"
-                  onClick={() => handlePostClick(question.id)}
-                >
-                  {question.title}
-                </h2>
-                <p className="text-gray-700 mt-2">{question.content}</p>
+                {question.isEditing ? (
+                  <>
+                    <input
+                      type="text"
+                      value={question.title}
+                      onChange={(e) =>
+                        setQuestions((prevQuestions) =>
+                          prevQuestions.map((q) =>
+                            q.id === question.id ? { ...q, title: e.target.value } : q
+                          )
+                        )
+                      }
+                      className="block w-full mb-2 p-2 border border-gray-300 rounded"
+                    />
+                    <textarea
+                      value={question.content}
+                      onChange={(e) =>
+                        setQuestions((prevQuestions) =>
+                          prevQuestions.map((q) =>
+                            q.id === question.id ? { ...q, content: e.target.value } : q
+                          )
+                        )
+                      }
+                      className="block w-full mb-2 p-2 border border-gray-300 rounded"
+                      rows="4"
+                    />
+                    <button
+                      onClick={() => handleSaveEdit(question.id, question.title, question.content)}
+                      className="text-green-600 hover:text-green-800 mr-2"
+                    >
+                      <FaSave className="text-2xl" />
+                    </button>
+                    <button
+                      onClick={() => handleEditToggle(question.id)}
+                      className="text-red-600 hover:text-red-800"
+                    >
+                      <FaTimes className="text-2xl" />
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <h2
+                      className="text-2xl font-bold text-gray-800 cursor-pointer"
+                      onClick={() => handlePostClick(question.id)}
+                    >
+                      {question.title}
+                    </h2>
+                    <p className="text-gray-700 mt-2">{question.content}</p>
+                  </>
+                )}
               </div>
               <div className="flex items-center space-x-4 mb-4">
                 <div
@@ -300,6 +385,10 @@ const Questions = () => {
                 />
                 <span>{question.badges?.length || 0} {question.badges?.length > 1 ? 'times' : 'time'}</span>
               </div>
+              <div className="flex items-center text-gray-600 mb-4">
+                <FaEye className="text-gray-500 text-2xl mr-2" />
+                <span>{question.viewCount || 0}</span>
+              </div>
               <div className="flex flex-wrap gap-2 mb-4">
                 {question.tags && question.tags.map((tag, index) => (
                   <span key={index} className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">
@@ -313,13 +402,21 @@ const Questions = () => {
               </div>
             </div>
             <div className="flex-shrink-0 flex flex-col space-y-2">
-              {(currentUser?.admin || currentUser?.id === question.userId) && (
-                <button
-                  onClick={() => handleDelete(question.id)}
-                  className="text-red-600 hover:text-red-800"
-                >
-                  <FaTrash className="text-2xl" />
-                </button>
+              {currentUser?.id === question.userId && (
+                <>
+                  <button
+                    onClick={() => handleEditToggle(question.id)}
+                    className="text-blue-600 hover:text-blue-800"
+                  >
+                    <FaEdit className="text-2xl" />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(question.id)}
+                    className="text-red-600 hover:text-red-800"
+                  >
+                    <FaTrash className="text-2xl" />
+                  </button>
+                </>
               )}
               {currentUser?.id === question.userId && !question.resolved && (
                 <button
