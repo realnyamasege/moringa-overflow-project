@@ -128,7 +128,7 @@ This platform will allow students and instructors to:
     -[Backend]_(https://)
 
 ## Developers 
-- Ezekiel Nyamasege- +254 724 227698
+- Ezekiel Nyamasege- nyamasege00@gmail.com - +254 724 227698
 - Reuben Kamau - reuben.kamau@student.moringaschool.com - +254 113 786810
 - Cynthia Rukwaro - rukwarocynthia4093@gmail.com - +254793475759
 - Samfelix Randa - samfelix61@gmail.com - +254719451143
