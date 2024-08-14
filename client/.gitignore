@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+ npm install react-icons
+ npm install -g json-server
+ json-server db.json --port 3000

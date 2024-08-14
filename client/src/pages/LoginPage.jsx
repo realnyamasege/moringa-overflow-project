@@ -1,61 +1,99 @@
-import React, { useContext, useState } from 'react'
-import { UserContext } from '../context/UserContext'
-import { Link } from 'react-router-dom'
-export default function Login() 
-{
-    const {login_user} = useContext(UserContext)
-    const [email, setEmail] = useState()
-    const [password, setPassword] = useState()
+import React, { useState } from "react";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
+const LoginPage = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-    function handleSubmit(e){
-        e.preventDefault()
-        login_user(email, password)
-        setEmail("")
-        setPassword("")
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  
+    const payload = {
+      email,
+      password
+    };
+  
+    fetch("http://127.0.0.1:5000/login", {
+      method: "POST",
+      body: JSON.stringify(payload),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          return response.json().then((error) => {
+            throw new Error(error.error || "Network response was not ok");
+          });
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Login response data:", data); // Debugging
+        if (data.access_token) {
+          localStorage.setItem("access_token", data.access_token);
+          navigate("/Profile");
+        } else {
+          toast.error("Invalid email or password.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error logging in:", error);
+        toast.error("An error occurred. Please try again.");
+      });
+  };
 
   return (
-    <div className='grid grid-cols-3'>
-        <div>
-            <img src='https://i.pinimg.com/564x/db/59/2e/db592eacd248afff9d03ad64906853d6.jpg'/>
-        </div>
-
-
-        {/* <div className="flex flex-col justify-center h-[70vh]"> */}
-        <section class=" dark:bg-gray-900">
-  <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">     
-      <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-          <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-              <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                  Sign in to your account
-              </h1>
-              <form class="space-y-4 md:space-y-6" onSubmit={handleSubmit}  action="#">
-                  <div>
-                      <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
-                      <input type="email" value={email || ""} onChange={(e)=>setEmail(e.target.value)}  name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@example.com" required/>
-                  </div>
-                  <div>
-                      <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                      <input type="password" value={password || ""} onChange={(e)=>setPassword(e.target.value)} name="password" id="password" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required/>
-                  </div>
-                  <div class="flex items-center justify-between">
-                      
-
-                  </div>
-                  <button type="submit" className="w-full text-white bg-blue-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Sign in</button>
-                  <p class="text-sm font-light text-gray-500 dark:text-gray-400">
-                      Don’t have an account yet? <Link to ="/register" class="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign up</Link>
-                  </p>
-              </form>
+    <div className="flex justify-center items-center h-screen bg-blue-100">
+      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
+        <h1 className="text-2xl font-bold mb-6">Login</h1>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              required
+            />
           </div>
+          <div className="mb-6">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+          >
+            Login
+          </button>
+        </form>
+        <div className="mt-4">
+          <button
+            onClick={() => navigate("/reset-password")}
+            className="text-blue-500 hover:underline focus:outline-none"
+          >
+            Reset Password
+          </button>
+        </div>
       </div>
-  </div>
-</section>
-        {/* </div> */}
-
-        <div></div>
-        
     </div>
-  )
-}
+  );
+};
+
+export default LoginPage;

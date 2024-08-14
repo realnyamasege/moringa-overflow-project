@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Landing from '../components/Landing'
 import Post from '../components/Post'
-import { v4 as uuidv4 } from 'uuid';
+
 import ReactPaginate from 'react-paginate';
 
 export default function Home() 
@@ -9,7 +9,7 @@ export default function Home()
   const [posts, setPosts] = useState([])
 
   useEffect(()=>{
-    fetch("http://localhost:3000/posts")
+    fetch("Don't place a url here!!")
     .then((res)=>res.json())
     .then((data)=>{
        setPosts(data)

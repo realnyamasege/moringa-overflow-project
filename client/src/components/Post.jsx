@@ -1,20 +1,16 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { toast } from 'react-toastify'
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-export default function Post({post}) 
-{
-
-
+const Post = ({ post }) => {
   return (
-    <Link to={`/Question/${post.id}`} className='border p-3 bg-gray-200' >
-        <div>
-           <img class="rounded-t-lg w-full h-[50vh]" src="https://images.pexels.com/photos/21273536/pexels-photo-21273536/free-photo-of-beautiful-pink-blossoms-in-spring.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="" />
-        </div>
-        <h1 className='text-xl font-semibold'>{post.title}</h1>
-        <p>{post.content}</p>
-        <p>By <span className='italic'>{post.author}</span> </p>
-        
-  </Link>
-  )
-}
+    <Link to={`/Question/${post.id}`} className="border p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
+      <div className="p-4">
+        <h2 className="text-xl font-semibold mb-2">{post.title}</h2>
+        <p className="text-gray-700 mb-2">{post.content}</p>
+        <p className="text-gray-500 text-sm">By <span className="italic">{post.author}</span></p>
+      </div>
+    </Link>
+  );
+};
+
+export default Post;
