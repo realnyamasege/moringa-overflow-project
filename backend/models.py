@@ -63,7 +63,7 @@ class Question(db.Model):
     answers = db.relationship('Answer', back_populates='question', cascade='all, delete-orphan')
     badges = db.relationship('Badge', back_populates='question')
     votes = db.relationship('Vote', back_populates='question')
-    views = db.relationship('View', back_populates='question')
+    views = db.relationship('View', back_populates='question', cascade='all, delete-orphan')
 
     def to_dict(self):
         return {
@@ -91,9 +91,10 @@ class Answer(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)  # Ensure correct reference
     answer = db.Column(db.Text, nullable=False)
     link = db.Column(db.String)
+    codeSnippet = db.Column(db.Text, nullable=True)
     upvotes = db.Column(db.Integer, default=0)
     downvotes = db.Column(db.Integer, default=0)
-    accepted = db.Column(db.Boolean, default=False)
+    is_accepted = db.Column(db.Boolean, default=False)
 
     # Relationships
     question = db.relationship('Question', back_populates='answers')
@@ -107,9 +108,10 @@ class Answer(db.Model):
             'user_id': self.user_id,
             'answer': self.answer,
             'link': self.link,
+            'codeSnippet': self.codeSnippet,
             'upvotes': self.upvotes,
             'downvotes': self.downvotes,
-            'accepted': self.accepted,
+            'is_accepted': self.is_accepted,
             'question': {'id': self.question.id, 'title': self.question.title} if self.question else None,
             'user': {'id': self.user.id, 'name': self.user.name} if self.user else None,
             'votes': [{'id': v.id, 'vote_type': v.vote_type} for v in self.votes]

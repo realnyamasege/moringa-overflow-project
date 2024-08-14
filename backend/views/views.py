@@ -6,24 +6,34 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 views_bp = Blueprint('views_bp', __name__)
 
 
-@views_bp.route('/views', methods=['POST'])
-@jwt_required()
-def create_or_update_view():
-    user_id = get_jwt_identity()
-    data = request.get_json()
-    question_id = data.get('question_id')
-    
-    view = View.query.filter_by(user_id=user_id, question_id=question_id).first()
-    
-    if view:
-        view.view_count += 1
-    else:
-        view = View(user_id=user_id, question_id=question_id)
-    
-    db.session.add(view)
-    db.session.commit()
-    
-    return jsonify({'message': 'View recorded successfully', 'view_count': view.view_count}), 200
+@views_bp.route('/views', methods=['PATCH'])
+def update_view_count():
+    try:
+        data = request.get_json()
+        question_id = data.get('question_id')
+
+        if not question_id:
+            return jsonify({'message': 'Question ID is required'}), 400
+
+        # Create or update the view record
+        view = View.query.filter_by(question_id=question_id).first()
+        
+        if not view:
+            # Create new view record if none exists
+            view = View(question_id=question_id, view_count=1)
+            db.session.add(view)
+        else:
+            # Increment the view count
+            view.view_count += 1
+
+        db.session.commit()
+        return jsonify({'message': 'View recorded successfully', 'view_count': view.view_count}), 200
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error occurred: {e}")
+        return jsonify({'message': 'Internal Server Error'}), 500
+
+
 
 @views_bp.route('/views/<int:question_id>', methods=['GET'])
 def get_view_count(question_id):

@@ -6,6 +6,7 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from models import db, User, Question, Answer, Vote, Badge, View, TokenBlocklist
 from views import user_bp, auth_bp, question_bp, answer_bp, vote_bp, badge_bp, views_bp
+import logging
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///moringa_overflow.db'
@@ -19,6 +20,7 @@ db.init_app(app)  # Initialize the SQLAlchemy instance
 migrate = Migrate(app, db)
 CORS(app)
 jwt = JWTManager(app)
+logging.basicConfig(level=logging.DEBUG)
 
 # Register blueprints
 app.register_blueprint(user_bp, url_prefix='/') 

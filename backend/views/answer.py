@@ -2,35 +2,36 @@ from flask import Blueprint, jsonify, request
 from models import Answer, db
 from sqlalchemy.orm import joinedload
 from flask_jwt_extended import  jwt_required, get_jwt_identity
+from flask import current_app as app
 
 answer_bp = Blueprint('answer_bp', __name__)
 
-# Create a new answer
 @answer_bp.route('/answers', methods=['POST'])
 @jwt_required()
 def create_answer():
-    data = request.get_json()
-    
-    # Check if required fields are present
-    required_fields = ['question_id', 'answer']
-    if not all(field in data for field in required_fields):
-        return jsonify({'message': 'Missing required fields'}), 400
+    try:
+        data = request.get_json()
+        user_id = get_jwt_identity()  # Extract user_id from JWT
 
-    # Get current user
-    user_id = get_jwt_identity()
+        if not user_id:
+            raise ValueError('User ID not found in JWT')
 
-    # Create and add new answer
-    new_answer = Answer(
-        question_id=data['question_id'],
-        user_id=user_id,
-        answer=data['answer'],
-        link=data.get('link'),
-        accepted=data.get('accepted', False)
-    )
-    
-    db.session.add(new_answer)
-    db.session.commit()
-    return jsonify({'message': 'Answer created successfully'}), 201
+        new_answer = Answer(
+            question_id=data.get('question_id'),
+            user_id=user_id,  # Use the user_id from JWT
+            answer=data.get('answer'),
+            link=data.get('link'),
+            codeSnippet=data.get('codeSnippet'),
+            is_accepted=data.get('is_accepted', False),
+        )
+
+        db.session.add(new_answer)
+        db.session.commit()
+
+        return jsonify(new_answer.to_dict()), 201
+    except Exception as e:
+        app.logger.error(f'Error creating answer: {e}')
+        return jsonify({'message': str(e)}), 500
 
 # Get all answers
 @answer_bp.route('/answers', methods=['GET'])
@@ -38,13 +39,22 @@ def get_answers():
     answers = Answer.query.options(joinedload(Answer.question), joinedload(Answer.user)).all()
     return jsonify([answer.to_dict() for answer in answers])
 
-# Get a specific answer by ID
-@answer_bp.route('/answers/<answer_id>', methods=['GET'])
-def get_answer(answer_id):
-    answer = Answer.query.options(joinedload(Answer.question), joinedload(Answer.user)).get(answer_id)
-    if answer:
-        return jsonify(answer.to_dict())
-    return jsonify({'message': 'Answer not found'}), 404
+@answer_bp.route('/questions/<question_id>/answers', methods=['GET'])
+def get_answers_for_question(question_id):
+    try:
+        # Query to get answers for the specific question
+        answers = Answer.query.filter_by(question_id=question_id).options(joinedload(Answer.user)).all()
+
+        if answers:
+            # Convert each answer to a dictionary
+            answers_list = [answer.to_dict() for answer in answers]
+            return jsonify(answers_list)
+        else:
+            return jsonify({'message': 'No answers found for this question'}), 404
+    except Exception as e:
+        # Handle unexpected errors
+        return jsonify({'message': str(e)}), 500
+
 
 # Update an answer
 @answer_bp.route('/answers/<answer_id>', methods=['PATCH'])

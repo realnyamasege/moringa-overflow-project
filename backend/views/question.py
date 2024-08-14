@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from models import Question, db, User
+from models import Question, db, User, Answer, View
 from sqlalchemy.orm import joinedload
 from flask_jwt_extended import  jwt_required, get_jwt_identity
 
@@ -84,15 +84,52 @@ def update_question(question_id):
     db.session.commit()
     return jsonify({'message': 'Question updated successfully'})
 
+@question_bp.route('/questions/<int:question_id>/accept/<int:answer_id>', methods=['PATCH'])
+@jwt_required()
+def accept_answer(question_id, answer_id):
+    try:
+        # Ensure the user is authorized to mark the answer as accepted
+        current_user = get_jwt_identity()
+        question = Question.query.get_or_404(question_id)
+
+        if question.user_id != current_user['id']:
+            return jsonify({'message': 'Unauthorized'}), 403
+
+        # Ensure the answer exists and is associated with the question
+        answer = Answer.query.filter_by(id=answer_id, question_id=question_id).first_or_404()
+
+        # Set the answer as accepted
+        question.accepted_answer_id = answer_id
+        db.session.commit()
+
+        return jsonify(question.to_dict()), 200
+    except Exception as e:
+        print(f'Error accepting answer: {e}')
+        return jsonify({'message': 'An error occurred'}), 500
+
+
+
 @question_bp.route('/questions/<question_id>', methods=['DELETE'])
 @jwt_required()
 def delete_question(question_id):
     try:
+        # Get the current user's identity from the JWT
+        current_user_id = get_jwt_identity()
+
+        # Fetch the question
         question = Question.query.get(question_id)
 
         if not question:
             return jsonify({'message': 'Question not found'}), 404
 
+        # Check if the current user is the owner of the question
+        if question.user_id != current_user_id:
+            return jsonify({'message': 'Permission denied'}), 403
+
+        # Delete related views
+        View.query.filter_by(question_id=question_id).delete()
+
+        # Delete the question
         db.session.delete(question)
         db.session.commit()
         return jsonify({'message': 'Question deleted successfully'})
@@ -100,3 +137,4 @@ def delete_question(question_id):
         db.session.rollback()
         print(f"Error occurred: {e}")  # Logs the error message to the console
         return jsonify({'message': 'Internal Server Error'}), 500
+

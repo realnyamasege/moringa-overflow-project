@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaArrowUp, FaArrowDown, FaStar, FaTrash, FaCheck, FaTag } from 'react-icons/fa';
+import { FaArrowUp, FaArrowDown, FaStar, FaTrash, FaCheck, FaTag, FaEye } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
 const Questions = () => {
   const [questions, setQuestions] = useState([]);
   const [votes, setVotes] = useState({});
+  const [views, setViews] = useState({});
   const [currentUser, setCurrentUser] = useState(null);
   const [searchKeyword, setSearchKeyword] = useState('');
   const [filterTag, setFilterTag] = useState('');
@@ -55,8 +56,15 @@ const Questions = () => {
         }, {});
         setVotes(initialVotes);
 
+        // Initialize views
+        const initialViews = data.reduce((acc, question) => {
+          acc[question.id] = question.views || 0;
+          return acc;
+        }, {});
+        setViews(initialViews);
+
         // Extract unique tags
-        const allTags = data.flatMap(question => question.tags || []);
+        const allTags = data.flatMap(question => (Array.isArray(question.tags) ? question.tags : []));
         const uniqueTags = [...new Set(allTags)];
         setTags(uniqueTags);
       } catch (error) {
@@ -69,10 +77,59 @@ const Questions = () => {
     fetchQuestions();
   }, [navigate]);
 
-  const handlePostClick = (id) => {
-    navigate(`/UpdateQuestion/${id}`);
-  };
+  useEffect(() => {
+    const fetchViewCounts = async () => {
+      try {
+        const viewCountPromises = questions.map(question =>
+          fetch(`http://localhost:5000/views/${question.id}`).then(response => response.json())
+        );
 
+        const viewCounts = await Promise.all(viewCountPromises);
+        const viewCountsMap = viewCounts.reduce((acc, view) => {
+          acc[view.question_id] = view.view_count || 0;
+          return acc;
+        }, {});
+
+        setViews(prevViews => ({
+          ...prevViews,
+          ...viewCountsMap,
+        }));
+      } catch (error) {
+        console.error('Error fetching view counts:', error);
+      }
+    };
+
+    if (questions.length > 0) {
+      fetchViewCounts();
+    }
+  }, [questions]);
+
+  const handlePostClick = async (id) => {
+    // Navigate to the update page
+    navigate(`/UpdateQuestion/${id}`);
+  
+    try {
+      // Make the PATCH request to record the view
+      const response = await fetch('http://localhost:5000/views', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ question_id: id }),
+      });
+  
+      if (!response.ok) throw new Error('Failed to record view');
+  
+      // Update the view count in the local state
+      setViews(prevViews => ({
+        ...prevViews,
+        [id]: (prevViews[id] || 0) + 1, // Increment the view count by 1
+      }));
+    } catch (error) {
+      console.error('Error recording view:', error);
+      // Optionally handle errors here
+    }
+  };
   const updateVotes = async (id, newUpvotes, newDownvotes) => {
     try {
       const response = await fetch(`http://localhost:5000/questions/${id}`, {
@@ -128,11 +185,24 @@ const Questions = () => {
 
   const handleDelete = async (id) => {
     try {
+      
+      const token = localStorage.getItem('access_token');
+      if (!token) {
+        console.error('No access token found');
+        return;
+      }
+  
       const response = await fetch(`http://localhost:5000/questions/${id}`, {
         method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json', // Optional, mainly needed if sending a body (not in DELETE requests)
+          'Authorization': `Bearer ${token}`, // Add JWT token for authorization
+        },
       });
+  
       if (!response.ok) throw new Error('Failed to delete question');
-
+  
+      // Update state to remove the deleted question
       setQuestions(prevQuestions => prevQuestions.filter(q => q.id !== id));
       toast.success('Question deleted successfully');
     } catch (error) {
@@ -227,120 +297,117 @@ const Questions = () => {
     }
   };
 
-  const filteredQuestions = questions
-    .filter(question =>
-      question.title.toLowerCase().includes(searchKeyword.toLowerCase()) ||
-      question.content.toLowerCase().includes(searchKeyword.toLowerCase())
-    )
-    .filter(question =>
-      filterTag ? question.tags.includes(filterTag) : true
-    );
+  const filteredQuestions = questions.filter(question =>
+    question.title.toLowerCase().includes(searchKeyword.toLowerCase()) &&
+    (filterTag === '' || (Array.isArray(question.tags) && question.tags.includes(filterTag)))
+  );
 
-  const sortedQuestions = filteredQuestions.sort((a, b) => b.upvotes - a.upvotes);
+  const sortedQuestions = filteredQuestions.sort((a, b) => b.created_at - a.created_at);
 
   return (
-    <div className="container mx-auto p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-4xl font-bold mb-8 text-center text-blue-800">Questions</h1>
-      <div className="mb-8 flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+    <div className="container mx-auto p-4">
+      <div className="flex mb-4">
         <input
           type="text"
           placeholder="Search questions..."
+          className="mb-4 md:mb-0 md:mr-4 p-2 border border-gray-300 rounded-lg w-full"
           value={searchKeyword}
           onChange={(e) => setSearchKeyword(e.target.value)}
-          className="p-3 border border-blue-300 rounded-lg w-full md:w-1/2 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-150"
         />
         <select
+          className="p-2 border border-gray-300 rounded-lg w-full"
           value={filterTag}
           onChange={(e) => setFilterTag(e.target.value)}
-          className="p-3 border border-blue-300 rounded-lg w-full md:w-1/2 mt-4 md:mt-0 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-150"
         >
           <option value="">All Tags</option>
           {tags.map(tag => (
-            <option key={tag} value={tag}>{tag}</option>
+            <option key={tag} value={tag}>
+              {tag}
+            </option>
           ))}
         </select>
       </div>
-      <div className="grid grid-cols-1 gap-6">
-        {sortedQuestions.map(question => (
-          <div key={question.id} className={`bg-white p-6 rounded-lg shadow-lg ${question.resolved ? 'border border-green-500' : ''}`}>
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold text-blue-600 cursor-pointer" onClick={() => handlePostClick(question.id)}>
-                {question.title}
-              </h2>
-              {currentUser && currentUser.role === 'admin' && (
-                <button
-                  onClick={() => handleDelete(question.id)}
-                  className="text-red-500 hover:text-red-700 transition"
-                >
-                  <FaTrash size={20} />
-                </button>
-              )}
-            </div>
+
+      <div className="space-y-4">
+        {sortedQuestions.length ? sortedQuestions.map(question => (
+          <div key={question.id} className="bg-white p-4 rounded-lg shadow-md">
+            <h2 className="text-xl font-semibold mb-2 flex items-center" onClick={() => handlePostClick(question.id)}>
+              {question.resolved && <FaCheck className="text-green-500 mr-2" />}
+              {question.title}
+              <div className="ml-auto flex items-center">
+                <FaEye className="text-gray-500 mr-2" />
+                <span>{views[question.id] || 0}</span>
+              </div>
+            </h2>
             <p className="text-gray-700 mb-4">{question.content}</p>
-            <div className="flex flex-wrap gap-2 mb-4">
-              {question.tags.map(tag => (
-                <span key={tag} className="bg-blue-200 text-blue-800 px-3 py-1 rounded-full text-sm">
+            
+            <div className="flex items-center mb-4">
+              <button
+                onClick={() => handleVote(question.id, 'upvote')}
+                className="flex items-center mr-4 text-blue-600 hover:text-blue-800"
+              >
+                <FaArrowUp />
+                <span className="ml-1">{votes[question.id]?.upvotes || 0}</span>
+              </button>
+              <button
+                onClick={() => handleVote(question.id, 'downvote')}
+                className="flex items-center text-red-600 hover:text-red-800"
+              >
+                <FaArrowDown />
+                <span className="ml-1">{votes[question.id]?.downvotes || 0}</span>
+              </button>
+            </div>
+            <div className="flex mb-4">
+              {(Array.isArray(question.tags) ? question.tags : []).map(tag => (
+                <span
+                  key={tag}
+                  className="bg-gray-200 text-gray-700 px-2 py-1 rounded-full text-sm mr-2"
+                >
                   <FaTag className="inline-block mr-1" />
                   {tag}
                 </span>
               ))}
             </div>
-            <div className="flex flex-wrap gap-2 mb-4">
-              {question.badges.map((badge, index) => (
-                <div key={index} className="flex items-center bg-yellow-200 text-yellow-800 px-3 py-1 rounded-full text-sm">
-                  <FaStar className="inline-block mr-1" />
-                  {`Badge ${badge.count} `}
-                  {badge.adminId === currentUser?.id && (
-                    <button
-                      onClick={() => handleRemoveBadge(question.id)}
-                      className="text-red-500 hover:text-red-700 ml-2"
-                    >
-                      <FaTrash size={16} />
-                    </button>
-                  )}
-                </div>
-              ))}
-              {currentUser && (
-                <button
-                  onClick={() => handleBadge(question.id)}
-                  className="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm hover:bg-yellow-600 transition"
-                >
-                  Add Badge
-                </button>
-              )}
-            </div>
             <div className="flex items-center">
-              <button
-                onClick={() => handleVote(question.id, 'upvote')}
-                className={`flex items-center text-blue-600 ${votes[question.id]?.userVote === 'up' ? 'font-bold' : ''}`}
-              >
-                <FaArrowUp size={20} />
-                <span className="ml-2">{votes[question.id]?.upvotes || 0}</span>
-              </button>
-              <button
-                onClick={() => handleVote(question.id, 'downvote')}
-                className={`ml-4 flex items-center text-red-600 ${votes[question.id]?.userVote === 'down' ? 'font-bold' : ''}`}
-              >
-                <FaArrowDown size={20} />
-                <span className="ml-2">{votes[question.id]?.downvotes || 0}</span>
-              </button>
-              {question.resolved && (
-                <span className="ml-4 text-green-500 flex items-center">
-                  <FaCheck size={18} className="mr-2" />
-                  Resolved
-                </span>
+              {currentUser && (
+                <>
+                  <button
+                    onClick={() => handlePostClick(question.id)}
+                    className="mr-4 text-green-600 hover:text-green-800"
+                  >
+                    Update
+                  </button>
+                  <button
+                    onClick={() => handleDelete(question.id)}
+                    className="mr-4 text-red-600 hover:text-red-800"
+                  >
+                    <FaTrash />
+                  </button>
+                  <button
+                    onClick={() => handleMarkResolved(question.id)}
+                    className="mr-4 text-blue-600 hover:text-blue-800"
+                  >
+                    Mark as Resolved
+                  </button>
+                  <button
+                    onClick={() => handleBadge(question.id)}
+                    className="mr-4 text-yellow-600 hover:text-yellow-800"
+                  >
+                    <FaStar />
+                  </button>
+                  <button
+                    onClick={() => handleRemoveBadge(question.id)}
+                    className="text-yellow-600 hover:text-yellow-800"
+                  >
+                    Remove Badge
+                  </button>
+                </>
               )}
             </div>
-            {currentUser && currentUser.role === 'admin' && !question.resolved && (
-              <button
-                onClick={() => handleMarkResolved(question.id)}
-                className="mt-4 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition"
-              >
-                Mark as Resolved
-              </button>
-            )}
           </div>
-        ))}
+        )) : (
+          <p>No questions found</p>
+        )}
       </div>
     </div>
   );
