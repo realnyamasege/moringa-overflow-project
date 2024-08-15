@@ -1,19 +1,9 @@
 from flask import Blueprint, request, jsonify
-from werkzeug.security import generate_password_hash
-from werkzeug.utils import secure_filename
-import os
-
 from models import db, User
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 user_bp = Blueprint('user_bp', __name__)
-
-# Configuration for file uploads
-UPLOAD_FOLDER = 'uploads/'
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # Create a new user
 @user_bp.route('/users', methods=['POST'])
@@ -26,6 +16,10 @@ def create_user():
         return jsonify({'message': 'Missing required fields'}), 400
 
     # Check if user already exists
+    existing_user = User.query.filter_by(email=data['email']).first()
+    if existing_user:
+        return jsonify({'message': 'User with this ID already exists'}), 400
+
     existing_user_by_email = User.query.filter_by(email=data['email']).first()
     if existing_user_by_email:
         return jsonify({'message': 'User with this email already exists'}), 400
@@ -46,7 +40,6 @@ def create_user():
     db.session.commit()
     return jsonify({'message': 'User created successfully'}), 201
 
-# Get all users
 @user_bp.route('/users', methods=['GET'])
 def get_users():
     try:
@@ -57,38 +50,50 @@ def get_users():
     except Exception as e:
         print(f"Error occurred: {e}")  # This logs the error to the console
         return jsonify({'message': 'Internal Server Error'}), 500
-
+    
 # Get a specific user by ID
-@user_bp.route('/users/<int:user_id>', methods=['GET'])
+@user_bp.route('/users/<user_id>', methods=['GET'])
 def get_user(user_id):
     user = User.query.get(user_id)
     if user:
         return jsonify(user.to_dict())
     return jsonify({'message': 'User not found'}), 404
 
-# Update a user's profile
 @user_bp.route('/users/<int:user_id>', methods=['PATCH'])
+@jwt_required()
 def update_user(user_id):
+    current_user_id = get_jwt_identity()  # Get the ID of the logged-in user
+    
+    if current_user_id != user_id:
+        return jsonify({"message": "You are not allowed to update this user"}), 403
+    
     user = User.query.get(user_id)
+    
     if not user:
-        return jsonify({'message': 'User not found'}), 404
-    
-    if 'profile_image' in request.files:
-        file = request.files['profile_image']
-        if file:
-            filename = secure_filename(file.filename)
-            file_path = os.path.join('path/to/upload/folder', filename)
-            file.save(file_path)
-            user.profile_image = file_path
-    
-    user.name = request.form.get('name', user.name)
-    user.phone_number = request.form.get('phone_number', user.phone_number)
+        return jsonify({"message": "User not found"}), 404
+
+    data = request.get_json()
+
+    if 'password' in data:
+        hashed_password = generate_password_hash(data['password'])
+        user.password = hashed_password
+    if 'email' in data:
+        user.email = data['email']
+    if 'profile_image' in data:
+        user.profile_image = data['profile_image']    
+    if 'name' in data:
+        user.name = data['name']
+    if 'phone_number' in data:
+        user.phone_number = data['phone_number']
     
     db.session.commit()
-    return jsonify(user.to_dict())
-
-# Delete a user
-@user_bp.route('/users/<int:user_id>', methods=['DELETE'])
+    
+    return jsonify({
+        "id": user.id,
+        "name": user.name,
+        "phone_number": user.phone_number
+    })
+@user_bp.route('/users/<user_id>', methods=['DELETE'])
 @jwt_required()
 def delete_user(user_id):
     try:

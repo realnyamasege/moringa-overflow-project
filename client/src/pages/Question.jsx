@@ -292,46 +292,41 @@ const Questions = () => {
       toast.error('Failed to mark question as resolved');
     }
   };
-  const handleAddBadge = async (id) => {
-    // Ensure currentUser and currentUser.role are defined
+  const handleAddBadge = async () => {
     if (!currentUser || currentUser.role !== 'admin') {
       return toast.error('You are not authorized to add a badge');
     }
   
-    const question = questions.find(q => q.id === id);
-    if (!question) return;
-  
-    const userBadges = question.badges.filter(badge => badge.adminId === currentUser.id);
-    if (userBadges.length >= 5) {
-      return toast.error('You have already added 5 badges to this question');
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      return toast.error('No access token found');
     }
   
-    const newBadge = {
-      adminId: currentUser.id,
-      count: 1,
+    const badgeData = {
+      badge_name: newBadge,
+      user_id: currentUser.id,
     };
   
-    const updatedBadges = [...question.badges, newBadge];
-  
     try {
-      const response = await fetch(`http://localhost:5000/questions/${id}`, {
-        method: 'PATCH',
+      const response = await fetch('http://localhost:5000/badges', {
+        method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({ badges: updatedBadges }),
+        body: JSON.stringify(badgeData),
       });
   
-      if (!response.ok) throw new Error('Failed to add badge');
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to add badge');
+      }
   
-      setQuestions(prevQuestions =>
-        prevQuestions.map(q => q.id === id ? { ...q, badges: updatedBadges } : q)
-      );
-      toast.success('Badge added to the question');
+      toast.success('Badge added successfully');
+      setNewBadge(""); // Clear input field
     } catch (error) {
       console.error('Error adding badge:', error);
-      toast.error('Failed to add badge');
+      toast.error(`Error: ${error.message}`);
     }
   };
 

@@ -7,36 +7,31 @@ badge_bp = Blueprint('badge_bp', __name__)
 
 @badge_bp.route('/badges', methods=['POST'])
 @jwt_required()
-def create_badge():
+def add_badge():
+    current_user = get_jwt_identity()
+
+    if current_user['role'] != 'admin':
+        return jsonify({'message': 'You are not authorized to add a badge'}), 403
+
     data = request.get_json()
-    
-    # Check if required fields are present
-    required_fields = ['count', 'user_id', 'question_id']
-    if not all(field in data for field in required_fields):
-        return jsonify({'message': 'Missing required fields'}), 400
+    badge_name = data.get('badge_name')
+    user_id = data.get('user_id')
 
-    # Extract the identity of the user from the JWT token
-    current_user_id = get_jwt_identity()
+    if not badge_name or not user_id:
+        return jsonify({'message': 'Badge name and user ID are required'}), 400
 
-    # Verify if the current user is an admin
-    current_user = User.query.get(current_user_id)
-    if not current_user or not current_user.admin:
-        return jsonify({'message': 'Admin privileges required'}), 403
+    # Check if the user exists
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
 
-    # Create and add new badge
-    try:
-        new_badge = Badge(
-            admin_id=current_user_id,  # Use the admin's ID from the JWT
-            count=data['count'],
-            user_id=data['user_id'],
-            question_id=data['question_id']
-        )
-        
-        db.session.add(new_badge)
-        db.session.commit()
-        return jsonify({'message': 'Badge created successfully'}), 201
-    except Exception as e:
-        return jsonify({'message': str(e)}), 422
+    # Create a new badge
+    new_badge = Badge(badge_name=badge_name, user_id=user_id)
+    db.session.add(new_badge)
+    db.session.commit()
+
+    return jsonify({'message': 'Badge added successfully'}), 201
+
 # Get all badges
 @badge_bp.route('/badges', methods=['GET'])
 def get_badges():
