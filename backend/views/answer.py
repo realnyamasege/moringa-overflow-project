@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from models import Answer, db
+from models import Answer, db, Vote
 from sqlalchemy.orm import joinedload
 from flask_jwt_extended import  jwt_required, get_jwt_identity
 from flask import current_app as app
@@ -54,18 +54,56 @@ def get_answers_for_question(question_id):
     except Exception as e:
         # Handle unexpected errors
         return jsonify({'message': str(e)}), 500
-
-
-# Update an answer
-@answer_bp.route('/answers/<answer_id>', methods=['PATCH'])
-@jwt_required()
-def update_answer(answer_id):
+    
+@answer_bp.route('/answers/<int:answer_id>/vote', methods=['PATCH'])
+def update_answer_vote(answer_id):
     data = request.get_json()
-    answer = Answer.query.get(answer_id)
+    vote_type = data.get('voteType')
 
+    # Log received vote_type
+    app.logger.info(f"Received vote_type: {vote_type}")
+
+    # Validate vote_type
+    if vote_type not in ['upvote', 'downvote']:
+        app.logger.error(f"Invalid vote_type: {vote_type}")
+        return jsonify({'message': 'Invalid vote type'}), 422
+
+    # Fetch the answer
+    answer = Answer.query.get(answer_id)
     if not answer:
         return jsonify({'message': 'Answer not found'}), 404
 
+    # Update votes based on vote_type
+    if vote_type == 'upvote':
+        answer.upvotes += 1
+    elif vote_type == 'downvote':
+        answer.downvotes += 1
+
+    # Commit changes
+    db.session.commit()
+    return jsonify({'id': answer.id, 'upvotes': answer.upvotes, 'downvotes': answer.downvotes}), 200
+
+@answer_bp.route('/answers/<answer_id>', methods=['PATCH'])
+@jwt_required()
+def update_answer(answer_id):
+    # Get the current user's ID from the JWT
+    current_user_id = get_jwt_identity()
+
+    # Retrieve the answer from the database
+    answer = Answer.query.get(answer_id)
+
+    # Check if the answer exists
+    if not answer:
+        return jsonify({'message': 'Answer not found'}), 404
+
+    # Check if the current user is the author of the answer
+    if answer.user_id != current_user_id:
+        return jsonify({'message': 'Unauthorized'}), 403
+
+    # Get the data from the request
+    data = request.get_json()
+
+    # Update the answer fields if present in the request
     if 'answer' in data:
         answer.answer = data['answer']
     if 'link' in data:
@@ -73,7 +111,9 @@ def update_answer(answer_id):
     if 'accepted' in data:
         answer.accepted = data['accepted']
 
+    # Commit the changes to the database
     db.session.commit()
+
     return jsonify({'message': 'Answer updated successfully'})
 
 # Delete an answer

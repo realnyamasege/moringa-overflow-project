@@ -54,7 +54,6 @@ def get_question(question_id):
         return jsonify(question.to_dict())
     return jsonify({'message': 'Question not found'}), 404
 
-# Update a question
 @question_bp.route('/questions/<question_id>', methods=['PATCH'])
 @jwt_required()
 def update_question(question_id):
@@ -63,6 +62,13 @@ def update_question(question_id):
 
     if not question:
         return jsonify({'message': 'Question not found'}), 404
+
+    current_user = get_jwt_identity()
+    user = User.query.get(current_user['id'])
+
+    # Check if the current user is the author of the question or an admin
+    if question.user_id != current_user['id'] and not user.is_admin:
+        return jsonify({'message': 'Permission denied'}), 403
 
     if 'title' in data:
         question.title = data['title']
@@ -137,4 +143,32 @@ def delete_question(question_id):
         db.session.rollback()
         print(f"Error occurred: {e}")  # Logs the error message to the console
         return jsonify({'message': 'Internal Server Error'}), 500
+
+@question_bp.route('/questions/<int:id>', methods=['PATCH'])
+@jwt_required()
+def update_votes(id):
+    data = request.get_json()
+    upvotes = data.get('upvotes')
+    downvotes = data.get('downvotes')
+    
+    question = Question.query.get(id)
+    if not question:
+        return jsonify({'message': 'Question not found'}), 404
+    
+    if upvotes is not None:
+        question.upvotes = upvotes
+    if downvotes is not None:
+        question.downvotes = downvotes
+
+    try:
+        db.session.commit()
+        return jsonify({
+            'id': question.id,
+            'upvotes': question.upvotes,
+            'downvotes': question.downvotes
+        }), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'message': 'Failed to update vote count', 'error': str(e)}), 500
+
 

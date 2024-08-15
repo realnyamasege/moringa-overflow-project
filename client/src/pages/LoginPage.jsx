@@ -32,8 +32,15 @@ const LoginPage = () => {
       })
       .then((data) => {
         console.log("Login response data:", data); // Debugging
+  
         if (data.access_token) {
           localStorage.setItem("access_token", data.access_token);
+  
+          // Store user information in localStorage
+          if (data.user) {
+            localStorage.setItem("currentUser", JSON.stringify(data.user));
+          }
+  
           navigate("/Profile");
         } else {
           toast.error("Invalid email or password.");
@@ -44,7 +51,7 @@ const LoginPage = () => {
         toast.error("An error occurred. Please try again.");
       });
   };
-
+  
   return (
     <div className="flex justify-center items-center h-screen bg-blue-100">
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">

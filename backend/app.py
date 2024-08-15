@@ -18,7 +18,7 @@ app.config['JWT_REFRESH_TOKEN_EXPIRES'] = timedelta(days=30)
 # Initialize extensions
 db.init_app(app)  # Initialize the SQLAlchemy instance
 migrate = Migrate(app, db)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
 jwt = JWTManager(app)
 logging.basicConfig(level=logging.DEBUG)
 

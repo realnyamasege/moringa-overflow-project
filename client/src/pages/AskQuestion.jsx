@@ -10,7 +10,6 @@ export default function AskQuestion() {
   const [link, setLink] = useState('');
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [tagInput, setTagInput] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,17 +46,6 @@ export default function AskQuestion() {
     fetchCurrentUser();
   }, [navigate]);
 
-  const handleTagKeyPress = (e) => {
-    if (e.key === 'Enter' && tagInput.trim() !== '') {
-      e.preventDefault();
-      setTags([...tags, tagInput.trim()]);
-      setTagInput('');
-    }
-  };
-
-  const handleTagRemove = (tag) => {
-    setTags(tags.filter(t => t !== tag));
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -79,7 +67,7 @@ export default function AskQuestion() {
         author: currentUser.name,
         title,
         content,
-        tags,
+        tags: tags.split(',').map((tag) => tag.trim()), // Ensure tags are correctly formatted
         codeSnippet,
         link,
         upvotes: 0,
@@ -89,6 +77,8 @@ export default function AskQuestion() {
         badges: [],
       };
   
+      console.log('Submitting question:', questionData);
+  
       // Submit the question
       const response = await fetch('http://localhost:5000/questions', {
         method: 'POST',
@@ -96,7 +86,7 @@ export default function AskQuestion() {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         },
-        body: JSON.stringify({ title, content, tags, codeSnippet, link, userId: currentUser.id }),
+        body: JSON.stringify(questionData), // Use `questionData` which includes formatted tags
       });
   
       if (!response.ok) {
@@ -165,29 +155,12 @@ export default function AskQuestion() {
           <label className="block text-sm font-medium text-gray-900 dark:text-black">Tags</label>
           <input
             type="text"
-            value={tagInput}
-            onChange={(e) => setTagInput(e.target.value)}
-            onKeyPress={handleTagKeyPress}
+            value={tags}
+            onChange={(e) => setTags(e.target.value)}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             placeholder="Enter tags and press Enter"
           />
-          <div className="mt-2 flex flex-wrap gap-2">
-            {tags.map((tag, index) => (
-              <span
-                key={index}
-                className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm flex items-center"
-              >
-                {tag}
-                <button
-                  type="button"
-                  onClick={() => handleTagRemove(tag)}
-                  className="ml-2 text-red-500 hover:text-red-700"
-                >
-                  &times;
-                </button>
-              </span>
-            ))}
-          </div>
+          
         </div>
         <button
           type="submit"
