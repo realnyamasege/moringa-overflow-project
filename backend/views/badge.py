@@ -5,20 +5,28 @@ from flask_jwt_extended import  jwt_required, get_jwt_identity
 badge_bp = Blueprint('badge_bp', __name__)
 
 
-# Create a new badge
 @badge_bp.route('/badges', methods=['POST'])
+@jwt_required()
 def create_badge():
     data = request.get_json()
     
     # Check if required fields are present
-    required_fields = ['admin_id', 'count', 'user_id', 'question_id']
+    required_fields = ['count', 'user_id', 'question_id']
     if not all(field in data for field in required_fields):
         return jsonify({'message': 'Missing required fields'}), 400
+
+    # Extract the identity of the user from the JWT token
+    current_user_id = get_jwt_identity()
+
+    # Verify if the current user is an admin
+    current_user = User.query.get(current_user_id)
+    if not current_user or not current_user.admin:
+        return jsonify({'message': 'Admin privileges required'}), 403
 
     # Create and add new badge
     try:
         new_badge = Badge(
-            admin_id=data['admin_id'],
+            admin_id=current_user_id,  # Use the admin's ID from the JWT
             count=data['count'],
             user_id=data['user_id'],
             question_id=data['question_id']
@@ -29,7 +37,6 @@ def create_badge():
         return jsonify({'message': 'Badge created successfully'}), 201
     except Exception as e:
         return jsonify({'message': str(e)}), 422
-
 # Get all badges
 @badge_bp.route('/badges', methods=['GET'])
 def get_badges():

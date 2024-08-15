@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { useParams, useNavigate } from 'react-router-dom';
 
 const UpdateQuestions = () => {
-  const { id, userId } = useParams();
+  const { id, userId, answer_id } = useParams();
   const [error, setError] = useState('');
   const [question, setQuestion] = useState(null);
   const [answers, setAnswers] = useState([]); // Initialize as array
@@ -269,7 +269,6 @@ const UpdateQuestions = () => {
         if (response.ok) {
           const updatedAnswer = await response.json();
           // Update the answer in your state or context
-          toast.success('Answer updated successfully.');
         } else {
           throw new Error('Failed to update the answer.');
         }
@@ -281,36 +280,41 @@ const UpdateQuestions = () => {
 
     updateAnswer();
   };
-  const handleSaveAnswerEdit = async (answerId) => {
-    const updatedAnswers = question.answers.map(answer => {
-      if (answer.id === editingAnswerId) {
-        return { ...answer, answer: editedAnswerContent };
-      }
-      return answer;
+ const handleSaveAnswerEdit = async (answerId) => {
+  // Find the specific answer being edited
+  const updatedAnswers = question.answers.map(answer => {
+    if (answer.id === answerId) {
+      return { ...answer, content: editedAnswerContent }; // Correct field name should be used here
+    }
+    return answer;
+  });
+
+  try {
+    // Send PATCH request to update the specific answer
+    const response = await fetch(`http://localhost:5000/answers/${answerId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+      },
+      body: JSON.stringify({ content: editedAnswerContent }), // Send only the updated content
     });
 
-    try {
-      const response = await fetch(`http://localhost:5000/answers/${answerId}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
-        },
-        body: JSON.stringify({ answers: updatedAnswers }),
-      });
+    if (!response.ok) throw new Error('Failed to update answer');
 
-      if (response.ok) {
-        setQuestion({ ...question, answers: updatedAnswers });
-        setEditingAnswerId(null);
-        toast.success('Answer updated successfully');
-      } else {
-        throw new Error('Failed to update answer');
-      }
-    } catch (error) {
-      console.error('Error updating answer:', error);
-    }
-  };
+    // Update the local state with the new content
+    setQuestion(prevQuestion => ({
+      ...prevQuestion,
+      answers: updatedAnswers,
+    }));
 
+    setEditingAnswerId(null);
+    toast.success('Answer updated successfully');
+  } catch (error) {
+    console.error('Error updating answer:', error);
+    toast.error('Failed to update answer');
+  }
+};
   
 
   if (loading) return <p>Loading...</p>;
