@@ -1,0 +1,615 @@
+{
+  "users": [
+    {
+      "id": "b839",
+      "name": "qq",
+      "email": "qq@gmail.com",
+      "password": "1q2w",
+      "profile_image": "https://c4.wallpaperflare.com/wallpaper/448/174/357/neon-4k-hd-best-for-desktop-wallpaper-thumb.jpg",
+      "phone_number": "0723232323",
+      "admin": true,
+      "reputation_points": 0,
+      "badges": [
+        "New Member"
+      ]
+    },
+    {
+      "id": "13a0",
+      "name": "Cynthia",
+      "email": "SeenThere@gmail.com",
+      "password": "12345",
+      "profile_image": "https://img.freepik.com/free-photo/majestic-mountain-peak-tranquil-winter-landscape-generated-by-ai_188544-15662.jpg",
+      "phone_number": "0712131415",
+      "admin": true,
+      "reputation_points": 0,
+      "badges": [
+        "New Member"
+      ]
+    },
+    {
+      "id": "485c",
+      "name": "ww",
+      "email": "ww@gmail.com",
+      "password": "1234",
+      "profile_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbt6VjYbBvi0lD8OYeIcbuYzKqrqFCBT5k3w&s",
+      "phone_number": "0712345678",
+      "admin": true,
+      "reputation_points": 50,
+      "badges": [
+        "New Member"
+      ]
+    },
+    {
+      "id": "a9b6",
+      "name": "yy",
+      "email": "yy@gmail.com",
+      "password": "qwer",
+      "profile_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpy4G31X521U0de_lP8-1TWCAaE4U2FbGqag&s",
+      "phone_number": "0777777777",
+      "admin": false,
+      "reputation_points": 35,
+      "badges": [
+        "New Member"
+      ]
+    },
+    {
+      "id": "d2f7",
+      "name": "John",
+      "email": "john@gmail.com",
+      "password": "john123",
+      "profile_image": "https://example.com/john.jpg",
+      "phone_number": "0712345678",
+      "admin": false,
+      "reputation_points": 0,
+      "badges": [
+        "New Member"
+      ]
+    },
+    {
+      "id": "e8f5",
+      "name": "qwerty",
+      "email": "qw@gmail.com",
+      "password": "1234",
+      "profile_image": "https://mrwallpaper.com/images/hd/3d-anime-demon-slayer-8k-h3miza84u4pzvznb.jpg",
+      "phone_number": "1234567",
+      "admin": true,
+      "reputation_points": 110,
+      "badges": [
+        "New Member"
+      ]
+    },
+    {
+      "id": "83c4",
+      "name": "Graham",
+      "email": "q@gmail.com",
+      "password": "1234",
+      "profile_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS510RYx940igzfqFmb2nNkGzPsXtsE02YwEg&s",
+      "phone_number": "12345678",
+      "admin": false,
+      "reputation_points": 505,
+      "badges": [
+        "New Member"
+      ]
+    },
+    {
+      "id": "8599",
+      "name": "qqqqqq",
+      "email": "az@gmail.com",
+      "password": "1234",
+      "profile_image": "https://i.pinimg.com/736x/f1/d1/b9/f1d1b9b4618b024f13507ea7826d6a4e.jpg",
+      "phone_number": "1234567",
+      "admin": true,
+      "reputation_points": 20,
+      "badges": [
+        "New Member"
+      ]
+    },
+    {
+      "id": "3703",
+      "name": "reuben",
+      "email": "rickr6129@gmail.com",
+      "password": "12345",
+      "profile_image": "https://i.pinimg.com/736x/f1/d1/b9/f1d1b9b4618b024f13507ea7826d6a4e.jpg",
+      "phone_number": "123456789",
+      "admin": true,
+      "reputation_points": 0,
+      "badges": [
+        "New Member"
+      ]
+    },
+    {
+      "id": "7af7",
+      "name": "william",
+      "email": "williamcrossmakinon@gmail.com",
+      "password": "william625",
+      "profile_image": "https://www.google.com/imgres?q=laptop%20programming%20coding%20wallpaper&imgurl=https%3A%2F%2Fw0.peakpx.com%2Fwallpaper%2F433%2F154%2FHD-wallpaper-hacker-hood-code-programming.jpg&imgrefurl=https%3A%2F%2Fwww.peakpx.com%2Fen%2Fhd-wallpaper-desktop-vdloc&docid=vzsQ9Oeldx8-dM&tbnid=zddVHYf5WV5HbM&vet=12ahUKEwia3ourw9iHAxW7BdsEHbVSLcoQM3oECE8QAA..i&w=800&h=390&hcb=2&ved=2ahUKEwia3ourw9iHAxW7BdsEHbVSLcoQM3oECE8QAA",
+      "phone_number": "0743275779",
+      "admin": true,
+      "reputation_points": 5,
+      "badges": [
+        "New Member"
+      ]
+    },
+    {
+      "id": "eea6",
+      "name": "qwerty",
+      "email": "qs@gmail.com",
+      "password": "1234",
+      "profile_image": "https://w0.peakpx.com/wallpaper/284/393/HD-wallpaper-dark-anime.jpg",
+      "phone_number": "123456789",
+      "admin": false,
+      "reputation_points": 5,
+      "badges": [
+        "New Member"
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "userId": "b839",
+      "title": "How to center a div in CSS?",
+      "content": "I'm struggling to center a div in CSS. Can someone help?",
+      "tags": [
+        "CSS",
+        "HTML",
+        "Web Development"
+      ],
+      "codeSnippet": "<div class=\"center-me\">Hello World</div>",
+      "link": "http://example.com",
+      "upvotes": 5,
+      "downvotes": 3,
+      "resolved": true,
+      "answers": [
+        {
+          "answer": "wertyu",
+          "author": "qwerty",
+          "id": "1723051995244",
+          "link": "",
+          "upvotes": 1,
+          "downvotes": 0,
+          "accepted": false,
+          "userVote": "upvote"
+        },
+        {
+          "id": "1723106311007",
+          "userId": "e8f5",
+          "author": "qwerty",
+          "questionId": "q1",
+          "answer": "good question",
+          "link": "",
+          "upvotes": 0,
+          "downvotes": 0,
+          "accepted": false,
+          "votes": []
+        },
+        {
+          "id": "1723106332955",
+          "userId": "e8f5",
+          "author": "qwerty",
+          "questionId": "q1",
+          "answer": "qwerty",
+          "link": "",
+          "upvotes": 0,
+          "downvotes": 0,
+          "accepted": true,
+          "votes": []
+        },
+        {
+          "id": "1723577341311",
+          "userId": "485c",
+          "author": "ww",
+          "questionId": "q1",
+          "answer": "dfyigduyfg ",
+          "link": "",
+          "upvotes": 0,
+          "downvotes": 0,
+          "accepted": false,
+          "votes": []
+        },
+        {
+          "id": "1723577785246",
+          "userId": "485c",
+          "author": "ww",
+          "questionId": "q1",
+          "answer": "ervervefvdefvwerfv",
+          "link": "",
+          "upvotes": 0,
+          "downvotes": 0,
+          "accepted": false,
+          "votes": []
+        },
+        {
+          "id": "1723578117601",
+          "userId": "eea6",
+          "author": "qwerty",
+          "questionId": "q1",
+          "answer": "d",
+          "link": "",
+          "upvotes": 0,
+          "downvotes": 0,
+          "accepted": false,
+          "votes": []
+        }
+      ],
+      "userVote": "up",
+      "badges": [
+        {
+          "adminId": "485c",
+          "count": 1
+        }
+      ],
+      "views": [
+        "b839",
+        "e8f5",
+        "485c",
+        "eea6"
+      ],
+      "viewCount": 4
+    },
+    {
+      "id": "q2",
+      "userId": "13a0",
+      "title": "What is the difference between let and var in JavaScript?",
+      "content": "Can someone explain the difference between let and var in JavaScript?",
+      "tags": [
+        "JavaScript",
+        "ES6",
+        "Web Development"
+      ],
+      "codeSnippet": "",
+      "link": "http://example.com",
+      "upvotes": 2,
+      "downvotes": 0,
+      "resolved": false,
+      "answers": [
+        {
+          "id": "1723106775644",
+          "userId": "e8f5",
+          "author": "qwerty",
+          "questionId": "q2",
+          "answer": "wertyu",
+          "link": "",
+          "upvotes": 0,
+          "downvotes": 0,
+          "accepted": false,
+          "votes": []
+        },
+        {
+          "id": "1723106785045",
+          "userId": "e8f5",
+          "author": "qwerty",
+          "questionId": "q2",
+          "answer": "dfghj",
+          "link": "",
+          "upvotes": 0,
+          "downvotes": 0,
+          "accepted": false,
+          "votes": []
+        }
+      ],
+      "userVote": "up",
+      "badges": [
+        {
+          "adminId": "e8f5",
+          "count": 1
+        },
+        {
+          "adminId": "e8f5",
+          "count": 1
+        },
+        {
+          "adminId": "e8f5",
+          "count": 1
+        },
+        {
+          "adminId": "e8f5",
+          "count": 1
+        }
+      ],
+      "views": [
+        "13a0",
+        "e8f5"
+      ],
+      "viewCount": 2
+    },
+    {
+      "id": "q3",
+      "userId": "d2f7",
+      "title": "How to create a responsive layout in CSS?",
+      "content": "I want to create a responsive layout in CSS. Any tips or resources?",
+      "tags": [
+        "CSS",
+        "Responsive Design",
+        "Web Development"
+      ],
+      "codeSnippet": "",
+      "link": "http://example.com",
+      "upvotes": 0,
+      "downvotes": 0,
+      "resolved": false,
+      "answers": [],
+      "badges": [],
+      "views": [
+        "d2f7"
+      ],
+      "viewCount": 1
+    },
+    {
+      "id": "q4",
+      "userId": null,
+      "title": "What is the use of useEffect in React?",
+      "content": "I've seen useEffect in many React codebases. What is it used for?",
+      "tags": [
+        "React",
+        "JavaScript",
+        "Web Development"
+      ],
+      "codeSnippet": "",
+      "link": "http://example.com",
+      "upvotes": 1,
+      "downvotes": 0,
+      "resolved": false,
+      "answers": [],
+      "badges": [],
+      "views": [
+        "f5e8",
+        "485c"
+      ],
+      "viewCount": 2
+    },
+    {
+      "id": "d177",
+      "userId": "8599",
+      "author": "qqqqqq",
+      "title": "qwertyu",
+      "content": "qwertyu",
+      "tags": [
+        "React",
+        "JavaScript",
+        "Web Development"
+      ],
+      "codeSnippet": "",
+      "link": "",
+      "upvotes": 0,
+      "downvotes": 0,
+      "resolved": false,
+      "answers": [],
+      "badges": [],
+      "views": [
+        "8599",
+        "485c"
+      ],
+      "viewCount": 2
+    },
+    {
+      "id": "fef9",
+      "userId": "7af7",
+      "author": "william",
+      "title": "123456iuytredsa",
+      "content": "qwetrewasdrehhhhhh",
+      "tags": [],
+      "codeSnippet": "<div className=\"flex justify-center items-center h-screen bg-blue-100\">\n      <div className=\"w-full max-w-md bg-white p-8 rounded-lg shadow-lg\">\n        <h1 className=\"text-2xl font-bold mb-6\">Reset Password</h1>\n        <form onSubmit={handleSubmit}>\n          <div className=\"mb-4\">\n            <label htmlFor=\"email\" className=\"block text-sm font-medium text-gray-700\">\n              Email\n            </label>\n            <input\n              type=\"email\"\n              id=\"email\"\n              value={email}\n              onChange={(e) => setEmail(e.target.value)}\n              className=\"mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm\"\n              required\n            />\n          </div>\n          \n          <button\n            type=\"submit\"\n            className=\"w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50\"\n          >\n            Send Reset Link\n          </button>\n        </form>\n      </div>\n    </div>",
+      "link": "",
+      "upvotes": 3,
+      "downvotes": 0,
+      "resolved": false,
+      "answers": [
+        {
+          "id": "1723121497278",
+          "userId": "7af7",
+          "author": "william",
+          "questionId": "fef9",
+          "answer": "uytrewqjjj",
+          "link": "",
+          "upvotes": 1,
+          "downvotes": 0,
+          "accepted": false,
+          "votes": [
+            {
+              "userId": "485c",
+              "type": "upvote"
+            }
+          ]
+        },
+        {
+          "id": "1723567993203",
+          "userId": "485c",
+          "author": "ww",
+          "questionId": "fef9",
+          "answer": "dfgheeee",
+          "link": "http://wertyui.com",
+          "upvotes": 0,
+          "downvotes": 1,
+          "accepted": false,
+          "votes": [
+            {
+              "userId": "485c",
+              "type": "downvote"
+            }
+          ]
+        }
+      ],
+      "badges": [
+        {
+          "adminId": "7af7",
+          "count": 1
+        },
+        {
+          "adminId": "7af7",
+          "count": 1
+        },
+        {
+          "adminId": "7af7",
+          "count": 1
+        },
+        {
+          "adminId": "7af7",
+          "count": 1
+        },
+        {
+          "adminId": "7af7",
+          "count": 1
+        }
+      ],
+      "userVote": "up",
+      "views": [
+        "7af7",
+        "485c"
+      ],
+      "viewCount": 2
+    },
+    {
+      "id": "q12",
+      "userId": "485c",
+      "author": "ww",
+      "title": "blue",
+      "content": "wertyu",
+      "tags": [
+        "ASdc"
+      ],
+      "codeSnippet": "",
+      "link": "",
+      "upvotes": 1,
+      "downvotes": 0,
+      "resolved": false,
+      "answers": [
+        {
+          "id": "1723573802715",
+          "userId": "485c",
+          "author": "ww",
+          "questionId": "q12",
+          "answer": "sdf sdds",
+          "link": "",
+          "upvotes": 0,
+          "downvotes": 0,
+          "accepted": false,
+          "votes": []
+        }
+      ],
+      "badges": [
+        {
+          "adminId": "485c",
+          "count": 1
+        },
+        {
+          "adminId": "485c",
+          "count": 1
+        },
+        {
+          "adminId": "485c",
+          "count": 1
+        }
+      ],
+      "views": [
+        "485c"
+      ],
+      "viewCount": 1
+    },
+    {
+      "id": "q8",
+      "userId": "485c",
+      "author": "ww",
+      "title": "yjfcytc",
+      "content": "jkhbhfxtrxtrxtrxt",
+      "tags": [
+        "gjvgyfcy"
+      ],
+      "codeSnippet": "",
+      "link": "",
+      "upvotes": 0,
+      "downvotes": 2,
+      "resolved": false,
+      "answers": [
+        {
+          "id": "1723576651257",
+          "userId": "485c",
+          "author": "ww",
+          "questionId": "q8",
+          "answer": "jfchhhhhhh",
+          "link": "",
+          "upvotes": 0,
+          "downvotes": 0,
+          "accepted": false,
+          "votes": []
+        }
+      ],
+      "badges": [
+        {
+          "adminId": "485c",
+          "count": 1
+        },
+        {
+          "adminId": "485c",
+          "count": 1
+        }
+      ],
+      "views": [
+        "485c",
+        "eea6"
+      ],
+      "viewCount": 2,
+      "userVote": "down"
+    },
+    {
+      "id": "q9",
+      "userId": "485c",
+      "author": "ww",
+      "title": "Yes",
+      "content": "FGHJHuvuujy",
+      "tags": [
+        "qweverv"
+      ],
+      "codeSnippet": "",
+      "link": "",
+      "upvotes": 1,
+      "downvotes": 0,
+      "resolved": false,
+      "answers": [
+        {
+          "id": "1723576811951",
+          "userId": "485c",
+          "author": "ww",
+          "questionId": "q9",
+          "answer": "fvgbrbg",
+          "link": "",
+          "upvotes": 1,
+          "downvotes": 0,
+          "accepted": false,
+          "votes": [
+            {
+              "userId": "485c",
+              "type": "upvote"
+            }
+          ]
+        }
+      ],
+      "badges": [],
+      "views": [
+        "485c"
+      ],
+      "viewCount": 1
+    },
+    {
+      "id": "q10",
+      "userId": "eea6",
+      "author": "qwerty",
+      "title": "Blah",
+      "content": "\ndcf tyd csdtrc trcd",
+      "tags": [
+        "Cynthia"
+      ],
+      "codeSnippet": "",
+      "link": "",
+      "upvotes": 2,
+      "downvotes": 0,
+      "resolved": false,
+      "answers": [],
+      "badges": [],
+      "views": [
+        "eea6"
+      ],
+      "viewCount": 1
+    }
+  ]
+}

@@ -94,7 +94,11 @@ def update_answer(answer_id):
 
     # Check if the answer exists
     if not answer:
-        return jsonify({'message': 'Answer not found'}), 404
+        return jsonify({"error": "Answer not found!"}), 404
+
+    # Check if the current user is authorized to update the answer
+    if answer.user_id != get_jwt_identity():
+        return jsonify({"error": "Unauthorized action!"}), 403
 
     # Check if the current user is the author of the answer
     if answer.user_id != current_user_id:
@@ -117,14 +121,19 @@ def update_answer(answer_id):
     return jsonify({'message': 'Answer updated successfully'})
 
 # Delete an answer
-@answer_bp.route('/answers/<answer_id>', methods=['DELETE'])
+@answer_bp.route('/answers/<int:answer_id>', methods=['DELETE'])
 @jwt_required()
 def delete_answer(answer_id):
     answer = Answer.query.get(answer_id)
 
-    if not answer:
-        return jsonify({'message': 'Answer not found'}), 404
+    if answer:
+        if answer.user_id == get_jwt_identity():
+            db.session.delete(answer)
+            db.session.commit()
 
-    db.session.delete(answer)
-    db.session.commit()
-    return jsonify({'message': 'Answer deleted successfully'})
+            return jsonify({'message': 'Answer deleted successfully'})
+        else:
+            return jsonify({"error": "You are trying to delete someone's answer!"}), 404
+
+    else:
+        return jsonify({"error": "Answer you are trying to delete is not found!"}), 404
