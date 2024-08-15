@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 export const UserContext = createContext();
 
-const server_url = "http://localhost:3000"; // Define your server URL here
+const server_url = "http://localhost:5000"; // Define your server URL here
 
 export const UserProvider = ({ children }) => {
   const nav = useNavigate();

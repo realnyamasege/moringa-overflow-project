@@ -20,29 +20,30 @@ const SignupPage = () => {
       return;
     }
 
-    // Default values for reputation points and badges
-    const reputationPoints = 0;
-    const badges = ["New Member"];
+    const payload = {
+      name,
+      email,
+      password,
+      profile_image: profileImage,
+      phone_number: phoneNumber,
+      admin: isAdmin
 
-    fetch("http://localhost:3000/users", {
+    };
+
+    console.log("Payload:", payload); // Log payload for debugging
+
+    fetch("http://127.0.0.1:5000/users", {
       method: "POST",
-      body: JSON.stringify({
-        name,
-        email,
-        password,
-        profile_image: profileImage,
-        phone_number: phoneNumber,
-        admin: isAdmin,
-        reputation_points: reputationPoints,
-        badges: badges,
-      }),
+      body: JSON.stringify(payload),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          return response.json().then((error) => {
+            throw new Error(error.message || "Network response was not ok");
+          });
         }
         return response.json();
       })
@@ -136,7 +137,7 @@ const SignupPage = () => {
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             />
           </div>
-          {/* <div className="mb-6">
+          <div className="mb-6">
             <label htmlFor="admin" className="block text-sm font-medium text-gray-700">
               Admin
             </label>
@@ -147,8 +148,7 @@ const SignupPage = () => {
               onChange={(e) => setIsAdmin(e.target.checked)}
               className="mt-1"
             />
-          </div> */}
-          {/* uncomment the above code only if necessary */}
+          </div>
           <button
             type="submit"
             className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"

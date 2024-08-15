@@ -1,7 +1,8 @@
-from flask import Blueprint, jsonify, request, abort, make_response
+from flask import Blueprint, jsonify, request, make_response
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from werkzeug.security import generate_password_hash
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
-from models import db, User, Question, Vote
+from models import db, User, Vote
 
 user_bp = Blueprint('user_bp', __name__)
 
@@ -28,43 +29,49 @@ def get_user(user_id):
         print(e)
         return jsonify({"message": "An error occurred while retrieving the user."}), 500
 
-# Update a user
-@user_bp.route('/users/<int:user_id>', methods=['PUT'])
+@user_bp.route('/users/<int:user_id>', methods=['PATCH'])
 @jwt_required()
 def update_user(user_id):
-    try:
-        current_user_id = get_jwt_identity()
-        user = User.query.get(user_id)
-        if not user:
-            return jsonify({"message": "User not found."}), 404
+    current_user_id = get_jwt_identity()  # Get the ID of the logged-in user
+    
+    if current_user_id != user_id:
+        return jsonify({"message": "You are not allowed to update this user"}), 403
+    
+    user = User.query.get(user_id)
+    
+    if not user:
+        return jsonify({"message": "User not found"}), 404
 
-        current_user = User.query.get(current_user_id)
-        if not current_user.is_admin and current_user_id != user.id:
-            return jsonify({"message": "Unauthorized"}), 403
+    data = request.get_json()
 
-        data = request.get_json()
-        username = data.get('username')
-        email = data.get('email')
-        password = data.get('password')
+    if 'password' in data:
+        hashed_password = generate_password_hash(data['password'])
+        user.password = hashed_password
+    if 'email' in data:
+        user.email = data['email']
+    if 'profile_image' in data:
+        user.profile_image = data['profile_image']    
+    if 'name' in data:
+        user.name = data['name']
+    if 'phone_number' in data:
+        user.phone_number = data['phone_number']
+    
+    db.session.commit()
+    
+    return jsonify({
+        "id": user.id,
+        "name": user.name,
+        "phone_number": user.phone_number
+    })
 
-        if username:
-            user.username = username
-        if email:
-            user.email = email
-        if password:
-            user.set_password(password)
-
-        db.session.commit()
-        return jsonify(user.to_dict()), 200
-    except Exception as e:
-        print(e)
-        return jsonify({"message": "An error occurred while updating the user."}), 500
-
-# delete user
-@user_bp.route("/users", methods=["DELETE"])
+@user_bp.route('/users/<int:user_id>', methods=['DELETE'])
 @jwt_required()
-def delete_user():
-    user_id = get_jwt_identity()
+def delete_user(user_id):
+    current_user_id = get_jwt_identity()  # Get the ID of the logged-in user
+    
+    if current_user_id != user_id:
+        return jsonify({"message": "You are not allowed to delete this user"}), 403
+
     user = User.query.get(user_id)
     
     if user:
@@ -96,4 +103,3 @@ def delete_user():
 
     else:
         return jsonify({"error": "User you are trying to delete is not found!"}), 404
-

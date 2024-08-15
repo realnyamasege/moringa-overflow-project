@@ -4,5 +4,4 @@ from .question import question_bp
 from .answer import answer_bp
 from .vote import vote_bp
 from .badge import badge_bp
-from .view import view_bp
-from .tag import tag_bp
+from .views import views_bp

@@ -1,25 +1,31 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { FaArrowUp, FaArrowDown, FaCheck, FaTrash, FaPencilAlt, FaTimes} from 'react-icons/fa';
 import { toast } from 'react-toastify';
-import { useNavigate, useParams } from 'react-router-dom';
-import { FaArrowUp, FaArrowDown, FaTrash, FaCheck, FaStar, FaPencilAlt } from 'react-icons/fa';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const UpdateQuestions = () => {
-  const navigate = useNavigate();
-  const { id } = useParams();
-  const [question, setQuestion] = useState({});
-  const [answer, setAnswer] = useState('');
+  const { id, userId, answer_id } = useParams();
+  const [error, setError] = useState('');
+  const [question, setQuestion] = useState(null);
+  const [answers, setAnswers] = useState([]); // Initialize as array
+  const [answerText, setAnswerText] = useState('');
   const [link, setLink] = useState('');
+  const [codeSnippet, setCodeSnippet] = useState('');
+  const [isAccepted, setIsAccepted] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [userVote, setUserVote] = useState(null);
   const [upvotes, setUpvotes] = useState(0);
   const [downvotes, setDownvotes] = useState(0);
-  const [userVote, setUserVote] = useState(null);
-  const [currentUser, setCurrentUser] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [editingAnswerId, setEditingAnswerId] = useState(null);
   const [editedAnswerContent, setEditedAnswerContent] = useState('');
+  const storedCurrentUsers = JSON.parse(localStorage.getItem('currentUser'));
+  const navigate = useNavigate();
+  const [ currentUser, setCurrentUser] = useState(storedCurrentUsers);
 
+  
   useEffect(() => {
-    const userId = localStorage.getItem("access_token");
-    if (!userId) {
+    const accessToken = localStorage.getItem("access_token");
+    if (!accessToken) {
       toast.error("No user logged in");
       navigate("/login");
       return;
@@ -27,7 +33,14 @@ const UpdateQuestions = () => {
 
     const fetchCurrentUser = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/users/${userId}`);
+        const response = await fetch("http://localhost:5000/authenticated_user", {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${accessToken}`,
+            "Content-Type": "application/json"
+          }
+        });
+
         if (response.ok) {
           const data = await response.json();
           setCurrentUser(data);
@@ -40,578 +53,394 @@ const UpdateQuestions = () => {
       }
     };
 
+    fetchCurrentUser();
+  }, [navigate]);
+  
+  useEffect(() => {
     const fetchQuestion = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/questions/${id}`);
-        if (response.ok) {
-          const data = await response.json();
-
-          // Check if the current user has already viewed the question
-          if (!data.views.includes(userId)) {
-            data.views.push(userId);
-            data.viewCount += 1;
-
-            // Update the views and viewCount in the database
-            await fetch(`http://localhost:3000/questions/${id}`, {
-              method: 'PATCH',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                views: data.views,
-                viewCount: data.viewCount,
-              }),
-            });
-          }
-
-          setQuestion(data);
-          setUpvotes(data.upvotes);
-          setDownvotes(data.downvotes);
-
-          // Check if the user has already voted on this question
-          const userVoteStatus = data.votes?.find(vote => vote.userId === userId);
-          if (userVoteStatus) {
-            setUserVote(userVoteStatus.type);
-          }
-        } else {
-          throw new Error('Failed to fetch question');
+        const response = await fetch(`http://localhost:5000/questions/${id}`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
         }
+        const data = await response.json();
+        setQuestion(data);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching question:', error);
+        toast.error('Failed to fetch question');
       }
     };
+    fetchQuestion();
+  }, [id]);
 
-    fetchCurrentUser().then(fetchQuestion).finally(() => setLoading(false));
-  }, [id, navigate]);
+  useEffect(() => {
+    if (id) {
+      fetchAnswers(id);
+    }
+  }, [id]);
 
-  const updateVotes = async (newUpvotes, newDownvotes, voteType) => {
+  const fetchAnswers = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3000/questions/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ upvotes: newUpvotes, downvotes: newDownvotes, userVote: voteType }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to update vote count');
-      }
+      const response = await fetch(`http://localhost:5000/questions/${id}/answers`);
+      if (!response.ok) throw new Error('Failed to fetch answers');
+      const data = await response.json();
+      setAnswers(data);
     } catch (error) {
-      console.error('Error updating vote count:', error);
+      console.error('Error fetching answers:', error);
     }
   };
 
-  const handleVote = (voteType) => {
-    let newUpvotes = upvotes;
-    let newDownvotes = downvotes;
-    let newVote = null;
-
-    if (voteType === 'up') {
-      if (userVote === 'up') {
-        newUpvotes -= 1;
-      } else {
-        newUpvotes += 1;
-        if (userVote === 'down') newDownvotes -= 1;
-      }
-      newVote = userVote === 'up' ? null : 'up';
-    } else if (voteType === 'down') {
-      if (userVote === 'down') {
-        newDownvotes -= 1;
-      } else {
-        newDownvotes += 1;
-        if (userVote === 'up') newUpvotes -= 1;
-      }
-      newVote = userVote === 'down' ? null : 'down';
-    }
-
-    setUpvotes(newUpvotes);
-    setDownvotes(newDownvotes);
-    setUserVote(newVote);
-    updateVotes(newUpvotes, newDownvotes, newVote);
-  };
-
-  const handleUpvote = () => handleVote('up');
-  const handleDownvote = () => handleVote('down');
-
-  const handleAnswerVote = async (answerId, voteType) => {
-    const updatedAnswers = question.answers.map(answer => {
-      if (answer.id === answerId) {
-        if (!answer.votes) answer.votes = [];
-        const existingVote = answer.votes.find(vote => vote.userId === currentUser.id);
-        let newUpvotes = answer.upvotes || 0;
-        let newDownvotes = answer.downvotes || 0;
-
-        if (voteType === 'upvote') {
-          if (existingVote) {
-            if (existingVote.type === 'upvote') {
-              newUpvotes -= 1;
-              answer.votes = answer.votes.filter(vote => vote.userId !== currentUser.id);
-            } else {
-              newUpvotes += 1;
-              newDownvotes -= 1;
-              existingVote.type = 'upvote';
-            }
-          } else {
-            newUpvotes += 1;
-            answer.votes.push({ userId: currentUser.id, type: 'upvote' });
-          }
-        } else if (voteType === 'downvote') {
-          if (existingVote) {
-            if (existingVote.type === 'downvote') {
-              newDownvotes -= 1;
-              answer.votes = answer.votes.filter(vote => vote.userId !== currentUser.id);
-            } else {
-              newDownvotes += 1;
-              newUpvotes -= 1;
-              existingVote.type = 'downvote';
-            }
-          } else {
-            newDownvotes += 1;
-            answer.votes.push({ userId: currentUser.id, type: 'downvote' });
-          }
-        }
-
-        return {
-          ...answer,
-          upvotes: newUpvotes,
-          downvotes: newDownvotes,
-        };
-      }
-      return answer;
-    });
-
+  const handleVote = async (type) => {
     try {
-      const response = await fetch(`http://localhost:3000/questions/${id}`, {
+      const response = await fetch(`http://localhost:5000/questions/${id}/vote`, {
         method: 'PATCH',
         headers: {
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ answers: updatedAnswers }),
+        body: JSON.stringify({ type }),
       });
 
       if (response.ok) {
-        setQuestion({ ...question, answers: updatedAnswers });
+        const updatedQuestion = await response.json();
+        setQuestion(updatedQuestion);
+        toast.success('Vote updated successfully');
       } else {
-        throw new Error('Failed to update answer votes');
+        throw new Error('Failed to update vote');
       }
     } catch (error) {
-      console.error('Error updating answer votes:', error);
+      console.error('Error updating vote:', error);
+      toast.error('Failed to update vote');
     }
   };
 
-  const handleSelectAcceptedAnswer = async (answerId) => {
-    const updatedAnswers = question.answers.map(answer => ({
-      ...answer,
-      accepted: answer.id === answerId
-    }));
-
+  const handleAnswerVote = async (answer_id, type) => {
+    // Ensure type is either 'upvote' or 'downvote'
+    const voteType = type === 'up' ? 'upvote' : 'downvote';
+  
+    console.log(`Sending vote type: ${voteType}`);  // Verify the type value
+  
     try {
-      const response = await fetch(`http://localhost:3000/questions/${id}`, {
+      const response = await fetch(`http://localhost:5000/answers/${answer_id}/vote`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
-        body: JSON.stringify({ answers: updatedAnswers, resolved: true }),
+        body: JSON.stringify({ voteType })  // Correctly format the voteType
       });
-
+  
+      console.log('Response status:', response.status);  // Log response status
       if (response.ok) {
-        setQuestion({ ...question, answers: updatedAnswers, resolved: true });
-        toast.success('Answer accepted and question marked as resolved');
-        // Update the user who provided the accepted answer
-        const answer = updatedAnswers.find(ans => ans.id === answerId);
-        if (answer) {
-          const userResponse = await fetch(`http://localhost:3000/users/${answer.userId}`);
-          if (userResponse.ok) {
-            const userData = await userResponse.json();
-            userData.reputation_points += 5;
-            const userUpdateResponse = await fetch(`http://localhost:3000/users/${answer.userId}`, {
-              method: 'PATCH',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ reputation_points: userData.reputation_points }),
-            });
-            if (!userUpdateResponse.ok) {
-              throw new Error('Failed to update user reputation points');
-            }
-          } else {
-            throw new Error('Failed to fetch user data');
-          }
-        }
+        const updatedAnswer = await response.json();
+        setAnswers(prevAnswers =>
+          prevAnswers.map(ans =>
+            ans.id === updatedAnswer.id ? updatedAnswer : ans
+          )
+        );
+        toast.success('Answer vote updated successfully');
       } else {
-        throw new Error('Failed to accept answer');
+        const errorData = await response.json();
+        throw new Error(`Failed to update answer vote: ${errorData.message || response.statusText}`);
       }
     } catch (error) {
-      console.error('Error accepting answer:', error);
-      toast.error('Failed to accept answer');
+      console.error('Error updating answer vote:', error);
+      toast.error('Failed to update answer vote');
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    if (!answerText) {
+      toast.error('Please fill out all required fields.');
+      return;
+    }
+  
     try {
       const newAnswer = {
-        id: Date.now().toString(),
-        userId: currentUser?.id,
-        author: currentUser?.name,
-        questionId: question.id,
-        answer,
+        question_id: question.id,
+        answer: answerText,
         link,
-        upvotes: 0,
-        downvotes: 0,
-        accepted: false,
-        votes: [],
+        codeSnippet,
+        is_accepted: isAccepted,
+        user_id: userId,
       };
-      const updatedAnswers = question.answers ? [...question.answers, newAnswer] : [newAnswer];
-
-      const response = await fetch(`http://localhost:3000/questions/${id}`, {
-        method: 'PATCH',
+  
+      const response = await fetch('http://localhost:5000/answers', {
+        method: 'POST',
         headers: {
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ answers: updatedAnswers }),
+        body: JSON.stringify(newAnswer),
       });
-
+  
       if (response.ok) {
-        toast.success('Answer added successfully');
-        setQuestion({ ...question, answers: updatedAnswers });
-        setAnswer('');
+        const createdAnswer = await response.json();
+        setAnswerText('');
         setLink('');
-        // Update user's reputation points
-        const userResponse = await fetch(`http://localhost:3000/users/${currentUser.id}`);
-        if (userResponse.ok) {
-          const userData = await userResponse.json();
-          userData.reputation_points += 5;
-          const userUpdateResponse = await fetch(`http://localhost:3000/users/${currentUser.id}`, {
-            method: 'PATCH',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ reputation_points: userData.reputation_points }),
-          });
-          if (!userUpdateResponse.ok) {
-            throw new Error('Failed to update user reputation points');
-          }
-          setCurrentUser(userData);
-        } else {
-          throw new Error('Failed to fetch user data');
-        }
+        setCodeSnippet('');
+        setAnswers(prevAnswers => [createdAnswer, ...prevAnswers]);
+        toast.success('Answer submitted successfully');
       } else {
-        throw new Error('Failed to add answer');
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to submit answer');
       }
     } catch (error) {
-      console.error('Error adding answer:', error);
+      console.error('Error submitting answer:', error);
+      toast.error('Failed to submit answer');
     }
   };
-
-  const handleDeleteAnswer = async (answerId) => {
+  
+  const handleSelectAcceptedAnswer = async (answerId) => {
     try {
-      const updatedAnswers = question.answers.filter(ans => ans.id !== answerId);
-
-      const response = await fetch(`http://localhost:3000/questions/${id}`, {
+      const response = await fetch(`http://localhost:5000/questions/${id}/accept/${answerId}`, {
         method: 'PATCH',
         headers: {
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ answers: updatedAnswers }),
+      });
+  
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Error response:', errorText);
+        throw new Error('Failed to mark answer as accepted');
+      }
+  
+      const updatedQuestion = await response.json();
+      setQuestion(updatedQuestion);
+      toast.success('Answer marked as accepted');
+    } catch (error) {
+      console.error('Error marking answer as accepted:', error);
+      toast.error('Failed to mark answer as accepted');
+    }
+  };
+  const handleDeleteAnswer = async (answerId) => {
+    try {
+      const response = await fetch(`http://localhost:5000/answers/${answerId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+        },
       });
 
       if (response.ok) {
+        setAnswers(prevAnswers => prevAnswers.filter(answer => answer.id !== answerId));
         toast.success('Answer deleted successfully');
-        setQuestion({ ...question, answers: updatedAnswers });
       } else {
         throw new Error('Failed to delete answer');
       }
     } catch (error) {
       console.error('Error deleting answer:', error);
+      toast.error('Failed to delete answer');
     }
   };
+  const handleEditAnswer = async (answer) => {
+    // Debug logging
+    console.log('Attempting to edit answer:', answer);
+    console.log('Current user ID:', currentUser.id);
 
-  const handleBadge = async () => {
-    const userBadgeCount = question.badges?.filter(badge => badge.adminId === currentUser.id).length || 0;
-    if (userBadgeCount >= 5) {
-      return toast.error('You have already added 5 badges to this question');
+    
+    if (String(answer.userId) === String(storedCurrentUsers?.id)) {
+        // Set state for editing
+        setEditingAnswerId(answer.id);
+        setEditedAnswerContent(answer.answer);
+    } else {
+        // Log and show error
+        console.error('Access token mismatch:', answer.userId, storedCurrentUsers?.id);
+        toast.error('You can only edit your own answers.');
+        return;
     }
 
-    const newBadge = {
-      adminId: currentUser.id,
-      count: 1,
+    const updateAnswer = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/answers/${answer.id}`, {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ answer: editedAnswerContent }),
+        });
+
+        if (response.ok) {
+          const updatedAnswer = await response.json();
+          // Update the answer in your state or context
+        } else {
+          throw new Error('Failed to update the answer.');
+        }
+      } catch (error) {
+        console.error('Error updating the answer:', error);
+        toast.error('Failed to update the answer.');
+      }
     };
 
-    const updatedBadges = [...(question.badges || []), newBadge];
-
-    try {
-      const response = await fetch(`http://localhost:3000/questions/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ badges: updatedBadges }),
-      });
-
-      if (response.ok) {
-        setQuestion({ ...question, badges: updatedBadges });
-        toast.success('Badge added to the question');
-      } else {
-        throw new Error('Failed to add badge');
-      }
-    } catch (error) {
-      console.error('Error adding badge:', error);
-    }
+    updateAnswer();
   };
-
-  const handleRemoveBadge = async () => {
-    let removedBadgesCount = 0;
-    const updatedBadges = question.badges?.filter(badge => {
-      if (badge.adminId === currentUser.id && removedBadgesCount < 1) {
-        removedBadgesCount++;
-        return false;
-      }
-      return true;
-    }) || [];
-
-    try {
-      const response = await fetch(`http://localhost:3000/questions/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ badges: updatedBadges }),
-      });
-
-      if (response.ok) {
-        setQuestion({ ...question, badges: updatedBadges });
-        toast.success('Badge removed from the question');
-      } else {
-        throw new Error('Failed to remove badge');
-      }
-    } catch (error) {
-      console.error('Error removing badge:', error);
+ const handleSaveAnswerEdit = async (answerId) => {
+  // Find the specific answer being edited
+  const updatedAnswers = question.answers.map(answer => {
+    if (answer.id === answerId) {
+      return { ...answer, content: editedAnswerContent }; // Correct field name should be used here
     }
-  };
+    return answer;
+  });
 
-  const handleEditAnswer = (answer) => {
-    if (answer.userId === currentUser.id) {
-      setEditingAnswerId(answer.id);
-      setEditedAnswerContent(answer.answer);
-    } else {
-      toast.error('You can only edit your own answers.');
-    }
-  };
-
-  const handleSaveAnswerEdit = async () => {
-    const updatedAnswers = question.answers.map(answer => {
-      if (answer.id === editingAnswerId) {
-        return { ...answer, answer: editedAnswerContent };
-      }
-      return answer;
+  try {
+    // Send PATCH request to update the specific answer
+    const response = await fetch(`http://localhost:5000/answers/${answerId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+      },
+      body: JSON.stringify({ content: editedAnswerContent }), // Send only the updated content
     });
 
-    try {
-      const response = await fetch(`http://localhost:3000/questions/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ answers: updatedAnswers }),
-      });
+    if (!response.ok) throw new Error('Failed to update answer');
 
-      if (response.ok) {
-        setQuestion({ ...question, answers: updatedAnswers });
-        setEditingAnswerId(null);
-        toast.success('Answer updated successfully');
-      } else {
-        throw new Error('Failed to update answer');
-      }
-    } catch (error) {
-      console.error('Error updating answer:', error);
-    }
-  };
+    // Update the local state with the new content
+    setQuestion(prevQuestion => ({
+      ...prevQuestion,
+      answers: updatedAnswers,
+    }));
 
-  if (loading) {
-    return <div>Loading...</div>;
+    setEditingAnswerId(null);
+    toast.success('Answer updated successfully');
+  } catch (error) {
+    console.error('Error updating answer:', error);
+    toast.error('Failed to update answer');
   }
+};
+  
 
-  const sortedAnswers = question.answers?.sort((a, b) => b.upvotes - a.upvotes) || [];
+  if (loading) return <p>Loading...</p>;
 
   return (
-    <div className="container mx-auto p-6">
-      <div className="bg-white rounded-lg shadow-lg p-6 flex flex-col md:flex-row items-start gap-6">
-        <div className="flex-1">
-          <div className="flex justify-between">
-            <h1 className="text-3xl font-bold text-gray-900">{question.title}</h1>
-          </div>
-          <div className="mt-4">
-            <p className="text-gray-700 mt-4">{question.content}</p>
-          </div>
-          {question.codeSnippet && (
-            <div className="mt-4 bg-gray-100 p-4 rounded-lg overflow-x-auto">
-              <h3 className="text-lg font-semibold">Code Snippet:</h3>
-              <pre className="bg-gray-200 p-2 rounded-lg">
-                <code className="whitespace-pre-wrap break-words">{question.codeSnippet}</code>
-              </pre>
-            </div>
-          )}
-          {question.link && (
-            <div className="mt-4">
-              <h3 className="text-lg font-semibold">Link:</h3>
-              <a href={question.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
-                {question.link}
+    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '20px', gap: '20px' }}>
+      {/* Question Details Section */}
+      <div style={{ flex: '2', backgroundColor: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+        <h1 style={{ fontSize: '24px', marginBottom: '10px' }}>{question.title}</h1>
+        <p style={{ fontSize: '16px', marginBottom: '10px' }}>{question.content}</p>
+        {question.link && (
+          <a href={question.link} style={{ color: '#1e90ff', textDecoration: 'underline', marginBottom: '10px', display: 'block' }} target="_blank" rel="noopener noreferrer">
+            Related link
+          </a>
+        )}
+        {question.code_snippet && (
+          <pre style={{ backgroundColor: '#f0f0f0', padding: '10px', borderRadius: '4px', overflowX: 'auto', marginBottom: '20px' }}>
+            <code>{question.code_snippet}</code>
+          </pre>
+        )}
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+          <button onClick={() => handleVote('up')} style={{ fontSize: '18px', marginRight: '10px', cursor: 'pointer', background: 'none', border: 'none', color: userVote === 'up' ? '#4caf50' : '#757575' }}>
+            <FaArrowUp />
+          </button>
+          <span style={{ fontSize: '18px', marginRight: '10px' }}>{question.upvotes}</span>
+          <button onClick={() => handleVote('down')} style={{ fontSize: '18px', marginRight: '10px', cursor: 'pointer', background: 'none', border: 'none', color: userVote === 'down' ? '#f44336' : '#757575' }}>
+            <FaArrowDown />
+          </button>
+          <span style={{ fontSize: '18px', marginRight: '10px' }}>{question.downvotes}</span>
+        </div>
+        <div style={{ marginBottom: '20px' }}>
+        <h2 style={{ fontSize: '20px', marginBottom: '10px' }}>Answers</h2>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {answers.length > 0 ? (
+        answers.map((answer) => (
+          <div key={answer.id} style={{ marginBottom: '20px', padding: '10px', backgroundColor: '#f9f9f9', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
+            <p style={{ fontSize: '16px', marginBottom: '10px' }}>{answer.answer}</p>
+            {answer.link && (
+              <a href={answer.link} style={{ color: '#1e90ff', textDecoration: 'underline', marginBottom: '10px', display: 'block' }} target="_blank" rel="noopener noreferrer">
+                Related link
               </a>
-            </div>
-          )}
-          <div className="mt-4 flex flex-wrap gap-2">
-            {question.tags && question.tags.map((tag, index) => (
-              <span key={index} className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">
-                {tag}
-              </span>
-            ))}
-          </div>
-          <div className="flex items-center mt-4 space-x-4">
-            <div
-              className={`flex items-center space-x-1 cursor-pointer ${userVote === 'up' ? 'text-blue-500' : 'text-gray-500'}`}
-              onClick={handleUpvote}
-            >
-              <FaArrowUp className={`text-2xl mr-4 ${userVote === 'up' ? 'text-blue-500' : 'text-gray-500'}`} />
-              <span>{upvotes}</span>
-            </div>
-            <div
-              className={`flex items-center space-x-1 cursor-pointer ${userVote === 'down' ? 'text-red-500' : 'text-gray-500'}`}
-              onClick={handleDownvote}
-            >
-              <FaArrowDown className={`text-2xl mr-4 ${userVote === 'down' ? 'text-red-500' : 'text-gray-500'}`} />
-              <span>{downvotes}</span>
-            </div>
-          </div>
-          {question.resolved && (
-            <div className="mt-4 text-sm text-green-500">
-              Approved
-            </div>
-          )}
-          {currentUser?.admin && (
-            <>
-              <div
-                onClick={handleBadge}
-                className="mt-4 flex items-center cursor-pointer text-yellow-500 hover:text-yellow-600"
-              >
-                <FaStar className="mr-2" /> Add Badge
-              </div>
-              <div
-                onClick={handleRemoveBadge}
-                className="mt-4 flex items-center cursor-pointer text-yellow-500 hover:text-yellow-600"
-              >
-                <FaStar className="mr-2" /> Remove Badge
-              </div>
-            </>
-          )}
-          <div className="mt-4 text-sm text-gray-500">
-            <span>By {question.author}</span>
-          </div>
-          <div className="mt-6">
-            <h2 className="text-lg font-semibold text-gray-900">Answers</h2>
-            <div className="mt-4 space-y-4">
-              {sortedAnswers.map((cmt, index) => (
-                <div key={index} className={`border border-gray-300 rounded-lg p-4 flex justify-between items-start ${cmt.accepted ? 'bg-green-100' : ''}`}>
-                  <div className="flex-1">
-                    {editingAnswerId === cmt.id ? (
-                      <>
-                        <textarea
-                          value={editedAnswerContent}
-                          onChange={(e) => setEditedAnswerContent(e.target.value)}
-                          className="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500"
-                          rows="3"
-                        />
-                        <button
-                          onClick={handleSaveAnswerEdit}
-                          className="text-blue-600 hover:text-blue-800 mt-2"
-                        >
-                          Save
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <p className="text-gray-800">{cmt.answer}</p>
-                        {cmt.link && (
-                          <div className="mt-2">
-                            <h3 className="text-sm font-semibold">Link:</h3>
-                            <a href={cmt.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
-                              {cmt.link}
-                            </a>
-                          </div>
-                        )}
-                      </>
-                    )}
-                    <p className="text-sm text-gray-500 mt-2">- {cmt.author}</p>
-                    <div className="flex items-center mt-2 space-x-4">
-                      <div
-                        className={`flex items-center space-x-1 cursor-pointer ${cmt.votes?.find(vote => vote.userId === currentUser.id && vote.type === 'upvote') ? 'text-blue-500' : 'text-gray-500'}`}
-                        onClick={() => handleAnswerVote(cmt.id, 'upvote')}
-                      >
-                        <FaArrowUp className={`text-xl mr-2 ${cmt.votes?.find(vote => vote.userId === currentUser.id && vote.type === 'upvote') ? 'text-blue-500' : 'text-gray-500'}`} />
-                        <span>{cmt.upvotes || 0}</span>
-                      </div>
-                      <div
-                        className={`flex items-center space-x-1 cursor-pointer ${cmt.votes?.find(vote => vote.userId === currentUser.id && vote.type === 'downvote') ? 'text-red-500' : 'text-gray-500'}`}
-                        onClick={() => handleAnswerVote(cmt.id, 'downvote')}
-                      >
-                        <FaArrowDown className={`text-xl mr-2 ${cmt.votes?.find(vote => vote.userId === currentUser.id && vote.type === 'downvote') ? 'text-red-500' : 'text-gray-500'}`} />
-                        <span>{cmt.downvotes || 0}</span>
-                      </div>
-                      {currentUser?.id === cmt.userId && (
-                        <div className="flex items-center space-x-4">
-                          <FaPencilAlt
-                            onClick={() => handleEditAnswer(cmt)}
-                            className="text-gray-600 cursor-pointer"
-                          />
-                          <button
-                            onClick={() => handleDeleteAnswer(cmt.id)}
-                            className="text-red-600 hover:text-red-800"
-                          >
-                            <FaTrash className="text-xl" />
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
+            )}
+            {answer.codeSnippet && (
+              <pre style={{ backgroundColor: '#f0f0f0', padding: '10px', borderRadius: '4px', overflowX: 'auto', marginBottom: '20px' }}>
+                <code style={{ whiteSpace: 'pre-wrap' }}>{answer.codeSnippet}</code>
+              </pre>
+            )}
+            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+              <button onClick={() => handleAnswerVote(answer.id, 'up')} style={{ fontSize: '18px', marginRight: '10px', cursor: 'pointer', background: 'none', border: 'none', color: answer.userVote === 'up' ? '#4caf50' : '#757575' }}>
+                <FaArrowUp />
+              </button>
+              <span style={{ fontSize: '18px', marginRight: '10px' }}>{answer.upvotes}</span>
+              <button onClick={() => handleAnswerVote(answer.id, 'down')} style={{ fontSize: '18px', marginRight: '10px', cursor: 'pointer', background: 'none', border: 'none', color: answer.userVote === 'down' ? '#f44336' : '#757575' }}>
+                <FaArrowDown />
+              </button>
+              <span style={{ fontSize: '18px', marginRight: '10px' }}>{answer.downvotes}</span>
+              {storedCurrentUsers && question && storedCurrentUsers.id === question.user_id && question.accepted_answer && (
+                <button onClick={() => handleSelectAcceptedAnswer(answer.id)} style={{ fontSize: '18px', cursor: 'pointer', background: 'none', border: 'none', color: '#f44336', marginLeft: '10px' }}>
+                  <FaCheck />
+                </button>
+              )}
+              {storedCurrentUsers?.id === answer.userId && (
+                <div className="flex items-center space-x-4">
+                  <FaPencilAlt
+                    onClick={() => handleEditAnswer(answer)}
+                    className="text-gray-600 cursor-pointer"
+                  />
+                  <button
+                    onClick={() => handleDeleteAnswer(answer.id)}
+                    className="text-red-600 hover:text-red-800"
+                  >
+                    <FaTrash className="text-xl" />
+                  </button>
                 </div>
-              ))}
-              {question.answers && question.answers.length === 0 && (
-                <p className="text-gray-500">No Answers yet.</p>
               )}
             </div>
+            {editingAnswerId === answer.id && (
+              <div className={`border border-gray-300 rounded-lg p-4 flex justify-between items-start ${answer.accepted ? 'bg-green-100' : ''}`}>
+                <div className="flex-1">
+                  <textarea
+                    value={editedAnswerContent}
+                    onChange={(e) => setEditedAnswerContent(e.target.value)}
+                    className="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500"
+                    rows="3"
+                  />
+                  <button
+                    onClick={handleSaveAnswerEdit}
+                    className="text-blue-600 hover:text-blue-800 mt-2"
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
+        ))
+      ) : (
+        <p>No answers yet.</p>
+      )}
         </div>
-        <div className="flex-1">
-          <h1 className="font-semibold text-2xl text-gray-900">Answer</h1>
-          <form onSubmit={handleSubmit} className="mt-4">
-            <div className="mb-5">
-              <label className="block mb-2 text-sm font-medium text-gray-700">Your Answer</label>
-              <textarea
-                value={answer}
-                onChange={(e) => setAnswer(e.target.value)}
-                className="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500"
-                required
-              />
-            </div>
-            <div className="mb-5">
-              <label className="block mb-2 text-sm font-medium text-gray-700">Link</label>
-              <input
-                type="url"
-                value={link}
-                onChange={(e) => setLink(e.target.value)}
-                className="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Enter link (optional)"
-              />
-            </div>
-            <button
-              type="submit"
-              className="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
-            >
-              Submit
-            </button>
-          </form>
-        </div>
+        <form onSubmit={handleSubmit} style={{ marginTop: '20px' }}>
+          <h2 style={{ fontSize: '20px', marginBottom: '10px' }}>Submit Your Answer</h2>
+          <textarea
+            value={answerText}
+            onChange={(e) => setAnswerText(e.target.value)}
+            placeholder="Your answer"
+            required
+            style={{ width: '100%', height: '100px', padding: '10px', borderRadius: '4px', border: '1px solid #ddd', marginBottom: '10px' }}
+          />
+          <input
+            type="url"
+            value={link}
+            onChange={(e) => setLink(e.target.value)}
+            placeholder="Link (optional)"
+            style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ddd', marginBottom: '10px' }}
+          />
+          <textarea
+            value={codeSnippet}
+            onChange={(e) => setCodeSnippet(e.target.value)}
+            placeholder="Code snippet (optional)"
+            style={{ width: '100%', height: '100px', padding: '10px', borderRadius: '4px', border: '1px solid #ddd', marginBottom: '10px' }}
+          />
+          <button type="submit" style={{ padding: '10px 20px', border: 'none', borderRadius: '4px', backgroundColor: '#4caf50', color: '#fff', cursor: 'pointer' }}>
+            Submit
+          </button>
+        </form>
       </div>
     </div>
   );

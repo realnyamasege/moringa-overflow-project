@@ -4,8 +4,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
-from models import db, User, Question, Answer, Vote, Badge, Views, Tag, TokenBlocklist
-from views import user_bp, auth_bp, question_bp, answer_bp, vote_bp, badge_bp, view_bp, tag_bp
+from models import db, User, Question, Answer, Vote, Badge, View, TokenBlocklist
+from views import user_bp, auth_bp, question_bp, answer_bp, vote_bp, badge_bp, views_bp
+import logging
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///moringa_overflow.db'
@@ -17,8 +18,9 @@ app.config['JWT_REFRESH_TOKEN_EXPIRES'] = timedelta(days=30)
 # Initialize extensions
 db.init_app(app)  # Initialize the SQLAlchemy instance
 migrate = Migrate(app, db)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
 jwt = JWTManager(app)
+logging.basicConfig(level=logging.DEBUG)
 
 # Register blueprints
 app.register_blueprint(user_bp, url_prefix='/') 
@@ -27,8 +29,7 @@ app.register_blueprint(question_bp, url_prefix='/')
 app.register_blueprint(answer_bp, url_prefix='/')
 app.register_blueprint(vote_bp, url_prefix='/')
 app.register_blueprint(badge_bp, url_prefix='/')
-app.register_blueprint(view_bp, url_prefix='/')
-app.register_blueprint(tag_bp, url_prefix='/')
+app.register_blueprint(views_bp, url_prefix='/')
 
 # JWT token blocklist loader
 @jwt.token_in_blocklist_loader

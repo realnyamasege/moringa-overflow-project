@@ -9,27 +9,49 @@ const LoginPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    fetch("http://localhost:3000/users")
-      .then((response) => response.json())
-      .then((users) => {
-        const user = users.find(
-          (user) => user.email === email && user.password === password
-        );
-
-        if (user) {
-          localStorage.setItem("access_token", user.id); // Example token; use a proper token in real apps
+  
+    const payload = {
+      email,
+      password
+    };
+  
+    fetch("http://127.0.0.1:5000/login", {
+      method: "POST",
+      body: JSON.stringify(payload),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          return response.json().then((error) => {
+            throw new Error(error.error || "Network response was not ok");
+          });
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Login response data:", data); // Debugging
+  
+        if (data.access_token) {
+          localStorage.setItem("access_token", data.access_token);
+  
+          // Store user information in localStorage
+          if (data.user) {
+            localStorage.setItem("currentUser", JSON.stringify(data.user));
+          }
+  
           navigate("/Profile");
         } else {
           toast.error("Invalid email or password.");
         }
       })
       .catch((error) => {
-        console.error("Error fetching users:", error);
+        console.error("Error logging in:", error);
         toast.error("An error occurred. Please try again.");
       });
   };
-
+  
   return (
     <div className="flex justify-center items-center h-screen bg-blue-100">
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">

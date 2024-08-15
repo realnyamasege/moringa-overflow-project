@@ -26,13 +26,9 @@ class User(db.Model, SerializerMixin):
     questions = db.relationship('Question', back_populates='user', cascade='all, delete-orphan')
     answers = db.relationship('Answer', back_populates='user')
     votes = db.relationship('Vote', back_populates='user')
-    badges = db.relationship('Badge', back_populates='user', cascade='all, delete-orphan')
-
-    def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
-
-    def check_password(self, password):
-        return check_password_hash(self.password_hash, password)
+    created_badges = db.relationship('Badge', foreign_keys='Badge.admin_id', back_populates='creator')
+    received_badges = db.relationship('Badge', foreign_keys='Badge.user_id', back_populates='recipient')
+    views = db.relationship('View', back_populates='user')
 
     def to_dict(self):
         return {
@@ -57,7 +53,7 @@ class Question(db.Model, SerializerMixin):
     answers = db.relationship('Answer', back_populates='question')
     tags = db.relationship('Tag', secondary='question_tag', back_populates='questions')
     votes = db.relationship('Vote', back_populates='question')
-    views = db.relationship('Views', back_populates='question')
+    views = db.relationship('View', back_populates='question', cascade='all, delete-orphan')
 
     def to_dict(self):
         return {
@@ -71,13 +67,15 @@ class Question(db.Model, SerializerMixin):
     def __repr__(self):
         return f'<Question {self.title}>'
 
-class Answer(db.Model, SerializerMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    body = db.Column(db.Text, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    status = db.Column(db.String(20), default='pending')
-    question_id = db.Column(db.Integer, db.ForeignKey('question.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)  # Use Integer here
+    question_id = db.Column(db.Integer, db.ForeignKey('questions.id'), nullable=False)  # Ensure correct reference
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)  # Ensure correct reference
+    answer = db.Column(db.Text, nullable=False)
+    link = db.Column(db.String)
+    codeSnippet = db.Column(db.Text, nullable=True)
+    upvotes = db.Column(db.Integer, default=0)
+    downvotes = db.Column(db.Integer, default=0)
+    is_accepted = db.Column(db.Boolean, default=False)
 
     question = db.relationship('Question', back_populates='answers')
     user = db.relationship('User', back_populates='answers')
@@ -90,7 +88,16 @@ class Answer(db.Model, SerializerMixin):
             'created_at': self.created_at.isoformat(),
             'status': self.status,
             'question_id': self.question_id,
-            'user_id': self.user_id
+            'user_id': self.user_id,
+            'answer': self.answer,
+            'link': self.link,
+            'codeSnippet': self.codeSnippet,
+            'upvotes': self.upvotes,
+            'downvotes': self.downvotes,
+            'is_accepted': self.is_accepted,
+            'question': {'id': self.question.id, 'title': self.question.title} if self.question else None,
+            'user': {'id': self.user.id, 'name': self.user.name} if self.user else None,
+            'votes': [{'id': v.id, 'vote_type': v.vote_type} for v in self.votes]
         }
 
     def __repr__(self):
@@ -167,8 +174,33 @@ class Views(db.Model, SerializerMixin):
             'viewed_at': self.viewed_at.isoformat()
         }
 
-    def __repr__(self):
-        return f'<Views {self.id}>'
+class View(db.Model):
+    __tablename__ = 'views'
+    
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    question_id = db.Column(db.Integer, db.ForeignKey('questions.id'), nullable=False)
+    view_count = db.Column(db.Integer, default=0, nullable=False)
+    
+    # Define relationships
+    user = db.relationship('User', back_populates='views')
+    question = db.relationship('Question', back_populates='views')
+    
+    def __init__(self, user_id, question_id):
+        self.user_id = user_id
+        self.question_id = question_id
+        self.view_count = 1
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'question_id': self.question_id,
+            'view_count': self.view_count
+        }
+    
+class TokenBlocklist(db.Model):
+    __tablename__ = 'token_blocklist'
 
 class TokenBlocklist(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
