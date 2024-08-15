@@ -63,8 +63,11 @@ def authenticated_user():
     if user:
         user_data = {
             'id': user.id,
-            'username': user.username,
-            'email': user.email
+            'name': user.name,
+            'email': user.email,
+            'phone_number': user.phone_number,
+            'profile_image': user.profile_image,
+            'reputation_points': user.reputation_points,  # Include reputation points
         }
         return jsonify(user_data), 200
     

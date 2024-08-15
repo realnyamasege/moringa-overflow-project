@@ -1,5 +1,5 @@
-from flask import Blueprint, jsonify, request, make_response
-from models import Question, db, User, Answer, View, Tag
+from flask import Blueprint, jsonify, request, make_response, current_app as app
+from models import Question, db, User, Answer, View
 from sqlalchemy.orm import joinedload
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
@@ -53,39 +53,6 @@ def get_question(id):
         print(f"Error while retrieving question {id}: {e}")
         return make_response(jsonify({"message": "An error occurred while retrieving the question."}), 500)
 
-# Update a question
-@question_bp.route('/questions/<int:question_id>', methods=['PATCH'])
-@jwt_required()
-def update_question(question_id):
-    data = request.get_json()
-    question = Question.query.get(question_id)
-    if not question:
-        return jsonify({'message': 'Question not found'}), 404
-
-    current_user = get_jwt_identity()
-    user = User.query.get(current_user['id'])
-    if question.user_id != current_user['id'] and not user.is_admin:
-        return jsonify({'message': 'Permission denied'}), 403
-
-    if 'title' in data:
-        question.title = data['title']
-    if 'content' in data:
-        question.content = data['content']
-    if 'tags' in data:
-        question.tags = data['tags']
-    if 'code_snippet' in data:
-        question.code_snippet = data['code_snippet']
-    if 'link' in data:
-        question.link = data['link']
-    if 'upvotes' in data:
-        question.upvotes = data['upvotes']
-    if 'downvotes' in data:
-        question.downvotes = data['downvotes']
-    if 'resolved' in data:
-        question.resolved = data['resolved']
-
-    db.session.commit()
-    return jsonify({'message': 'Question updated successfully'})
 
 # Accept an answer for a question
 @question_bp.route('/questions/<int:question_id>/accept/<int:answer_id>', methods=['PATCH'])
@@ -105,6 +72,7 @@ def accept_answer(question_id, answer_id):
     except Exception as e:
         print(f'Error accepting answer: {e}')
         return jsonify({'message': 'An error occurred'}), 500
+        
 
 # Delete a question
 @question_bp.route('/questions/<int:question_id>', methods=['DELETE'])
@@ -129,29 +97,37 @@ def delete_question(question_id):
         return jsonify({'message': 'Internal Server Error'}), 500
 
 # Update vote counts for a question
-@question_bp.route('/questions/<int:id>/votes', methods=['PATCH'])
+@question_bp.route('/questions/<int:question_id>', methods=['PATCH'])
 @jwt_required()
-def update_votes(id):
+def update_question_votes(question_id):
     data = request.get_json()
-    upvotes = data.get('upvotes')
-    downvotes = data.get('downvotes')
-    
-    question = Question.query.get(id)
+
+    app.logger.info(f"Received data: {data}")  # Log the received data
+
+    if 'upvotes' not in data or 'downvotes' not in data:
+        return jsonify({"error": "Upvotes and downvotes are required"}), 400
+
+    try:
+        upvotes = int(data['upvotes'])
+        downvotes = int(data['downvotes'])
+    except ValueError:
+        return jsonify({"error": "Invalid data format"}), 400
+
+    question = Question.query.get(question_id)
     if not question:
-        return jsonify({'message': 'Question not found'}), 404
-    
-    if upvotes is not None:
-        question.upvotes = upvotes
-    if downvotes is not None:
-        question.downvotes = downvotes
+        return jsonify({"error": "Question not found"}), 404
+
+    question.upvotes = upvotes
+    question.downvotes = downvotes
 
     try:
         db.session.commit()
         return jsonify({
-            'id': question.id,
-            'upvotes': question.upvotes,
-            'downvotes': question.downvotes
+            "id": question.id,
+            "upvotes": question.upvotes,
+            "downvotes": question.downvotes
         }), 200
     except Exception as e:
         db.session.rollback()
-        return jsonify({'message': 'Failed to update vote count', 'error': str(e)}), 500
+        app.logger.error(f"Error updating votes: {e}")
+        return jsonify({"error": "An error occurred while updating the votes", "details": str(e)}), 500

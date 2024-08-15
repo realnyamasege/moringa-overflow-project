@@ -13,7 +13,8 @@ export default function Layout() {
   }, []);
 
   const handleLogin = () => {
-    localStorage.setItem('access_token', 'some-token'); // Example token; replace with real one
+    // Simulate login action (replace with actual login logic)
+    localStorage.setItem('access_token', 'some-token');
     setIsAuthenticated(true);
     navigate("/Profile");
   };
@@ -21,17 +22,15 @@ export default function Layout() {
   const handleLogout = () => {
     localStorage.removeItem('access_token');
     setIsAuthenticated(false);
-    navigate("/"); // Redirect to home page or any other page
+    navigate("/"); // Redirect to home page
   };
 
   return (
     <div>
       <nav className="bg-white mt-6 border-gray-200 dark:bg-gray-900">
         <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
-          <Link to="/" className="flex items-center space-x-3 rtl:space-x-reverse">
-            <span>
-              <img src="./images/Logo.jpeg" alt="logo" width="250" height="95%" />
-            </span>
+          <Link to="/" className="flex items-center space-x-2 rtl:space-x-reverse">
+            <img src="./images/Logo.jpeg" alt="logo" width="250" height="95%" />
           </Link>
           <div className="flex items-center space-x-4 rtl:space-x-reverse">
             <ul className="hidden md:flex md:space-x-8 rtl:space-x-reverse">
@@ -159,7 +158,7 @@ export default function Layout() {
               <ul className="text-gray-600 dark:text-gray-400">
                 <li className="mb-4">
                   <a
-                    href="https://www.youtube.com/watch?v=4n4rBrs5-LY"
+                    href="https://www.example.com/about"
                     className="hover:underline"
                   >
                     About
@@ -167,7 +166,7 @@ export default function Layout() {
                 </li>
                 <li className="mb-4">
                   <a
-                    href="https://www.youtube.com/watch?v=4n4rBrs5-LY"
+                    href="https://www.example.com/careers"
                     className="hover:underline"
                   >
                     Careers
@@ -175,7 +174,7 @@ export default function Layout() {
                 </li>
                 <li className="mb-4">
                   <a
-                    href="https://www.youtube.com/watch?v=4n4rBrs5-LY"
+                    href="https://www.example.com/brand-center"
                     className="hover:underline"
                   >
                     Brand Center
@@ -183,7 +182,7 @@ export default function Layout() {
                 </li>
                 <li className="mb-4">
                   <a
-                    href="https://www.youtube.com/watch?v=4n4rBrs5-LY"
+                    href="https://www.example.com/blog"
                     className="hover:underline"
                   >
                     Blog
@@ -202,23 +201,18 @@ export default function Layout() {
                   </a>
                 </li>
                 <li className="mb-4">
-                  <a href="https://X.com" className="hover:underline">
-                    X/Twitter
+                  <a href="https://twitter.com" className="hover:underline">
+                    Twitter
                   </a>
                 </li>
                 <li className="mb-4">
-                  <a href="https://Facebook.com" className="hover:underline">
+                  <a href="https://facebook.com" className="hover:underline">
                     Facebook
                   </a>
                 </li>
-                <li className="mb-4">
-                  <a href="https://Linkedin.com" className="hover:underline">
-                    Linkedin
-                  </a>
-                </li>
-                <li className="mb-4">
-                  <a href="#" className="hover:underline">
-                    Contact Us
+                <li>
+                  <a href="https://youtube.com" className="hover:underline">
+                    YouTube
                   </a>
                 </li>
               </ul>
@@ -230,7 +224,7 @@ export default function Layout() {
               <ul className="text-gray-600 dark:text-gray-400">
                 <li className="mb-4">
                   <a
-                    href="https://www.youtube.com/watch?v=4n4rBrs5-LY"
+                    href="https://www.example.com/privacy"
                     className="hover:underline"
                   >
                     Privacy Policy
@@ -238,7 +232,7 @@ export default function Layout() {
                 </li>
                 <li className="mb-4">
                   <a
-                    href="https://www.youtube.com/watch?v=4n4rBrs5-LY"
+                    href="https://www.example.com/terms"
                     className="hover:underline"
                   >
                     Terms & Conditions
@@ -246,7 +240,7 @@ export default function Layout() {
                 </li>
                 <li className="mb-4">
                   <a
-                    href="https://www.youtube.com/watch?v=4n4rBrs5-LY"
+                    href="https://www.example.com/cookie-policy"
                     className="hover:underline"
                   >
                     Cookie Policy
@@ -256,36 +250,32 @@ export default function Layout() {
             </div>
             <div>
               <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
-                Subscribe
+                Download
               </h2>
-              <form>
-                <label
-                  htmlFor="newsletter"
-                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Enter your email
-                </label>
-                <div className="relative">
-                  <input
-                    type="email"
-                    id="newsletter"
-                    className="block w-full px-3 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Your email address"
-                    required
-                  />
-                  <button
-                    type="submit"
-                    className="absolute inset-y-0 right-0 px-3 py-2 text-white bg-blue-700 rounded-r-lg hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                  >
-                    Subscribe
-                  </button>
-                </div>
-              </form>
+              <ul className="text-gray-600 dark:text-gray-400">
+                <li className="mb-4">
+                  <a href="https://www.example.com/download" className="hover:underline">
+                    App Store
+                  </a>
+                </li>
+                <li className="mb-4">
+                  <a href="https://www.example.com/download" className="hover:underline">
+                    Google Play
+                  </a>
+                </li>
+                <li className="mb-4">
+                  <a href="https://www.example.com/download" className="hover:underline">
+                    Windows Store
+                  </a>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
-        <div className="bg-gray-100 dark:bg-gray-800 py-4 text-center text-gray-500 dark:text-gray-400">
-          <span>&copy; 2024 Moringa Overflow. All Rights Reserved.</span>
+        <div className="bg-gray-200 p-4 text-center dark:bg-gray-800">
+          <span className="text-sm text-gray-500 dark:text-gray-400">
+            © 2024 Your Company. All Rights Reserved.
+          </span>
         </div>
       </footer>
     </div>

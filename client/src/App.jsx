@@ -21,24 +21,24 @@ function App() {
       <UserProvider>
         <Routes>
           <Route path='/' element={<Layout />}>
-            <Route path='/' element={<Home />} />
-            <Route path='/about' element={<About />} />
-            <Route path='/AskQuestion' element={<AskQuestion />} />
-            <Route path='/Signup' element={<Signup />} />
-            <Route path='/LoginPage' element={<LoginPage />} />
-            <Route path='/Questions' element={<Question />} />
-            <Route path="/Profile" element={<UserProfile />} />
-            <Route path='/UpdateQuestion/:id' element={<UpdateQuestion />} />
-            <Route path='/reset-password' element={<RequestResetPassword />} />
-            <Route path="*" element={<NoPage />} />
+            <Route index element={<Home />} />
+            <Route path='about' element={<About />} />
+            <Route path='AskQuestion' element={<AskQuestion />} />
+            <Route path='Signup' element={<Signup />} />
+            <Route path='LoginPage' element={<LoginPage />} />
+            <Route path='Questions' element={<Question />} />
+            <Route path='Profile' element={<UserProfile />} />
+            <Route path='UpdateQuestion/:id' element={<UpdateQuestion />} />
+            <Route path='reset-password' element={<RequestResetPassword />} />
+            <Route path='*' element={<NoPage />} />
           </Route>
-          <Route path='/admin/' element={<LayoutAdmin />}>
+          <Route path='/admin' element={<LayoutAdmin />}>
             <Route path='login' element={<AdminLogin />} />
           </Route>
         </Routes>
       </UserProvider>
     </BrowserRouter>
-  )
+  );
 }
 
 export default App;

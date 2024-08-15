@@ -40,18 +40,6 @@ def update_vote(vote_id):
     db.session.commit()
     return jsonify({'message': 'Vote updated successfully'})
 
-# Update an existing vote
-@vote_bp.route('/votes/<int:vote_id>', methods=['PUT'])
-def update_vote(vote_id):
-    data = request.json
-    try:
-        vote = Vote.query.get_or_404(vote_id)
-        # Allow updates regardless of the user
-        vote.value = data.get('value', vote.value)
-        db.session.commit()
-        return jsonify({"message": "Vote updated successfully"}), 200
-    except Exception as e:
-        return make_response(jsonify({"message": "An error occurred while updating the vote.", "error": str(e)}), 500)
 
 # Delete an existing vote
 @vote_bp.route('/votes/<int:vote_id>', methods=['DELETE'])

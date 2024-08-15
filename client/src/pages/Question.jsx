@@ -177,7 +177,7 @@ const Questions = () => {
             body: JSON.stringify({ upvotes: newUpvotes, downvotes: newDownvotes }),
         });
 
-        // Log the response to inspect it
+        // Log the raw response text
         const text = await response.text();
         console.log('Response:', text);
 
@@ -191,7 +191,6 @@ const Questions = () => {
         console.error('Error updating vote count:', error);
     }
 };
-
   const handleVote = (id, voteType) => {
     setVotes(prevVotes => {
       const questionVotes = prevVotes[id];

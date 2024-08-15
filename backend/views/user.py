@@ -6,6 +6,42 @@ from models import db, User, Vote
 
 user_bp = Blueprint('user_bp', __name__)
 
+@user_bp.route('/users', methods=['POST'])
+def create_user():
+    data = request.get_json()
+
+    # Extract data from request
+    name = data.get('name')
+    email = data.get('email')
+    password = data.get('password')
+    profile_image = data.get('profile_image')
+    phone_number = data.get('phone_number')
+    admin = data.get('admin', False)  # Default to False if not provided
+
+    # Validate input
+    if not name or not email or not password:
+        return make_response(jsonify({"message": "Name, email, and password are required"}), 400)
+
+    if User.query.filter_by(email=email).first():
+        return make_response(jsonify({"message": "Email already exists"}), 400)
+
+    # Create new user instance
+    new_user = User(
+        name=name,
+        email=email,
+        profile_image=profile_image,
+        phone_number=phone_number,
+        admin=admin
+    )
+    new_user.password = generate_password_hash(password)  # Hash the password
+
+    try:
+        db.session.add(new_user)
+        db.session.commit()
+        return jsonify({"message": "User created successfully"}), 201
+    except Exception as e:
+        db.session.rollback()
+        return make_response(jsonify({"message": "An error occurred while creating the user.", "error": str(e)}), 500)
 # Get all users
 @user_bp.route('/users', methods=['GET'])
 def get_users():
@@ -55,6 +91,8 @@ def update_user(user_id):
         user.name = data['name']
     if 'phone_number' in data:
         user.phone_number = data['phone_number']
+    if 'admin' in data:
+        user.admin = data['admin']    
     
     db.session.commit()
     

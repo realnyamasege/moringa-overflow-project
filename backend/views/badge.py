@@ -74,3 +74,36 @@ def delete_badge(badge_id):
     db.session.delete(badge)
     db.session.commit()
     return '', 204
+
+# Route to assign a badge to a user
+@badge_bp.route('/assign', methods=['POST'])
+@jwt_required()
+def assign_badge():
+    current_user = get_jwt_identity()
+
+    # Check if the current user is an admin
+    if current_user['role'] != 'admin':
+        return jsonify({'message': 'You are not authorized to assign badges'}), 403
+
+    data = request.get_json()
+    badge_id = data.get('badge_id')
+    user_id = data.get('user_id')
+
+    if not badge_id or not user_id:
+        return jsonify({'message': 'Badge ID and user ID are required'}), 400
+
+    # Check if the badge exists
+    badge = Badge.query.get(badge_id)
+    if not badge:
+        return jsonify({'message': 'Badge not found'}), 404
+
+    # Check if the user exists
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
+
+    # Assign the badge to the user
+    user.badges.append(badge)
+    db.session.commit()
+
+    return jsonify({'message': 'Badge assigned successfully'}), 200
