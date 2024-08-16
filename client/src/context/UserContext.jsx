@@ -1,7 +1,8 @@
 import { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import {server_url} from "../..config"
+import {server_url} from "../../config"
+
 
 export const UserContext = createContext();
 
