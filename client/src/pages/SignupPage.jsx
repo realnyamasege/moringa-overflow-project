@@ -32,7 +32,7 @@ const SignupPage = () => {
 
     console.log("Payload:", payload); // Log payload for debugging
 
-    fetch("http://127.0.0.1:5000/users", {
+    fetch("https://moringa-overflow-project.onrender.com", {
       method: "POST",
       body: JSON.stringify(payload),
       headers: {

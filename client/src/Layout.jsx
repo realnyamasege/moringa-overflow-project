@@ -13,8 +13,7 @@ export default function Layout() {
   }, []);
 
   const handleLogin = () => {
-    // Simulate login action (replace with actual login logic)
-    localStorage.setItem('access_token', 'some-token');
+    localStorage.setItem('access_token', 'some-token'); // Example token; replace with real one
     setIsAuthenticated(true);
     navigate("/Profile");
   };
@@ -22,18 +21,20 @@ export default function Layout() {
   const handleLogout = () => {
     localStorage.removeItem('access_token');
     setIsAuthenticated(false);
-    navigate("/"); // Redirect to home page
+    navigate("/"); // Redirect to home page or any other page
   };
 
   return (
     <div>
-      <nav className="bg-white mt-6 border-gray-200 dark:bg-gray-900">
-        <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
-          <Link to="/" className="flex items-center space-x-2 rtl:space-x-reverse">
-            <img src="./images/Logo.jpeg" alt="logo" width="250" height="95%" />
-          </Link>
-          <div className="flex items-center space-x-4 rtl:space-x-reverse">
-            <ul className="hidden md:flex md:space-x-8 rtl:space-x-reverse">
+      <nav className="bg-white mt-6 border-gray-200 bg-gray-900">
+        <div className="max-w-screen flex items-center justify-between mx-auto p-4 bg-gray-900">
+          <div><Link to="/" className="flex items-center ">
+            <span>
+              <img src="./images/Logo.jpeg" alt="logo" width="250" height="95%" />
+            </span>
+          </Link></div>
+          <div className=" flex items-center space-x-4 ">
+            <ul className="hidden md:flex md:space-x-8 ">
               <li>
                 <Link
                   to="/"
@@ -132,7 +133,7 @@ export default function Layout() {
         </div>
       </nav>
 
-      <div className="bg-gray-100 text-lg container mx-auto min-h-[90vh]">
+      <div id="navbar-default" className="bg-gray-100 text-lg container mx-auto min-h-[90vh]">
         <ToastContainer
           position="top-right"
           autoClose={5000}
@@ -158,7 +159,7 @@ export default function Layout() {
               <ul className="text-gray-600 dark:text-gray-400">
                 <li className="mb-4">
                   <a
-                    href="https://www.example.com/about"
+                    href="https://www.youtube.com/watch?v=4n4rBrs5-LY"
                     className="hover:underline"
                   >
                     About
@@ -166,7 +167,7 @@ export default function Layout() {
                 </li>
                 <li className="mb-4">
                   <a
-                    href="https://www.example.com/careers"
+                    href="https://www.youtube.com/watch?v=4n4rBrs5-LY"
                     className="hover:underline"
                   >
                     Careers
@@ -174,7 +175,7 @@ export default function Layout() {
                 </li>
                 <li className="mb-4">
                   <a
-                    href="https://www.example.com/brand-center"
+                    href="https://www.youtube.com/watch?v=4n4rBrs5-LY"
                     className="hover:underline"
                   >
                     Brand Center
@@ -182,7 +183,7 @@ export default function Layout() {
                 </li>
                 <li className="mb-4">
                   <a
-                    href="https://www.example.com/blog"
+                    href="https://www.youtube.com/watch?v=4n4rBrs5-LY"
                     className="hover:underline"
                   >
                     Blog
@@ -201,18 +202,18 @@ export default function Layout() {
                   </a>
                 </li>
                 <li className="mb-4">
-                  <a href="https://twitter.com" className="hover:underline">
-                    Twitter
+                  <a href="https://X.com" className="hover:underline">
+                    X/Twitter
                   </a>
                 </li>
                 <li className="mb-4">
-                  <a href="https://facebook.com" className="hover:underline">
+                  <a href="https://Facebook.com" className="hover:underline">
                     Facebook
                   </a>
                 </li>
-                <li>
-                  <a href="https://youtube.com" className="hover:underline">
-                    YouTube
+                <li className="mb-4">
+                  <a href="https://www.youtube.com/watch?v=4n4rBrs5-LY" className="hover:underline">
+                    Contact Us
                   </a>
                 </li>
               </ul>
@@ -224,7 +225,7 @@ export default function Layout() {
               <ul className="text-gray-600 dark:text-gray-400">
                 <li className="mb-4">
                   <a
-                    href="https://www.example.com/privacy"
+                    href="https://www.youtube.com/watch?v=4n4rBrs5-LY"
                     className="hover:underline"
                   >
                     Privacy Policy
@@ -232,7 +233,7 @@ export default function Layout() {
                 </li>
                 <li className="mb-4">
                   <a
-                    href="https://www.example.com/terms"
+                    href="https://www.youtube.com/watch?v=4n4rBrs5-LY"
                     className="hover:underline"
                   >
                     Terms & Conditions
@@ -240,10 +241,18 @@ export default function Layout() {
                 </li>
                 <li className="mb-4">
                   <a
-                    href="https://www.example.com/cookie-policy"
+                    href="https://www.youtube.com/watch?v=4n4rBrs5-LY"
                     className="hover:underline"
                   >
-                    Cookie Policy
+                    Licensing
+                  </a>
+                </li>
+                <li className="mb-4">
+                  <a
+                    href="https://www.youtube.com/watch?v=4n4rBrs5-LY"
+                    className="hover:underline"
+                  >
+                    Sitemap
                   </a>
                 </li>
               </ul>
@@ -254,28 +263,51 @@ export default function Layout() {
               </h2>
               <ul className="text-gray-600 dark:text-gray-400">
                 <li className="mb-4">
-                  <a href="https://www.example.com/download" className="hover:underline">
-                    App Store
+                  <a href="https://discord.com" className="hover:underline">
+                    Discord Server
                   </a>
                 </li>
                 <li className="mb-4">
-                  <a href="https://www.example.com/download" className="hover:underline">
-                    Google Play
+                  <a href="https://X.com" className="hover:underline">
+                    X/Twitter
                   </a>
                 </li>
                 <li className="mb-4">
-                  <a href="https://www.example.com/download" className="hover:underline">
-                    Windows Store
+                  <a href="https://Facebook.com" className="hover:underline">
+                    Facebook
+                  </a>
+                </li>
+                <li className="mb-4">
+                  <a href="https://www.youtube.com/watch?v=4n4rBrs5-LY" className="hover:underline">
+                    Contact Us
                   </a>
                 </li>
               </ul>
             </div>
           </div>
-        </div>
-        <div className="bg-gray-200 p-4 text-center dark:bg-gray-800">
-          <span className="text-sm text-gray-500 dark:text-gray-400">
-            © 2024 Your Company. All Rights Reserved.
-          </span>
+          <div className="bg-gray-100 dark:bg-gray-800">
+            <div className="w-full max-w-screen-xl mx-auto py-4 px-4 md:px-6">
+              <div className="sm:flex sm:items-center sm:justify-between">
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  © 2024 <a href="https://flowbite.com" className="hover:underline">Flowbite™</a>. All Rights Reserved.
+                </span>
+                <ul className="flex space-x-4 rtl:space-x-reverse mt-3 sm:mt-0">
+                  <li>
+                    <a href="#" className="text-gray-500 dark:text-gray-400 hover:underline">Privacy Policy</a>
+                  </li>
+                  <li>
+                    <a href="#" className="text-gray-500 dark:text-gray-400 hover:underline">Terms of Service</a>
+                  </li>
+                  <li>
+                    <a href="#" className="text-gray-500 dark:text-gray-400 hover:underline">Licensing</a>
+                  </li>
+                  <li>
+                    <a href="#" className="text-gray-500 dark:text-gray-400 hover:underline">Sitemap</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
