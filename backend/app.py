@@ -9,7 +9,7 @@ from views import user_bp, auth_bp, question_bp, answer_bp, vote_bp, badge_bp, v
 import logging
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///moringa_overflow.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://moringa_overflow_db_user:ax6y3YPPyzbDP1bE8W3O2ZYi6iz4XfiC@dpg-cqvhiplds78s739jn4kg-a.oregon-postgres.render.com/moringa_overflow_db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = 'super-secret'
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=1)
