@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
+
 const SignupPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -32,7 +33,7 @@ const SignupPage = () => {
 
     console.log("Payload:", payload); // Log payload for debugging
 
-    fetch("https://moringa-overflow-project.onrender.com", {
+    fetch("https://moringa-overflow-project.onrender.com/users", {
       method: "POST",
       body: JSON.stringify(payload),
       headers: {
